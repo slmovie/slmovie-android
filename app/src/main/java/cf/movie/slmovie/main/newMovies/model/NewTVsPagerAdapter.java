@@ -3,9 +3,12 @@ package cf.movie.slmovie.main.newMovies.model;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.view.ViewGroup;
 
 import cf.movie.slmovie.base.BaseMovies.constant.Which;
 import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment;
+import cf.movie.slmovie.utils.LogUtils;
 
 /**
  * Created by 包俊 on 2017/7/22.
@@ -58,4 +61,5 @@ public class NewTVsPagerAdapter extends FragmentPagerAdapter {
                 return Which.NewTVStr;
         }
     }
+
 }

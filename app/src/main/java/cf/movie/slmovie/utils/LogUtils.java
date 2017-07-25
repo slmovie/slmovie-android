@@ -12,11 +12,11 @@ public class LogUtils {
 
     public static void e(String Tag, String msg) {
         if (Constant.Log)
-            Log.e(Tag, msg);
+            Log.e("slmovie", msg);
     }
 
     public static void w(String Tag, String msg) {
         if (Constant.Log)
-            Log.w(Tag, msg);
+            Log.w("slmovie", msg);
     }
 }

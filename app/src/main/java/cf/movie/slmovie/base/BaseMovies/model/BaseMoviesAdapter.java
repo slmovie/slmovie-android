@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import cf.movie.slmovie.R;
 import cf.movie.slmovie.base.BaseMovies.bean.BaseMoviesBean;
+import cf.movie.slmovie.utils.LogUtils;
 
 /**
  * Created by 包俊 on 2017/7/21.
