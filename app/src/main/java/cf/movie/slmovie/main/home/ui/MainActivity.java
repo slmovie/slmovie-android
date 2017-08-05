@@ -1,5 +1,6 @@
 package cf.movie.slmovie.main.home.ui;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,7 @@ import cf.movie.slmovie.R;
 import cf.movie.slmovie.base.BaseActivity;
 import cf.movie.slmovie.base.BaseMovies.constant.Which;
 import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment;
+import cf.movie.slmovie.main.detail.DetailActivity;
 import cf.movie.slmovie.main.newMovies.ui.NewMoviesFragment;
 import cf.movie.slmovie.main.newMovies.ui.NewTVsFragment;
 import cf.movie.slmovie.utils.LogUtils;
@@ -96,7 +98,8 @@ public class MainActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(this, DetailActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
