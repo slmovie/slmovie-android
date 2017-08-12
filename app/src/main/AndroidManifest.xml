@@ -22,9 +22,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.detail.DetailActivity"
+            android:name=".main.detail.ui.DetailActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".main.search.ui.SearchResultActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -11,7 +11,7 @@ public class Constant {
 
     static {
         if (ENVIRONMENT_TYPE.equals("T")) {
-            WEBROOT = "http://192.168.1.114:3000";
+            WEBROOT = "http://192.168.1.104:3000";
         }
         if (ENVIRONMENT_TYPE.equals("P")) {
             WEBROOT = "http://www.slys.cf";

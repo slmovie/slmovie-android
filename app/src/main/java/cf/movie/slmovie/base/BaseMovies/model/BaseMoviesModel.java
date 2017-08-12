@@ -47,6 +47,7 @@ public class BaseMoviesModel {
                         Gson gson = new Gson();
                         BaseMoviesBean bean = gson.fromJson(response.toString(), BaseMoviesBean.class);
                         if (bean.getStatus().getCode().equals("1")) {
+                            event.setStatus(true);
                             if (adapter == null) {
                                 adapter = new BaseMoviesAdapter(bean.getMovies());
                                 event.setAdapter(adapter);

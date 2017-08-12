@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import cf.movie.slmovie.R;
 import cf.movie.slmovie.base.BaseMovies.bean.BaseMoviesBean;
-import cf.movie.slmovie.utils.LogUtils;
 
 /**
  * Created by 包俊 on 2017/7/21.
@@ -45,16 +44,25 @@ public class BaseMoviesAdapter extends RecyclerView.Adapter<BaseMoviesAdapter.Ho
         holder.simpleDraweeView.setImageURI(uri);
         holder.tv_name.setText(movie.getName());
         holder.tv_year.setText("上映年代：" + movie.getYear());
-        holder.tv_location.setText("地区：" + movie.getDetails().getLocation());
         holder.tv_douban.setText("评分：" + movie.getDouban());
-        holder.tv_actor.setText("主演：" + movie.getDetails().getActor());
-        if (movie.getDetails().isTV()) {
-            holder.tv_status.setText(movie.getDetails().getStatus());
-            holder.tv_type.setVisibility(View.GONE);
-            holder.tv_status.setVisibility(View.VISIBLE);
+        if (movie.getDetails() != null) {
+            holder.tv_location.setText("地区：" + movie.getDetails().getLocation());
+            holder.tv_actor.setText("主演：" + movie.getDetails().getActor());
+            if (movie.getDetails().isTV()) {
+                holder.tv_status.setText(movie.getDetails().getStatus());
+                holder.tv_type.setVisibility(View.GONE);
+                holder.tv_status.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv_type.setText("类型：" + movie.getDetails().getType());
+                holder.tv_type.setVisibility(View.VISIBLE);
+                holder.tv_status.setVisibility(View.GONE);
+            }
+            holder.tv_location.setVisibility(View.VISIBLE);
+            holder.tv_actor.setVisibility(View.VISIBLE);
         } else {
-            holder.tv_type.setText("类型：" + movie.getDetails().getType());
-            holder.tv_type.setVisibility(View.VISIBLE);
+            holder.tv_location.setVisibility(View.GONE);
+            holder.tv_actor.setVisibility(View.GONE);
+            holder.tv_type.setVisibility(View.GONE);
             holder.tv_status.setVisibility(View.GONE);
         }
     }
@@ -64,10 +72,15 @@ public class BaseMoviesAdapter extends RecyclerView.Adapter<BaseMoviesAdapter.Ho
         return movies.size();
     }
 
+    public BaseMoviesBean.movies getMovies(int position) {
+        return movies.get(position);
+    }
+
     public static class HotMovieViewHolder extends RecyclerView.ViewHolder {
 
         private SimpleDraweeView simpleDraweeView;
         private TextView tv_name, tv_year, tv_location, tv_type, tv_douban, tv_actor, tv_status;
+
 
         public HotMovieViewHolder(View itemView) {
             super(itemView);
@@ -80,5 +93,6 @@ public class BaseMoviesAdapter extends RecyclerView.Adapter<BaseMoviesAdapter.Ho
             tv_actor = (TextView) itemView.findViewById(R.id.tv_actor);
             tv_status = (TextView) itemView.findViewById(R.id.tv_status);
         }
+
     }
 }

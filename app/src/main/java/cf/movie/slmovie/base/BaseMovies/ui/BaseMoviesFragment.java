@@ -1,5 +1,6 @@
 package cf.movie.slmovie.base.BaseMovies.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -14,7 +15,10 @@ import android.view.View;
 import cf.movie.slmovie.R;
 import cf.movie.slmovie.base.BaseFragment;
 import cf.movie.slmovie.base.BaseMovies.constant.Which;
+import cf.movie.slmovie.base.BaseMovies.model.BaseMoviesAdapter;
+import cf.movie.slmovie.utils.impl.RecyclerItemClickListener;
 import cf.movie.slmovie.base.BaseMovies.presenter.BaseMoviesPresenter;
+import cf.movie.slmovie.main.detail.ui.DetailActivity;
 import cf.movie.slmovie.utils.LogUtils;
 
 /**
@@ -27,7 +31,7 @@ public class BaseMoviesFragment extends BaseFragment implements IBaseMovies {
     private SwipeRefreshLayout swipeLayout;
     private BaseMoviesPresenter presenter;
     private Which.UrlType which;
-    private RecyclerView.Adapter adapter = null;
+    private BaseMoviesAdapter adapter = null;
     private CoordinatorLayout container;
     private static final String ARG_PARAM1 = "which";
     private static final String ARG_PARAM2 = "adapter";
@@ -50,7 +54,7 @@ public class BaseMoviesFragment extends BaseFragment implements IBaseMovies {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             which = (Which.UrlType) getArguments().getSerializable(ARG_PARAM1);
-            adapter = (RecyclerView.Adapter) getArguments().getSerializable(ARG_PARAM2);
+            adapter = (BaseMoviesAdapter) getArguments().getSerializable(ARG_PARAM2);
         }
         LogUtils.e("BaseMoviesFragment", which.toString() + ">>>>>>" + "onCreate");
     }
@@ -104,21 +108,34 @@ public class BaseMoviesFragment extends BaseFragment implements IBaseMovies {
     }
 
     protected void initAction() {
-
     }
 
     @Override
-    public void setAdapter(RecyclerView.Adapter adapter) {
+    public void setAdapter(final BaseMoviesAdapter adapter) {
         this.adapter = adapter;
         swipeLayout.setRefreshing(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("address", adapter.getMovies(position).getAddress());
+                intent.putExtra("name", adapter.getMovies(position).getName());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
     }
 
     @Override
-    public void refreshOver(RecyclerView.Adapter adapter) {
+    public void refreshOver(BaseMoviesAdapter adapter) {
         this.adapter = adapter;
         swipeLayout.setRefreshing(false);
     }

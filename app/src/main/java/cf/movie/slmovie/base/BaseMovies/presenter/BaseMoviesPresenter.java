@@ -27,7 +27,6 @@ public class BaseMoviesPresenter {
         this.view = view;
         model = new BaseMoviesModel(activity);
         EventBus.getDefault().register(this);
-
     }
 
     /**

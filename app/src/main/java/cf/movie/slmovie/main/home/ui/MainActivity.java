@@ -2,26 +2,25 @@ package cf.movie.slmovie.main.home.ui;
 
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
-import java.util.List;
+import android.widget.Toast;
 
 import cf.movie.slmovie.R;
 import cf.movie.slmovie.base.BaseActivity;
 import cf.movie.slmovie.base.BaseMovies.constant.Which;
 import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment;
-import cf.movie.slmovie.main.detail.DetailActivity;
 import cf.movie.slmovie.main.newMovies.ui.NewMoviesFragment;
 import cf.movie.slmovie.main.newMovies.ui.NewTVsFragment;
+import cf.movie.slmovie.main.search.ui.SearchResultActivity;
 import cf.movie.slmovie.utils.LogUtils;
 
 /**
@@ -58,6 +57,18 @@ public class MainActivity extends BaseActivity
     protected void initData() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("热门电影");
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.search:
+                        Intent intent = new Intent(MainActivity.this, SearchResultActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -92,16 +103,6 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, DetailActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
