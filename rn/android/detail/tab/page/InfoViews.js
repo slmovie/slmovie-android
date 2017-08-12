@@ -45,7 +45,7 @@ export default class InfoViews extends React.Component {
 
 let styles = StyleSheet.create({
     container: {
-        backgroundColor: "#000000",
+        backgroundColor: "#2b2b2b",
     },
     text: {
         color: "#ffffff",
