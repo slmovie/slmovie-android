@@ -1,4 +1,4 @@
-package cf.movie.slmovie.main.detail.bean;
+package cf.movie.slmovie.main.search.bean;
 
 import java.util.ArrayList;
 
@@ -7,12 +7,12 @@ import cf.movie.slmovie.bean.FilesBean;
 import cf.movie.slmovie.bean.StatusBean;
 
 /**
- * Created by 包俊 on 2017/8/6.
+ * Created by 包俊 on 2017/8/12.
  */
 
-public class MovieDetail {
+public class SearchResult {
     private StatusBean status;
-    private movies movies;
+    private ArrayList<Movies> movies;
 
     public StatusBean getStatus() {
         return status;
@@ -22,35 +22,17 @@ public class MovieDetail {
         this.status = status;
     }
 
-    public MovieDetail.movies getMovies() {
+    public ArrayList<Movies> getMovies() {
         return movies;
     }
 
-    public void setMovies(MovieDetail.movies movies) {
+    public void setMovies(ArrayList<Movies> movies) {
         this.movies = movies;
     }
 
-    public class movies {
-        private String name, post, describe;
+    public class Movies {
+        private String name, post, describe, id;
         private DetailsBean details;
-        private ArrayList<FilesBean> files;
-        private ArrayList<String> detail;
-
-        public DetailsBean getDetails() {
-            return details;
-        }
-
-        public void setDetails(DetailsBean details) {
-            this.details = details;
-        }
-
-        public ArrayList<FilesBean> getFiles() {
-            return files;
-        }
-
-        public void setFiles(ArrayList<FilesBean> files) {
-            this.files = files;
-        }
 
         public String getName() {
             return name;
@@ -76,13 +58,22 @@ public class MovieDetail {
             this.describe = describe;
         }
 
-        public ArrayList<String> getDetail() {
-            return detail;
+        public String getId() {
+            return id;
         }
 
-        public void setDetail(ArrayList<String> detail) {
-            this.detail = detail;
+        public void setId(String id) {
+            this.id = id;
         }
+
+        public DetailsBean getDetails() {
+            return details;
+        }
+
+        public void setDetails(DetailsBean details) {
+            this.details = details;
+        }
+
     }
 
 }

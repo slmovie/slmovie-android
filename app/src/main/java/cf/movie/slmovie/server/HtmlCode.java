@@ -14,4 +14,6 @@ public class HtmlCode {
     public static final String NewTVs = "/index/newtvs?index=";
     //电影详情
     public static final String Details = "/detail?code=";
+    //电影搜索
+    public static final String Search = "/search/dyjy?name=";
 }

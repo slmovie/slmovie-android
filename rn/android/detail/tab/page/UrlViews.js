@@ -51,7 +51,7 @@ export default class UrlViews extends React.Component {
                 this.setState({choosen: i})
             }} key={i}>
                 <Text style={[styles.text, this._choosen(i)]}>
-                    {"[" + url.fileSize + "]" + url.name}
+                    {this._getDownloadUrl(url)}
                 </Text>
             </TouchableOpacity>
         )
@@ -75,6 +75,14 @@ export default class UrlViews extends React.Component {
         }
     }
 
+    //地址拼接
+    _getDownloadUrl(url) {
+        if (url.fileSize == '') {
+            return url.name
+        } else {
+            return "[" + url.fileSize + "]" + url.name
+        }
+    }
 }
 
 let styles = StyleSheet.create({
@@ -86,6 +94,8 @@ let styles = StyleSheet.create({
         color: "#ffffff",
         fontSize: 15,
         marginTop: 15,
-        textDecorationLine: "underline"
+        textDecorationLine: "underline",
+        marginLeft: 8,
+        marginRight: 8,
     }
 })

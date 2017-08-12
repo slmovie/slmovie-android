@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +19,7 @@ import cf.movie.slmovie.base.BaseMovies.constant.Which;
 import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment;
 import cf.movie.slmovie.main.newMovies.ui.NewMoviesFragment;
 import cf.movie.slmovie.main.newMovies.ui.NewTVsFragment;
-import cf.movie.slmovie.main.search.ui.SearchResultActivity;
+import cf.movie.slmovie.main.search.ui.SearchActivity;
 import cf.movie.slmovie.utils.LogUtils;
 
 /**
@@ -37,6 +36,7 @@ public class MainActivity extends BaseActivity
     private NewMoviesFragment newMoviesFragment = null;
     private NewTVsFragment newTVsFragment = null;
     private TextView tv_name;
+    private long lastClickTime;
 
     @Override
     protected int getContentLayout() {
@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.search:
-                        Intent intent = new Intent(MainActivity.this, SearchResultActivity.class);
+                        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                         startActivity(intent);
                         break;
                 }
@@ -94,7 +94,11 @@ public class MainActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (isFastDoubleClick()) {
+                System.exit(0);
+            } else {
+                Toast.makeText(this, "再按一次返回键退出程序", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -123,5 +127,22 @@ public class MainActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    /**
+     * @return boolean
+     * @Title: isFastDoubleClick
+     * @Description: 判断事件出发时间间隔是否超过预定值
+     */
+    public boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - lastClickTime;
+        if (0 < timeD && timeD < 1500) {
+            return true;
+        }
+        lastClickTime = time;
+        return false;
+    }
+
 
 }

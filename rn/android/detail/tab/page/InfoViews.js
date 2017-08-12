@@ -46,24 +46,35 @@ export default class InfoViews extends React.Component {
 let styles = StyleSheet.create({
     container: {
         backgroundColor: "#2b2b2b",
+        flex: 1,
     },
     text: {
         color: "#ffffff",
-        fontSize: 14,
-    },
+        fontSize:
+            14,
+    }
+    ,
     post: {
         width: 160,
-        height: 221,
-        marginTop: 20,
-    },
+        height:
+            221,
+        marginTop:
+            20,
+    }
+    ,
     scrollView: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: "center",
-    },
+        justifyContent:
+            'center',
+        alignItems:
+            "center",
+    }
+    ,
     info: {
         marginTop: 20,
-        marginLeft: 30,
-        marginRight: 30
+        marginLeft:
+            30,
+        marginRight:
+            30
     }
 })
