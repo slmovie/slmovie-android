@@ -80,7 +80,6 @@ public class MainActivity extends BaseActivity
         newMoviesFragment = NewMoviesFragment.newInstance();
         fragmentManager.beginTransaction().add(R.id.frameLayout, hotMoviesFragment).add(R.id.frameLayout, newMoviesFragment).add(R.id.frameLayout, newTVsFragment).commitAllowingStateLoss();
         fragmentManager.beginTransaction().hide(newTVsFragment).hide(newMoviesFragment).show(hotMoviesFragment).commitAllowingStateLoss();
-        tv_name.setText("11111");
     }
 
     @Override
