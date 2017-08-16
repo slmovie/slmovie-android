@@ -13,6 +13,8 @@ let DetailModule = NativeModules.DetailNative
 let SnackbarModule = NativeModules.SnackbarNative
 import CommonUtils from '../utils/CommonUtils.js'
 import DetailView from "./DetailView.js";
+import {version} from "./Version.js"
+import {check} from "../utils/CheckVersion.js"
 
 class HelloWorld extends React.Component {
 
@@ -25,11 +27,10 @@ class HelloWorld extends React.Component {
 
     componentDidMount() {
         this._getMovie()
+        check("detail", version)
     }
 
     render() {
-        console.log("state>>>>>" + this.state.movies)
-        console.log("{}>>>>>" + {})
         if (CommonUtils.isEmptyObj(this.state.movies)) {
             return (
                 <View/>
@@ -50,6 +51,7 @@ class HelloWorld extends React.Component {
         }
     }
 
+    //获取电影信息
     async _getMovie() {
         try {
             let {details} = await DetailModule.getMovie()

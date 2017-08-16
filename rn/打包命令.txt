@@ -1,1 +1,1 @@
-react-native bundle --entry-file ./slmovie/rn/android/detail/detail.android.js --bundle-output ./slmovie/app/src/main/assets/rn/detail.android.bundle --platform android --assets-dest ./slmovie/app/src/main/assets/rn/drawable --dev false
+react-native bundle --entry-file ./slmovie/rn/android/detail/detail.android.js --bundle-output ./slmovie/app/src/main/assets/rn/detail/detail.android.bundle --platform android --assets-dest ./slmovie/app/src/main/assets/rn/detail/drawable --dev false

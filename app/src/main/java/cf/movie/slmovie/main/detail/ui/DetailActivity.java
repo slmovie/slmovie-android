@@ -7,18 +7,20 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.ReactInstanceManagerBuilder;
 import com.facebook.react.ReactRootView;
-import com.facebook.react.common.LifecycleState;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 
-import cf.movie.slmovie.BuildConfig;
 import cf.movie.slmovie.R;
 import cf.movie.slmovie.base.BaseActivity;
+import cf.movie.slmovie.main.detail.presenter.DetailPresenter;
 import cf.movie.slmovie.main.detail.rn.DetailReactPackage;
-import cf.movie.slmovie.utils.rnUtils.ToastDialog.ToastDialogReactPackage;
+import cf.movie.slmovie.utils.rnUtils.checkVersion.CheckVersionReactPackage;
+import cf.movie.slmovie.utils.rnUtils.toastDialog.ToastDialogReactPackage;
 import cf.movie.slmovie.utils.rnUtils.download.DownloadReactPackage;
 import cf.movie.slmovie.utils.rnUtils.snackbar.SnackbarReactPackage;
 
@@ -32,6 +34,8 @@ public class DetailActivity extends BaseActivity implements DefaultHardwareBackB
     private Toolbar toolbar;
     private CoordinatorLayout container;
     private SwipeRefreshLayout swipeLayout;
+    private String address;
+    private DetailPresenter presenter;
 
     @Override
     protected int getContentLayout() {
@@ -49,21 +53,8 @@ public class DetailActivity extends BaseActivity implements DefaultHardwareBackB
     @Override
     protected void initData() {
         Intent intent = getIntent();
-        String address = intent.getStringExtra("address");
+        address = intent.getStringExtra("address");
         String name = intent.getStringExtra("name");
-        mReactInstanceManager = ReactInstanceManager.builder()
-                .setApplication(getApplication())
-                .setBundleAssetName("rn/detail.android.bundle")
-                .setJSMainModuleName("slmovie/rn/android/detail/detail.android")
-                .addPackage(new MainReactPackage())
-                .addPackage(new DetailReactPackage(address, iDetailView))
-                .addPackage(new SnackbarReactPackage(container))
-                .addPackage(new DownloadReactPackage())
-                .addPackage(new ToastDialogReactPackage(this))
-                .setUseDeveloperSupport(BuildConfig.DEBUG)
-                .setInitialLifecycleState(LifecycleState.RESUMED)
-                .build();
-        mReactRootView.startReactApplication(mReactInstanceManager, "DetailActivity", null);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -74,6 +65,14 @@ public class DetailActivity extends BaseActivity implements DefaultHardwareBackB
         swipeLayout.setProgressBackgroundColorSchemeColor(Color.WHITE);
         swipeLayout.setSize(SwipeRefreshLayout.DEFAULT);
         swipeLayout.setEnabled(false);
+        swipeLayout.setRefreshing(true);
+        presenter = new DetailPresenter(this, iDetailView);
+        if (presenter.checkVersion()) {
+            mReactInstanceManager = presenter.initReact().build();
+            mReactRootView.startReactApplication(mReactInstanceManager, "DetailActivity", null);
+        } else {
+            Toast.makeText(this, "失败", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -93,6 +92,26 @@ public class DetailActivity extends BaseActivity implements DefaultHardwareBackB
                 @Override
                 public void run() {
                     swipeLayout.setRefreshing(fresh);
+                }
+            });
+        }
+
+        @Override
+        public void setReactPackage(ReactInstanceManagerBuilder builder) {
+            builder.addPackage(new MainReactPackage())
+                    .addPackage(new DetailReactPackage(address, iDetailView))
+                    .addPackage(new SnackbarReactPackage(container))
+                    .addPackage(new DownloadReactPackage())
+                    .addPackage(new ToastDialogReactPackage(DetailActivity.this))
+                    .addPackage(new CheckVersionReactPackage(iDetailView));
+        }
+
+        @Override
+        public void reCreateReactNative() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mReactInstanceManager.recreateReactContextInBackground();
                 }
             });
         }

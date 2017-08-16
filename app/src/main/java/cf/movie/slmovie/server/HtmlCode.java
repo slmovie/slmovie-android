@@ -16,4 +16,6 @@ public class HtmlCode {
     public static final String Details = "/detail?code=";
     //电影搜索
     public static final String Search = "/search/dyjy?name=";
+    //rn更新
+    public static final String RNUpdate = "/RNZIP/";
 }

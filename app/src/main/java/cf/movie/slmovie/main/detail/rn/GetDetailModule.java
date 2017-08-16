@@ -42,7 +42,6 @@ public class GetDetailModule extends ReactContextBaseJavaModule implements IDeta
     public void getMovie(Promise promise) {
         this.promise = promise;
         model.getMovie(address);
-        iDetailView.refresh(true);
     }
 
     @Override

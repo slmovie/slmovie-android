@@ -1,7 +1,6 @@
-package cf.movie.slmovie.utils.rnUtils.ToastDialog;
+package cf.movie.slmovie.utils.rnUtils.toastDialog;
 
 import android.app.Activity;
-import android.support.design.widget.CoordinatorLayout;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
@@ -11,8 +10,6 @@ import com.facebook.react.uimanager.ViewManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import cf.movie.slmovie.utils.rnUtils.snackbar.SnackbarModule;
 
 /**
  * Created by 包俊 on 2017/8/7.

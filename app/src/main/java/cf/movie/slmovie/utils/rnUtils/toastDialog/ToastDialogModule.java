@@ -1,4 +1,4 @@
-package cf.movie.slmovie.utils.rnUtils.ToastDialog;
+package cf.movie.slmovie.utils.rnUtils.toastDialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,8 +13,6 @@ import com.facebook.react.bridge.ReadableArray;
 import java.util.ArrayList;
 
 import cf.movie.slmovie.R;
-
-import static android.R.string.cancel;
 
 /**
  * Created by 包俊 on 2017/8/10.
