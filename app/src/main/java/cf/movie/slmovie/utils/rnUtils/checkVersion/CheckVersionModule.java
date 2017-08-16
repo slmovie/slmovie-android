@@ -38,12 +38,13 @@ public class CheckVersionModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void Download(final String module) {
-        DownloadUtil.instance().download(Constant.WEBROOT + HtmlCode.RNUpdate + module + ".zip", context.getExternalCacheDir().getAbsolutePath(), new DownloadUtil.OnDownloadListener() {
+        DownloadUtil.instance().download(Constant.WEBROOT + HtmlCode.RNUpdate + module + ".zip", context.getExternalCacheDir().getAbsolutePath() + File.separator + "rn", new DownloadUtil.OnDownloadListener() {
             @Override
             public void onDownloadSuccess() {
-                boolean ok = ZipUtils.upZip(context.getExternalCacheDir().getAbsolutePath() + File.separator + module + ".zip", context.getExternalCacheDir().getAbsolutePath() + File.separator + "rn/" + module);
-                if(ok){
-
+                boolean ok = ZipUtils.upZip(context.getExternalCacheDir().getAbsolutePath() + File.separator + "rn" + File.separator + module + ".zip", context.getExternalCacheDir().getAbsolutePath() + File.separator + "rn" + File.separator + module);
+                if (ok) {
+                    File file = new File(context.getExternalCacheDir().getAbsolutePath() + File.separator + "rn" + File.separator + module + ".zip");
+                    file.delete();
                 }
                 iDetailView.reCreateReactNative();
             }

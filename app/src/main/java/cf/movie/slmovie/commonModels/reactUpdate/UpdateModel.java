@@ -35,10 +35,10 @@ public class UpdateModel {
                 fileRn.mkdir();
             AssetsUtils.copy(context, zipName, context.getExternalCacheDir().getAbsolutePath());
             boolean over = ZipUtils.upZip(context.getExternalCacheDir().getAbsolutePath() + File.separator + zipName, context.getExternalCacheDir().getAbsolutePath() + File.separator + jsPath);
-//            if (over) {
-//                File fileD = new File(context.getExternalCacheDir().getAbsolutePath(), zipName);
-//                fileD.delete();
-//            }
+            if (over) {
+                File fileD = new File(context.getExternalCacheDir().getAbsolutePath(), zipName);
+                fileD.delete();
+            }
             return over;
         } else {
             return true;
