@@ -15,7 +15,7 @@ import java.util.List;
  * Created by 包俊 on 2017/7/19.
  */
 
-public class MyApplication extends Application implements ReactApplication {
+public class MyApplication extends Application{
 
     public static MyApplication mApp;
 
@@ -24,24 +24,5 @@ public class MyApplication extends Application implements ReactApplication {
         mApp = this;
         super.onCreate();
         Fresco.initialize(this);
-    }
-
-    public ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-        @Override
-        public boolean getUseDeveloperSupport() {
-            return false;
-        }
-
-        @Override
-        protected List<ReactPackage> getPackages() {
-            return Arrays.<ReactPackage>asList(
-                    new MainReactPackage()
-            );
-        }
-    };
-
-    @Override
-    public ReactNativeHost getReactNativeHost() {
-        return null;
     }
 }

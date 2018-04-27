@@ -11,10 +11,10 @@ import {
 
 let DetailModule = NativeModules.DetailNative
 let SnackbarModule = NativeModules.SnackbarNative
-import CommonUtils from '../utils/CommonUtils.js'
+import CommonUtils from '../../utils/CommonUtils.js'
 import DetailView from "./DetailView.js";
 import {version} from "./Version.js"
-import {check} from "../utils/CheckVersion.js"
+import {check} from "../../utils/CheckVersion.js"
 
 class HelloWorld extends React.Component {
 
@@ -56,7 +56,6 @@ class HelloWorld extends React.Component {
         try {
             let {details} = await DetailModule.getMovie()
             this.setState({movies: JSON.parse(details)})
-            console.log("_getMovie>>>>" + details);
         } catch (e) {
             console.error(e)
         }

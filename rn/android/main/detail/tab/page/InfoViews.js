@@ -8,12 +8,36 @@ import {
     View,
     Image,
     ScrollView,
+    PanResponder,
 } from 'react-native';
 
 export default class InfoViews extends React.Component {
+
+    constructor(props) {
+        super(props)
+    }
+
+    componentWillMount() {
+        this._panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: (evt, gestureState) => false,
+            onPanResponderMove: (evt, gestureState) => {
+                console.log(gestureState.dx)
+
+            },
+            onPanResponderRelease: (evt, gestureState) => {
+                // console.log(gestureState.dx)
+                // if (gestureState.dx > 100) {
+                //     console.log("finish")
+                // } else {
+                //     console.log("needFinish: false")
+                // }
+            },
+        })
+    }
+
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.container} {...this._panResponder.panHandlers}>
                 <ScrollView showsVerticalScrollIndicator={true}>
                     <View style={styles.scrollView}>
                         <Image source={{uri: this.props.movies.movies.post}} style={styles.post}/>

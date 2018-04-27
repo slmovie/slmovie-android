@@ -35,7 +35,7 @@ public class DetailPresenter {
         builder.setApplication(context.getApplication());
 //                .setBundleAssetName("rn/detail/detail.android.bundle")
         builder.setJSBundleFile(context.getExternalCacheDir().getAbsolutePath() + "/rn/detail/detail.android.bundle");
-        builder.setJSMainModuleName("slmovie/rn/android/detail/detail.android");
+        builder.setJSMainModuleName("slmovie/rn/android/main/detail/detail.android");
         builder.setUseDeveloperSupport(BuildConfig.DEBUG);
         builder.setInitialLifecycleState(LifecycleState.RESUMED);
         impl.setReactPackage(builder);

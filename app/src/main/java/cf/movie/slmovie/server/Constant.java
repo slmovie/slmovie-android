@@ -5,7 +5,7 @@ package cf.movie.slmovie.server;
  */
 
 public class Constant {
-    private static String ENVIRONMENT_TYPE = "T";
+    private static String ENVIRONMENT_TYPE = "P";
     public static boolean Log = true;
     public static String WEBROOT;
 
@@ -14,7 +14,7 @@ public class Constant {
             WEBROOT = "http://192.168.43.22:3000";
         }
         if (ENVIRONMENT_TYPE.equals("P")) {
-            WEBROOT = "http://www.slys.cf";
+            WEBROOT = "http://45.32.41.169:3000";
         }
     }
 
