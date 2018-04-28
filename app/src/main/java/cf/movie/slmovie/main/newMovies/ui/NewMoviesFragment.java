@@ -29,8 +29,8 @@ public class NewMoviesFragment extends BaseFragment {
 
     @Override
     protected void initGui() {
-        tabLayout = (TabLayout) view.findViewById(R.id.tablet);
-        viewPager = (ViewPager) view.findViewById(R.id.viewpage);
+        tabLayout = (TabLayout) getView().findViewById(R.id.tablet);
+        viewPager = (ViewPager) getView().findViewById(R.id.viewpage);
         int id = viewPager.getId();
         LogUtils.e("viewPage", "movie>>>>>" + id + "");
     }

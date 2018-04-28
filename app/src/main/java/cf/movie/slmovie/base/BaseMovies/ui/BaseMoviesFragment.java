@@ -65,9 +65,9 @@ public class BaseMoviesFragment extends BaseFragment implements IBaseMovies {
     }
 
     protected void initGui() {
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
-        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeLayout);
-        container = (CoordinatorLayout) view.findViewById(R.id.container);
+        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler);
+        swipeLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeLayout);
+        container = (CoordinatorLayout) getView().findViewById(R.id.container);
     }
 
     protected void initData() {

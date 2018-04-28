@@ -13,11 +13,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.lingala.zip4j.core.ZipFile;
-
-import java.io.File;
-import java.io.IOException;
-
 import cf.movie.slmovie.R;
 import cf.movie.slmovie.base.BaseActivity;
 import cf.movie.slmovie.base.BaseMovies.constant.Which;
@@ -25,9 +20,7 @@ import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment;
 import cf.movie.slmovie.main.newMovies.ui.NewMoviesFragment;
 import cf.movie.slmovie.main.newMovies.ui.NewTVsFragment;
 import cf.movie.slmovie.main.search.ui.SearchActivity;
-import cf.movie.slmovie.utils.AssetsUtils;
 import cf.movie.slmovie.utils.LogUtils;
-import cf.movie.slmovie.utils.ZipUtils;
 
 /**
  * Created by 包俊 on 2017/7/19.

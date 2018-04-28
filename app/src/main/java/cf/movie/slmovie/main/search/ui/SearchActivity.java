@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import cf.movie.slmovie.R;
 import cf.movie.slmovie.base.BaseActivity;
@@ -22,8 +21,6 @@ import cf.movie.slmovie.main.detail.ui.DetailActivity;
 import cf.movie.slmovie.main.search.bean.SearchAdapter;
 import cf.movie.slmovie.main.search.presenter.SearchPresenter;
 import cf.movie.slmovie.utils.impl.RecyclerItemClickListener;
-
-import static cf.movie.slmovie.R.id.container;
 
 public class SearchActivity extends BaseActivity implements ISearchActivity {
     private Toolbar toolbar;
