@@ -20,13 +20,13 @@ import cf.movie.slmovie.base.BaseMovies.bean.BaseMoviesBean;
 
 public class BaseMoviesAdapter extends RecyclerView.Adapter<BaseMoviesAdapter.HotMovieViewHolder> {
 
-    private ArrayList<BaseMoviesBean.movies> movies;
+    private ArrayList<BaseMoviesBean.movie> movies;
 
-    public BaseMoviesAdapter(ArrayList<BaseMoviesBean.movies> movies) {
+    public BaseMoviesAdapter(ArrayList<BaseMoviesBean.movie> movies) {
         this.movies = movies;
     }
 
-    public void refresh(ArrayList<BaseMoviesBean.movies> movies) {
+    public void refresh(ArrayList<BaseMoviesBean.movie> movies) {
         this.movies = movies;
         notifyDataSetChanged();
     }
@@ -39,7 +39,7 @@ public class BaseMoviesAdapter extends RecyclerView.Adapter<BaseMoviesAdapter.Ho
 
     @Override
     public void onBindViewHolder(HotMovieViewHolder holder, int position) {
-        BaseMoviesBean.movies movie = movies.get(position);
+        BaseMoviesBean.movie movie = movies.get(position);
         Uri uri = Uri.parse(movie.getPost());
         holder.simpleDraweeView.setImageURI(uri);
         holder.tv_name.setText(movie.getName());
@@ -72,7 +72,7 @@ public class BaseMoviesAdapter extends RecyclerView.Adapter<BaseMoviesAdapter.Ho
         return movies.size();
     }
 
-    public BaseMoviesBean.movies getMovies(int position) {
+    public BaseMoviesBean.movie getMovies(int position) {
         return movies.get(position);
     }
 

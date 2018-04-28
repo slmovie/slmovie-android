@@ -51,23 +51,23 @@ public class NewMoviesPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return Which.LastUpdateMovieStr;
+                return Which.INSTANCE.getLastUpdateMovieStr();
             case 1:
-                return Which.ActionMovieStr;
+                return Which.INSTANCE.getActionMovieStr();
             case 2:
-                return Which.ComedyStr;
+                return Which.INSTANCE.getComedyStr();
             case 3:
-                return Which.LoveMovieStr;
+                return Which.INSTANCE.getLoveMovieStr();
             case 4:
-                return Which.ScienceMovieStr;
+                return Which.INSTANCE.getScienceMovieStr();
             case 5:
-                return Which.HorrorMovieStr;
+                return Which.INSTANCE.getHorrorMovieStr();
             case 6:
-                return Which.DramaMovieStr;
+                return Which.INSTANCE.getDramaMovieStr();
             case 7:
-                return Which.WarMovieStr;
+                return Which.INSTANCE.getWarMovieStr();
             default:
-                return Which.LastUpdateMovieStr;
+                return Which.INSTANCE.getLastUpdateMovieStr();
         }
     }
 
