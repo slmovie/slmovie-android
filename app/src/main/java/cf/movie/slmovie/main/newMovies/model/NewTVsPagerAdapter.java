@@ -22,17 +22,17 @@ public class NewTVsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return BaseMoviesFragment.newInstance(Which.UrlType.NewTVs);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.NewTVs);
             case 1:
-                return BaseMoviesFragment.newInstance(Which.UrlType.ChinaTV);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.ChinaTV);
             case 2:
-                return BaseMoviesFragment.newInstance(Which.UrlType.HongTaiTV);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.HongTaiTV);
             case 3:
-                return BaseMoviesFragment.newInstance(Which.UrlType.WestenTV);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.WestenTV);
             case 4:
-                return BaseMoviesFragment.newInstance(Which.UrlType.JapanKoreaTV);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.JapanKoreaTV);
             default:
-                return BaseMoviesFragment.newInstance(Which.UrlType.NewTVs);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.NewTVs);
         }
     }
 

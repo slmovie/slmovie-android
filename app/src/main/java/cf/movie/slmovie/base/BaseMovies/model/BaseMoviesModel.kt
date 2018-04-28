@@ -43,12 +43,12 @@ class BaseMoviesModel(private val context: Context) {
             if (bean.status!!.code == "1") {
                 event.isStatus = true
                 if (adapter == null) {
-                    adapter = BaseMoviesAdapter(bean.movies)
+                    adapter = BaseMoviesAdapter(bean.movies!!)
                     event.adapter = adapter
                     event.isRefresh = false
                     EventBus.getDefault().post(event)
                 } else {
-                    adapter!!.refresh(bean.movies)
+                    adapter!!.refresh(bean.movies!!)
                     event.adapter = adapter
                     event.isRefresh = true
                     EventBus.getDefault().post(event)

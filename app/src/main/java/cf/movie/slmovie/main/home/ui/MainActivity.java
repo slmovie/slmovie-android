@@ -75,7 +75,7 @@ public class MainActivity extends BaseActivity
         toggle.syncState();
         navigationView.getMenu().getItem(0).setChecked(true);
         fragmentManager = getSupportFragmentManager();
-        hotMoviesFragment = BaseMoviesFragment.newInstance(Which.UrlType.HotMovie);
+        hotMoviesFragment = BaseMoviesFragment.Companion.newInstance(Which.UrlType.HotMovie);
         newTVsFragment = NewTVsFragment.newInstance();
         newMoviesFragment = NewMoviesFragment.newInstance();
         fragmentManager.beginTransaction().add(R.id.frameLayout, hotMoviesFragment).add(R.id.frameLayout, newMoviesFragment).add(R.id.frameLayout, newTVsFragment).commitAllowingStateLoss();

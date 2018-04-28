@@ -22,23 +22,23 @@ public class NewMoviesPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return BaseMoviesFragment.newInstance(Which.UrlType.LastUpdateMovie);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.LastUpdateMovie);
             case 1:
-                return BaseMoviesFragment.newInstance(Which.UrlType.ActionMovie);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.ActionMovie);
             case 2:
-                return BaseMoviesFragment.newInstance(Which.UrlType.Comedy);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.Comedy);
             case 3:
-                return BaseMoviesFragment.newInstance(Which.UrlType.LoveMovie);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.LoveMovie);
             case 4:
-                return BaseMoviesFragment.newInstance(Which.UrlType.ScienceMovie);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.ScienceMovie);
             case 5:
-                return BaseMoviesFragment.newInstance(Which.UrlType.HorrorMovie);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.HorrorMovie);
             case 6:
-                return BaseMoviesFragment.newInstance(Which.UrlType.DramaMovie);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.DramaMovie);
             case 7:
-                return BaseMoviesFragment.newInstance(Which.UrlType.WarMovie);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.WarMovie);
             default:
-                return BaseMoviesFragment.newInstance(Which.UrlType.LastUpdateMovie);
+                return BaseMoviesFragment.Companion.newInstance(Which.UrlType.LastUpdateMovie);
         }
     }
 
