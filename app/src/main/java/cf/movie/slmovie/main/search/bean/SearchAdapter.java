@@ -12,7 +12,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.ArrayList;
 
 import cf.movie.slmovie.R;
-import cf.movie.slmovie.base.BaseMovies.bean.BaseMoviesBean;
 
 /**
  * Created by 包俊 on 2017/8/12.

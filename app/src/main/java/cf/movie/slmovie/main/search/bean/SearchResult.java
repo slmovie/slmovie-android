@@ -3,7 +3,6 @@ package cf.movie.slmovie.main.search.bean;
 import java.util.ArrayList;
 
 import cf.movie.slmovie.bean.DetailsBean;
-import cf.movie.slmovie.bean.FilesBean;
 import cf.movie.slmovie.bean.StatusBean;
 
 /**
