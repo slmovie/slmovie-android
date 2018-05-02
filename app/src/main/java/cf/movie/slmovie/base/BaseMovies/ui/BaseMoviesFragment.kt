@@ -89,7 +89,7 @@ class BaseMoviesFragment : BaseFragment(), IBaseMovies {
         linearLayoutManager.orientation = OrientationHelper.VERTICAL
         recyclerView!!.layoutManager = linearLayoutManager
         recyclerView!!.adapter = adapter
-        recyclerView!!.addOnItemTouchListener(RecyclerItemClickListener(activity, recyclerView, object : RecyclerItemClickListener.OnItemClickListener {
+        recyclerView!!.addOnItemTouchListener(RecyclerItemClickListener(activity, object : RecyclerItemClickListener.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 val intent = Intent(activity, DetailActivity::class.java)
                 intent.putExtra("address", adapter.getMovies(position).address)
@@ -97,7 +97,7 @@ class BaseMoviesFragment : BaseFragment(), IBaseMovies {
                 startActivity(intent)
             }
 
-            override fun onLongItemClick(view: View, position: Int) {
+            override fun onLongItemClick(view: View?, position: Int) {
 
             }
         }))

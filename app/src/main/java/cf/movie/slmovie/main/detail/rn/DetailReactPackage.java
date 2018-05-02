@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import cf.movie.slmovie.main.detail.rn.GetDetailModule;
 import cf.movie.slmovie.main.detail.ui.IDetailView;
-import cf.movie.slmovie.utils.rnUtils.snackbar.SnackbarModule;
 
 /**
  * Created by BJ on 2016/9/28.

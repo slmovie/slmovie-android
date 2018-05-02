@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         View HeadView = navigationView.getHeaderView(0);
         tv_name = (TextView) HeadView.findViewById(R.id.tv_name);
-        LogUtils.e("viewPage", "Main>>>" + tv_name.getId());
+        LogUtils.INSTANCE.e("viewPage", "Main>>>" + tv_name.getId());
     }
 
     @Override

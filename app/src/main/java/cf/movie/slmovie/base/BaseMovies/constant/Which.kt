@@ -2,9 +2,6 @@ package cf.movie.slmovie.base.BaseMovies.constant
 
 import cf.movie.slmovie.server.HtmlCode
 
-import android.os.Build.VERSION_CODES.N
-import cf.movie.slmovie.server.HtmlCode.HotMovie
-
 /**
  * Created by 包俊 on 2017/7/22.
  */

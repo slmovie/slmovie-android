@@ -33,7 +33,7 @@ public class NewTVsFragment extends BaseFragment {
         tabLayout = (TabLayout) getView().findViewById(R.id.tablet);
         viewPager = (ViewPager) getView().findViewById(R.id.viewPage);
         int id = viewPager.getId();
-        LogUtils.e("viewPage", "tv>>>>>" + id + "");
+        LogUtils.INSTANCE.e("viewPage", "tv>>>>>" + id + "");
     }
 
     @Override
