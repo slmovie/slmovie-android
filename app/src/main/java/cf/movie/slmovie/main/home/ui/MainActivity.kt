@@ -1,0 +1,135 @@
+package cf.movie.slmovie.main.home.ui
+
+import android.content.Intent
+import android.support.design.widget.NavigationView
+import android.support.v4.app.FragmentManager
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
+import android.widget.Toast
+
+import cf.movie.slmovie.R
+import cf.movie.slmovie.base.BaseActivity
+import cf.movie.slmovie.base.BaseMovies.constant.Which
+import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment
+import cf.movie.slmovie.main.newMovies.ui.NewMoviesFragment
+import cf.movie.slmovie.main.newMovies.ui.NewTVsFragment
+import cf.movie.slmovie.main.search.ui.SearchActivity
+import cf.movie.slmovie.utils.LogUtils
+
+/**
+ * Created by 包俊 on 2017/7/19.
+ */
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private var toolbar: Toolbar? = null
+    private var navigationView: NavigationView? = null
+    private var drawer: DrawerLayout? = null
+    private var fragmentManager: FragmentManager? = null
+    private var hotMoviesFragment: BaseMoviesFragment? = null
+    private var newMoviesFragment: NewMoviesFragment? = null
+    private var newTVsFragment: NewTVsFragment? = null
+    private var tv_name: TextView? = null
+    private var lastClickTime: Long = 0
+
+    override val contentLayout: Int
+        get() = R.layout.activity_main
+
+
+    /**
+     * @return boolean
+     * @Title: isFastDoubleClick
+     * @Description: 判断事件出发时间间隔是否超过预定值
+     */
+    val isFastDoubleClick: Boolean
+        get() {
+            val time = System.currentTimeMillis()
+            val timeD = time - lastClickTime
+            if (0 < timeD && timeD < 1500) {
+                return true
+            }
+            lastClickTime = time
+            return false
+        }
+
+    override fun initGui() {
+        toolbar = findViewById(R.id.toolbar) as Toolbar
+        drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        navigationView = findViewById(R.id.nav_view) as NavigationView
+        val HeadView = navigationView!!.getHeaderView(0)
+        tv_name = HeadView.findViewById(R.id.tv_name) as TextView
+        LogUtils.e("viewPage", "Main>>>" + tv_name!!.id)
+    }
+
+    override fun initData() {
+        setSupportActionBar(toolbar)
+        supportActionBar!!.title = "热门电影"
+        toolbar!!.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.search -> {
+                    val intent = Intent(this@MainActivity, SearchActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            true
+        }
+        val toggle = ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer!!.setDrawerListener(toggle)
+        toggle.syncState()
+        navigationView!!.menu.getItem(0).isChecked = true
+        fragmentManager = supportFragmentManager
+        hotMoviesFragment = BaseMoviesFragment.newInstance(Which.UrlType.HotMovie)
+        newTVsFragment = NewTVsFragment.newInstance()
+        newMoviesFragment = NewMoviesFragment.newInstance()
+        fragmentManager!!.beginTransaction().add(R.id.frameLayout, hotMoviesFragment).add(R.id.frameLayout, newMoviesFragment).add(R.id.frameLayout, newTVsFragment).commitAllowingStateLoss()
+        fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(newMoviesFragment).show(hotMoviesFragment).commitAllowingStateLoss()
+    }
+
+    override fun initAction() {
+        navigationView!!.setNavigationItemSelectedListener(this)
+    }
+
+    override fun onBackPressed() {
+        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            if (isFastDoubleClick) {
+                System.exit(0)
+            } else {
+                Toast.makeText(this, "再按一次返回键退出程序", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    //加载菜单
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.movie_new) {
+            supportActionBar!!.title = "最新电影"
+            fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(hotMoviesFragment).show(newMoviesFragment).commitAllowingStateLoss()
+        } else if (id == R.id.movie_hot) {
+            supportActionBar!!.title = "热门电影"
+            fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(newMoviesFragment).show(hotMoviesFragment).commitAllowingStateLoss()
+        } else if (id == R.id.tv_new) {
+            supportActionBar!!.title = "最新电视剧"
+            fragmentManager!!.beginTransaction().show(newTVsFragment).hide(newMoviesFragment).hide(hotMoviesFragment).commitAllowingStateLoss()
+        }
+        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        drawer.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+
+}
