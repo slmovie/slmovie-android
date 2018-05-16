@@ -28,7 +28,7 @@ class NewMoviesFragment : BaseFragment() {
     }
 
     override fun initData() {
-        viewPager!!.adapter = NewMoviesPagerAdapter(activity.supportFragmentManager)
+        viewPager!!.adapter = NewMoviesPagerAdapter(activity!!.supportFragmentManager)
         tabLayout!!.setupWithViewPager(viewPager)
         tabLayout!!.tabMode = TabLayout.MODE_SCROLLABLE
     }

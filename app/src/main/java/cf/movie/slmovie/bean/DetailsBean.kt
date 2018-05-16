@@ -17,4 +17,5 @@ class DetailsBean : BaseVo() {
     var imdb: String? = null
     var status: String? = null
     var isTV: Boolean = false
+    var average: String? = null
 }

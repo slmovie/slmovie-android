@@ -11,7 +11,7 @@ import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment
  * Created by 包俊 on 2017/7/22.
  */
 
-class NewTVsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class NewTVsPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         when (position) {

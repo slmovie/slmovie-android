@@ -29,7 +29,7 @@ class NewTVsFragment : BaseFragment() {
     }
 
     override fun initData() {
-        viewPager!!.adapter = NewTVsPagerAdapter(activity.supportFragmentManager)
+        viewPager!!.adapter = NewTVsPagerAdapter(activity?.supportFragmentManager)
         tabLayout!!.setupWithViewPager(viewPager)
         tabLayout!!.tabMode = TabLayout.MODE_SCROLLABLE
     }

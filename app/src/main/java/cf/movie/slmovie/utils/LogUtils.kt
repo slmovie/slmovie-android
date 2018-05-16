@@ -12,11 +12,11 @@ object LogUtils {
 
     fun e(Tag: String, msg: String) {
         if (Constant.Log)
-            Log.e("slmovie", msg)
+            Log.e(Tag, msg)
     }
 
     fun w(Tag: String, msg: String) {
         if (Constant.Log)
-            Log.w("slmovie", msg)
+            Log.w(Tag, msg)
     }
 }

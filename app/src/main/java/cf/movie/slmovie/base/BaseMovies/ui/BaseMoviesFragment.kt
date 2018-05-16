@@ -40,8 +40,8 @@ class BaseMoviesFragment : BaseFragment(), IBaseMovies {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            which = arguments.getSerializable(ARG_PARAM1) as Which.UrlType
-            adapter = arguments.getSerializable(ARG_PARAM2) as? BaseMoviesAdapter
+            which = arguments?.getSerializable(ARG_PARAM1) as Which.UrlType
+            adapter = arguments?.getSerializable(ARG_PARAM2) as? BaseMoviesAdapter
         }
         LogUtils.e("BaseMoviesFragment", which!!.toString() + ">>>>>>" + "onCreate")
     }
@@ -56,7 +56,7 @@ class BaseMoviesFragment : BaseFragment(), IBaseMovies {
         LogUtils.e("BaseMoviesFragment", which!!.toString() + ">>>>>>" + "initData")
         if (adapter == null || adapter!!.itemCount == 0) {
             LogUtils.e("BaseMoviesFragment", which!!.toString() + ">>>>>>" + "重新加载adapter")
-            presenter = BaseMoviesPresenter(activity, this)
+            presenter = BaseMoviesPresenter(activity!!, this)
             swipeLayout!!.setColorSchemeColors(Color.BLUE,
                     Color.GREEN,
                     Color.YELLOW,
@@ -89,7 +89,7 @@ class BaseMoviesFragment : BaseFragment(), IBaseMovies {
         linearLayoutManager.orientation = OrientationHelper.VERTICAL
         recyclerView!!.layoutManager = linearLayoutManager
         recyclerView!!.adapter = adapter
-        recyclerView!!.addOnItemTouchListener(RecyclerItemClickListener(activity, object : RecyclerItemClickListener.OnItemClickListener {
+        recyclerView!!.addOnItemTouchListener(RecyclerItemClickListener(activity!!, object : RecyclerItemClickListener.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 val intent = Intent(activity, DetailActivity::class.java)
                 intent.putExtra("address", adapter.getMovies(position).address)

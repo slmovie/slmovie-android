@@ -1,21 +1,24 @@
 package cf.movie.slmovie.base.BaseMovies.model
 
+import android.content.Context
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseMovies.bean.BaseMoviesBean
-import com.facebook.drawee.view.SimpleDraweeView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import java.util.*
 
 /**
  * Created by 包俊 on 2017/7/21.
  */
 
-class BaseMoviesAdapter(var movies: ArrayList<BaseMoviesBean.movie>) : RecyclerView.Adapter<BaseMoviesAdapter.HotMovieViewHolder>() {
+class BaseMoviesAdapter(var context: Context, var movies: ArrayList<BaseMoviesBean.movie>) : RecyclerView.Adapter<BaseMoviesAdapter.HotMovieViewHolder>() {
 
     val serialVersionUID: Long = -2579386368620865598L
 
@@ -25,14 +28,21 @@ class BaseMoviesAdapter(var movies: ArrayList<BaseMoviesBean.movie>) : RecyclerV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HotMovieViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_hotmovie, parent, false)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.item_hotmovie, parent, false)
         return HotMovieViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: HotMovieViewHolder, position: Int) {
         val movie = movies!![position]
         val uri = Uri.parse(movie.post)
-        holder.simpleDraweeView.setImageURI(uri)
+        var options = RequestOptions()
+        options.placeholder(R.drawable.ic_launcher)
+                .error(R.drawable.ic_launcher)
+                .fallback(R.drawable.ic_launcher)
+        Glide.with(context)
+                .load(uri)
+                .apply(options)
+                .into(holder.iv_post)
         holder.tv_name.text = movie.name
         holder.tv_year.text = "上映年代：" + movie.year!!
         holder.tv_douban.text = "评分：" + movie.douban!!
@@ -67,7 +77,7 @@ class BaseMoviesAdapter(var movies: ArrayList<BaseMoviesBean.movie>) : RecyclerV
     }
 
     class HotMovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var simpleDraweeView = itemView.findViewById(R.id.simpleDraweeView) as SimpleDraweeView
+        var iv_post = itemView.findViewById(R.id.iv_post) as ImageView
         var tv_name = itemView.findViewById(R.id.tv_name) as TextView
         var tv_year = itemView.findViewById(R.id.tv_year) as TextView
         var tv_location = itemView.findViewById(R.id.tv_location) as TextView
