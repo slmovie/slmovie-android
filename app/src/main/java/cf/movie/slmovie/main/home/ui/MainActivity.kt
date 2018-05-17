@@ -17,15 +17,17 @@ import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseActivity
 import cf.movie.slmovie.base.BaseMovies.constant.Which
 import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment
+import cf.movie.slmovie.main.home.presenter.MainActivityPresenter
 import cf.movie.slmovie.main.newMovies.ui.NewMoviesFragment
 import cf.movie.slmovie.main.newMovies.ui.NewTVsFragment
 import cf.movie.slmovie.main.search.ui.SearchActivity
 import cf.movie.slmovie.utils.LogUtils
+import pub.devrel.easypermissions.EasyPermissions
 
 /**
  * Created by 包俊 on 2017/7/19.
  */
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, EasyPermissions.PermissionCallbacks {
 
     private var toolbar: Toolbar? = null
     private var navigationView: NavigationView? = null
@@ -36,6 +38,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var newTVsFragment: NewTVsFragment? = null
     private var tv_name: TextView? = null
     private var lastClickTime: Long = 0
+    private var presenter: MainActivityPresenter? = null
+
+    companion object {
+        val WRITE_EXTERNAL_STORAGE: Int = 5001
+    }
+
 
     override val contentLayout: Int
         get() = R.layout.activity_main
@@ -67,6 +75,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun initData() {
+        presenter = MainActivityPresenter(this)
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "热门电影"
         toolbar!!.setOnMenuItemClickListener { item ->
@@ -89,6 +98,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         newMoviesFragment = NewMoviesFragment.newInstance()
         fragmentManager!!.beginTransaction().add(R.id.frameLayout, hotMoviesFragment).add(R.id.frameLayout, newMoviesFragment).add(R.id.frameLayout, newTVsFragment).commitAllowingStateLoss()
         fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(newMoviesFragment).show(hotMoviesFragment).commitAllowingStateLoss()
+        presenter!!.checkUpdate()
     }
 
     override fun initAction() {
@@ -129,6 +139,27 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        when (requestCode) {
+            WRITE_EXTERNAL_STORAGE -> {
+                Toast.makeText(this, "用户授权成功！", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        when (requestCode) {
+            WRITE_EXTERNAL_STORAGE -> {
+                Toast.makeText(this, "用户授权失败！", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 

@@ -42,6 +42,10 @@ dependencies {
         exclude group: 'com.android.support'
     }
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation('pub.devrel:easypermissions:1.2.0') {
+        exclude module: 'support-v4'
+        exclude group: 'com.android.support'
+    }
 }
 repositories {
     mavenCentral()

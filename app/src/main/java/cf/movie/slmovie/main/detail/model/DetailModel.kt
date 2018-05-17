@@ -1,18 +1,14 @@
 package cf.movie.slmovie.main.detail.model
 
 import android.content.Context
-
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.VolleyError
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-
-import org.json.JSONException
-import org.json.JSONObject
-
 import cf.movie.slmovie.server.Constant
 import cf.movie.slmovie.server.HtmlCode
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import org.json.JSONException
+import org.json.JSONObject
 
 /**
  * Created by 包俊 on 2017/8/7.
