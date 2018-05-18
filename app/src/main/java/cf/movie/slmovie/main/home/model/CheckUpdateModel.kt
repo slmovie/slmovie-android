@@ -22,8 +22,7 @@ class CheckUpdateModel(private val context: Context, private val impl: BaseReqLi
             val gson = Gson()
             val bean = gson.fromJson(response.toString(), CheckUpdateBean::class.java)
             impl.success(bean)
-        }, Response.ErrorListener { error ->
-            impl.failed(error.networkResponse.statusCode.toString(), error.message)
+        }, Response.ErrorListener {
         })
         Volley.newRequestQueue(context).add(stringRequest)
     }
