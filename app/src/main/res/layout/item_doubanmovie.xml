@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dip"
+    android:layout_marginRight="10dip"
+    android:layout_marginTop="10dip"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/cardViewBackground"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="115dip"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_post"
+                android:layout_width="83dip"
+                android:layout_height="115dip"
+                android:scaleType="fitXY" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dip"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    style="@style/movieText"
+                    android:text="12471286478"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_year"
+                    style="@style/movieText"
+                    android:layout_marginTop="2dip"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="上映年代：2017" />
+
+                <TextView
+                    android:id="@+id/tv_type"
+                    style="@style/movieText"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="类型：动作" />
+
+                <TextView
+                    android:id="@+id/tv_douban"
+                    style="@style/movieText"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="评分：10.0" />
+
+                <TextView
+                    android:id="@+id/tv_directer"
+                    style="@style/movieText"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="导演：123 123" />
+
+                <TextView
+                    android:id="@+id/tv_actor"
+                    style="@style/movieText"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="主演：12431 12421 " />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

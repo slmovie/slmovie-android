@@ -46,8 +46,10 @@ dependencies {
         exclude module: 'support-v4'
         exclude group: 'com.android.support'
     }
+    implementation 'com.github.Aspsine:SwipeToLoadLayout:1.0.4'
 }
 repositories {
     mavenCentral()
     google()
+    maven { url "https://jitpack.io" }
 }

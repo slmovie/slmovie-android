@@ -14,9 +14,11 @@ import android.widget.TextView
 import android.widget.Toast
 
 import cf.movie.slmovie.R
+import cf.movie.slmovie.R.id.tv_name
 import cf.movie.slmovie.base.BaseActivity
 import cf.movie.slmovie.base.BaseMovies.constant.Which
 import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment
+import cf.movie.slmovie.main.douban.view.DoubanView
 import cf.movie.slmovie.main.home.presenter.MainActivityPresenter
 import cf.movie.slmovie.main.newMovies.ui.NewMoviesFragment
 import cf.movie.slmovie.main.newMovies.ui.NewTVsFragment
@@ -36,6 +38,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     private var hotMoviesFragment: BaseMoviesFragment? = null
     private var newMoviesFragment: NewMoviesFragment? = null
     private var newTVsFragment: NewTVsFragment? = null
+    private var top250: DoubanView? = null
     private var tv_name: TextView? = null
     private var lastClickTime: Long = 0
     private var presenter: MainActivityPresenter? = null
@@ -96,8 +99,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         hotMoviesFragment = BaseMoviesFragment.newInstance(Which.UrlType.HotMovie)
         newTVsFragment = NewTVsFragment.newInstance()
         newMoviesFragment = NewMoviesFragment.newInstance()
-        fragmentManager!!.beginTransaction().add(R.id.frameLayout, hotMoviesFragment).add(R.id.frameLayout, newMoviesFragment).add(R.id.frameLayout, newTVsFragment).commitAllowingStateLoss()
-        fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(newMoviesFragment).show(hotMoviesFragment).commitAllowingStateLoss()
+        top250 = DoubanView()
+        fragmentManager!!.beginTransaction().add(R.id.frameLayout, hotMoviesFragment).add(R.id.frameLayout, newMoviesFragment).add(R.id.frameLayout, newTVsFragment).add(R.id.frameLayout, top250).commitAllowingStateLoss()
+        fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(newMoviesFragment).hide(top250).show(hotMoviesFragment).commitAllowingStateLoss()
         presenter!!.checkUpdate()
     }
 
@@ -128,13 +132,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         val id = item.itemId
         if (id == R.id.movie_new) {
             supportActionBar!!.title = "最新电影"
-            fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(hotMoviesFragment).show(newMoviesFragment).commitAllowingStateLoss()
+            fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(hotMoviesFragment).show(newMoviesFragment).hide(top250).commitAllowingStateLoss()
         } else if (id == R.id.movie_hot) {
             supportActionBar!!.title = "热门电影"
-            fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(newMoviesFragment).show(hotMoviesFragment).commitAllowingStateLoss()
+            fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(newMoviesFragment).show(hotMoviesFragment).hide(top250).commitAllowingStateLoss()
         } else if (id == R.id.tv_new) {
             supportActionBar!!.title = "最新电视剧"
-            fragmentManager!!.beginTransaction().show(newTVsFragment).hide(newMoviesFragment).hide(hotMoviesFragment).commitAllowingStateLoss()
+            fragmentManager!!.beginTransaction().show(newTVsFragment).hide(newMoviesFragment).hide(hotMoviesFragment).hide(top250).commitAllowingStateLoss()
+        } else if (id == R.id.tv_top250) {
+            supportActionBar!!.title = "豆瓣Top250"
+            fragmentManager!!.beginTransaction().hide(newTVsFragment).hide(newMoviesFragment).hide(hotMoviesFragment).show(top250).commitAllowingStateLoss()
         }
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
