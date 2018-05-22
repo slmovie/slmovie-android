@@ -37,6 +37,7 @@ class Top250Adapter(var context: Context, var movies: ArrayList<Top250Bean.subje
         holder.tv_name.text = movie.title
         holder.tv_year.text = "上映年代：" + movie.year!!
         holder.tv_douban.text = "评分：" + movie.rating?.average!!
+        holder.tv_ranking.text = (position + 1).toString()
 
         var directors = ""
         if (movie.directors?.size!! > 0) {
@@ -92,5 +93,6 @@ class Top250Adapter(var context: Context, var movies: ArrayList<Top250Bean.subje
         var tv_type = itemView.findViewById(R.id.tv_type) as TextView
         var tv_douban = itemView.findViewById(R.id.tv_douban) as TextView
         var tv_actor = itemView.findViewById(R.id.tv_actor) as TextView
+        var tv_ranking = itemView.findViewById(R.id.tv_ranking) as TextView
     }
 }

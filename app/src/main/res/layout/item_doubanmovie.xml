@@ -19,10 +19,9 @@
         app:cardCornerRadius="3dp"
         app:cardElevation="5dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="115dip"
-            android:orientation="horizontal">
+            android:layout_height="115dip">
 
             <ImageView
                 android:id="@+id/iv_post"
@@ -35,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dip"
+                android:layout_toRightOf="@id/iv_post"
                 android:orientation="vertical">
 
                 <TextView
@@ -80,7 +80,18 @@
                     android:text="主演：12431 12421 " />
             </LinearLayout>
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/tv_ranking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:text="1"
+                android:textColor="#ffffff"
+                android:textSize="25sp" />
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
