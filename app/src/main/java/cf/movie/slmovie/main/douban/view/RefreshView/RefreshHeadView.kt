@@ -26,7 +26,7 @@ class RefreshHeadView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     }
 
     override fun onReset() {
-        tv!!.text = ""
+        tv!!.text = "onReset"
     }
 
     override fun onComplete() {
@@ -34,6 +34,7 @@ class RefreshHeadView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     }
 
     override fun onRelease() {
+        tv!!.text = "onRelease"
     }
 
     override fun onMove(yScrolled: Int, isComplete: Boolean, automatic: Boolean) {
@@ -49,7 +50,7 @@ class RefreshHeadView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     }
 
     override fun onPrepare() {
-        tv!!.text = ""
+        tv!!.text = "onPrepare"
     }
 
 }
