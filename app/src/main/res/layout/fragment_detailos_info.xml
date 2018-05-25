@@ -166,6 +166,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dip"
+            android:autoLink="web"
             android:text="xxxx"
             android:textColor="#ffffff"
             android:textSize="15sp"
