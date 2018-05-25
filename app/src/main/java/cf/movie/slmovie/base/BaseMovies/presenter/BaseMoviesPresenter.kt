@@ -31,7 +31,7 @@ class BaseMoviesPresenter(val activity: Activity, val view: IBaseMovies) {
         if (!isRefresh) {
             this.which = which
             isRefresh = true
-            model!!.getMovies(which)
+            model.getMovies(which)
         }
     }
 

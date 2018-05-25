@@ -5,7 +5,9 @@ import android.text.TextUtils
 import android.view.View
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseFragment
+import cf.movie.slmovie.main.detailOS.model.bean.DoubanDetailBean
 import cf.movie.slmovie.main.detailOS.model.event.DetailOsEvent
+import cf.movie.slmovie.main.detailOS.model.event.DoubanDetailOsEvent
 import cf.movie.slmovie.main.douban.model.Top250.Top250Bean
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_detailos_info.*
@@ -58,7 +60,7 @@ class InfoFragment : BaseFragment() {
         var genres = ""
         if (movie?.genres?.size!! > 0) {
             movie?.genres?.forEach {
-                genres = if (TextUtils.isEmpty(genres)) it!! else (genres + '、' + it)
+                genres = if (TextUtils.isEmpty(genres)) it else (genres + '、' + it)
             }
         }
         tv_type_c.text = genres
@@ -68,6 +70,7 @@ class InfoFragment : BaseFragment() {
     override fun initAction() {
     }
 
+    //服务器有数据的电影
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(result: DetailOsEvent) {
         if (result.isStatus) {
@@ -80,8 +83,27 @@ class InfoFragment : BaseFragment() {
                 tv_location_c.visibility = View.VISIBLE
                 tv_location.visibility = View.VISIBLE
             }
-        } else {
+        }
+    }
 
+    //通过豆瓣查找的电影
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(result: DoubanDetailOsEvent) {
+        var movie = result.movie
+        if (!TextUtils.isEmpty(movie.summary)) {
+            tv_des.text = movie.summary
+            tv_des.visibility = View.VISIBLE
+        }
+        var location = ""
+        if (movie.countries != null && movie.countries!!.size > 0) {
+            movie.countries!!.forEach {
+                location = if (TextUtils.isEmpty(location)) it else (location + '、' + it)
+            }
+        }
+        if (!TextUtils.isEmpty(location)) {
+            tv_location_c.text = location
+            tv_location_c.visibility = View.VISIBLE
+            tv_location.visibility = View.VISIBLE
         }
     }
 

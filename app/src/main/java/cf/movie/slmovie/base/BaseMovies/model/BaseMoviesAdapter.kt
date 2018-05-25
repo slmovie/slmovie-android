@@ -33,7 +33,7 @@ class BaseMoviesAdapter(var context: Context, var movies: ArrayList<BaseMoviesBe
     }
 
     override fun onBindViewHolder(holder: HotMovieViewHolder, position: Int) {
-        val movie = movies!![position]
+        val movie = movies[position]
         val uri = Uri.parse(movie.post)
         var options = RequestOptions()
         options.placeholder(R.drawable.ic_launcher)
@@ -69,11 +69,11 @@ class BaseMoviesAdapter(var context: Context, var movies: ArrayList<BaseMoviesBe
     }
 
     override fun getItemCount(): Int {
-        return movies!!.size
+        return movies.size
     }
 
     fun getMovies(position: Int): BaseMoviesBean.movie {
-        return movies!![position]
+        return movies[position]
     }
 
     class HotMovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

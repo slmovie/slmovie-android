@@ -3,27 +3,18 @@ package cf.movie.slmovie.main.douban.view
 import android.content.Intent
 import android.graphics.Color
 import android.support.design.widget.BaseTransientBottomBar
-import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.OrientationHelper
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseFragment
 import cf.movie.slmovie.main.detailOS.view.DetailOSActivity
 import cf.movie.slmovie.main.douban.model.Top250.Top250Adapter
-import cf.movie.slmovie.main.douban.model.Top250.Top250Bean
 import cf.movie.slmovie.main.douban.presenter.DoubanPresenter
 import cf.movie.slmovie.main.douban.presenter.DoubanPresenterImpl
-import cf.movie.slmovie.main.douban.view.RefreshView.RefreshFootView
-import cf.movie.slmovie.main.douban.view.RefreshView.RefreshHeadView
 import cf.movie.slmovie.utils.impl.RecyclerItemClickListener
-import com.aspsine.swipetoloadlayout.OnLoadMoreListener
-import com.aspsine.swipetoloadlayout.OnRefreshListener
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout
 import kotlinx.android.synthetic.main.activity_douban_top250.*
-import java.text.FieldPosition
 
 /**
  * Created by 包俊 on 2018/5/21.

@@ -24,7 +24,7 @@ class Top250Adapter(var context: Context, var movies: ArrayList<Top250Bean.subje
     }
 
     override fun onBindViewHolder(holder: Top250Adapter.HotMovieViewHolder, position: Int) {
-        val movie = movies!![position]
+        val movie = movies[position]
         val uri = Uri.parse(movie.images?.medium)
         var options = RequestOptions()
         options.placeholder(R.drawable.ic_launcher)
@@ -67,7 +67,7 @@ class Top250Adapter(var context: Context, var movies: ArrayList<Top250Bean.subje
         if (movie.genres?.size!! > 0) {
             movie.genres?.forEach {
                 if (TextUtils.isEmpty(genres)) {
-                    genres = it!!
+                    genres = it
                 } else {
                     genres = genres + '、' + it
                 }
@@ -78,11 +78,11 @@ class Top250Adapter(var context: Context, var movies: ArrayList<Top250Bean.subje
     }
 
     override fun getItemCount(): Int {
-        return movies!!.size
+        return movies.size
     }
 
     public fun getMovies(position: Int): Top250Bean.subject {
-        return movies!![position]
+        return movies[position]
     }
 
     class HotMovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

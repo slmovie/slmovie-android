@@ -41,7 +41,6 @@ class BaseMoviesFragment : BaseFragment(), IBaseMovies {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
             which = arguments?.getSerializable(ARG_PARAM1) as Which.UrlType
-            adapter = arguments?.getSerializable(ARG_PARAM2) as? BaseMoviesAdapter
         }
         LogUtils.e("BaseMoviesFragment", which!!.toString() + ">>>>>>" + "onCreate")
     }
@@ -123,7 +122,6 @@ class BaseMoviesFragment : BaseFragment(), IBaseMovies {
 
     companion object {
         private val ARG_PARAM1 = "which"
-        private val ARG_PARAM2 = "adapter"
 
         fun newInstance(which: Which.UrlType): BaseMoviesFragment {
             LogUtils.e("BaseMoviesFragment", which.toString() + ">>>>>>" + "newInstance")

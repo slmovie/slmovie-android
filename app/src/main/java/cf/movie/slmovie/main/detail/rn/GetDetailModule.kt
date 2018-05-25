@@ -32,7 +32,7 @@ class GetDetailModule(reactContext: ReactApplicationContext, private var address
     @ReactMethod
     fun getMovie(promise: Promise) {
         this.promise = promise
-        model!!.getMovie(address)
+        model.getMovie(address)
     }
 
     override fun callBack(msg: String) {

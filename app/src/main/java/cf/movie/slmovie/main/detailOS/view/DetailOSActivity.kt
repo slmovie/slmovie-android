@@ -7,11 +7,13 @@ import cf.movie.slmovie.base.BaseActivity
 import cf.movie.slmovie.base.BaseReqListener
 import cf.movie.slmovie.main.detail.bean.MovieDetailBean
 import cf.movie.slmovie.main.detailOS.model.DetailOSAdapter
+import cf.movie.slmovie.main.detailOS.model.bean.DoubanDetailBean
 import cf.movie.slmovie.main.detailOS.model.event.DetailOsEvent
+import cf.movie.slmovie.main.detailOS.model.event.DoubanDetailOsEvent
 import cf.movie.slmovie.main.detailOS.presenter.DetailOSActivityPresenter
 import cf.movie.slmovie.main.douban.model.Top250.Top250Bean
-import kotlinx.android.synthetic.main.activity_detail_os.*
 import org.greenrobot.eventbus.EventBus
+import kotlinx.android.synthetic.main.activity_detail_os.*
 
 /**
  * Created by 包俊 on 2018/5/23.
@@ -51,6 +53,16 @@ class DetailOSActivity : BaseActivity() {
 
         override fun failed(errorCode: String?, errorMsg: String?) {
             if (errorCode.equals("0")) {
+                presenter!!.getDouban(movie?.id!!, object : BaseReqListener<DoubanDetailBean> {
+                    override fun success(result: DoubanDetailBean) {
+                        EventBus.getDefault().post(DoubanDetailOsEvent(result, true, ""))
+                    }
+
+                    override fun failed(errorCode: String?, errorMsg: String?) {
+
+                    }
+
+                })
             }
         }
     }
