@@ -81,7 +81,7 @@ class Top250Adapter(var context: Context, var movies: ArrayList<Top250Bean.subje
         return movies!!.size
     }
 
-    fun getMovies(position: Int): Top250Bean.subject {
+    public fun getMovies(position: Int): Top250Bean.subject {
         return movies!![position]
     }
 

@@ -26,10 +26,10 @@ class MainActivityPresenter(private val context: Activity) {
     fun checkUpdate() {
         checkUpdateModel = CheckUpdateModel(context, object : BaseReqListener<CheckUpdateBean> {
             override fun success(result: CheckUpdateBean) {
-                if (result.version) {
+                if (result.movies!!.version) {
                     var builder: AlertDialog.Builder = AlertDialog.Builder(context, R.style.AlertDialog);
                     builder.setTitle("升级提示")
-                    builder.setMessage(result.info)
+                    builder.setMessage(result.movies!!.info)
                     builder.setPositiveButton("确定") { dialog, p1 ->
                         if (EasyPermissions.hasPermissions(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             downloadAPK()

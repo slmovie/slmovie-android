@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/recycleViewBackground">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_post"
+            android:layout_width="166dip"
+            android:layout_height="230dip"
+            android:layout_marginTop="30dp"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="XXXXX"
+            android:textColor="#ffffff"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_post" />
+
+        <TextView
+            android:id="@+id/tv_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:layout_marginTop="20dp"
+            android:text="年代："
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+        <TextView
+            android:id="@+id/tv_year_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:text="xxxx"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/tv_year"
+            app:layout_constraintTop_toTopOf="@id/tv_year" />
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="类型："
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@id/tv_year"
+            app:layout_constraintTop_toBottomOf="@id/tv_year" />
+
+        <TextView
+            android:id="@+id/tv_type_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:text="xxxx"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/tv_type"
+            app:layout_constraintTop_toTopOf="@id/tv_type" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="地区："
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/tv_year"
+            app:layout_constraintTop_toBottomOf="@id/tv_type" />
+
+        <TextView
+            android:id="@+id/tv_location_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:text="xxxx"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/tv_location"
+            app:layout_constraintTop_toTopOf="@id/tv_location" />
+
+        <TextView
+            android:id="@+id/tv_director"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="导演："
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@id/tv_year"
+            app:layout_constraintTop_toBottomOf="@id/tv_location" />
+
+        <TextView
+            android:id="@+id/tv_director_c"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip"
+            android:maxLines="3"
+            android:text="xxxx"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_director"
+            app:layout_constraintTop_toTopOf="@id/tv_director" />
+
+        <TextView
+            android:id="@+id/tv_actor"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="主演："
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@id/tv_year"
+            app:layout_constraintTop_toBottomOf="@id/tv_director_c" />
+
+        <TextView
+            android:id="@+id/tv_actor_c"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip"
+            android:text="xxxxxxxxx"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_actor"
+            app:layout_constraintTop_toTopOf="@id/tv_actor" />
+
+        <TextView
+            android:id="@+id/tv_db"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="豆瓣："
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@id/tv_year"
+            app:layout_constraintTop_toBottomOf="@id/tv_actor_c" />
+
+        <TextView
+            android:id="@+id/tv_db_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:text="xxxx"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/tv_db"
+            app:layout_constraintTop_toTopOf="@id/tv_db" />
+
+        <TextView
+            android:id="@+id/tv_des"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dip"
+            android:layout_marginRight="40dip"
+            android:layout_marginTop="5dp"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_db" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

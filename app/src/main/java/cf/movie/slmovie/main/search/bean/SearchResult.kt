@@ -10,11 +10,11 @@ import cf.movie.slmovie.bean.StatusBean
  * Created by 包俊 on 2017/8/12.
  */
 
-class SearchResult : BaseVo(){
+class SearchResult : BaseVo() {
     var status: StatusBean? = null
     var movies: ArrayList<Movies>? = null
 
-    inner class Movies {
+    inner class Movies : BaseVo() {
         var name: String? = null
         var post: String? = null
         var describe: String? = null

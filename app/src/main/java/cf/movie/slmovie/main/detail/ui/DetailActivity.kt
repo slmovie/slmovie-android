@@ -68,10 +68,10 @@ class DetailActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
     private val down: Float = 0.toFloat()
 
     override fun initGui() {
-        mReactRootView = findViewById(R.id.react) as ReactRootView
-        toolbar = findViewById(R.id.toolbar) as Toolbar
-        container = findViewById(R.id.container) as CoordinatorLayout
-        swipeLayout = findViewById(R.id.swipeLayout) as SwipeRefreshLayout
+        mReactRootView = findViewById(R.id.react)
+        toolbar = findViewById(R.id.toolbar)
+        container = findViewById(R.id.container)
+        swipeLayout = findViewById(R.id.swipeLayout)
     }
 
     override fun initData() {

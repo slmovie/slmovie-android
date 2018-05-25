@@ -18,8 +18,11 @@ object HtmlCode {
     val Search = "/search/dyjy?name="
     //rn更新
     val RNUpdate = "/RNZIP/"
+
     //app更新
     val APPUpdate = "/appVersion/detail?version="
     //APK下载地址
     val APP = "/app/slys.apk"
+    //根据豆瓣id查找电影
+    val DouBanID = "/search/douban?name="
 }

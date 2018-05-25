@@ -3,6 +3,8 @@ package cf.movie.slmovie.main.home.model
 import android.content.Context
 import cf.movie.slmovie.base.BaseMovies.bean.BaseMoviesBean
 import cf.movie.slmovie.base.BaseReqListener
+import cf.movie.slmovie.server.APPRestClient
+import cf.movie.slmovie.server.APPRestClient.Companion.get
 import cf.movie.slmovie.server.Constant
 import cf.movie.slmovie.server.HtmlCode
 import cf.movie.slmovie.utils.Version
@@ -18,13 +20,15 @@ import com.google.gson.Gson
 class CheckUpdateModel(private val context: Context, private val impl: BaseReqListener<CheckUpdateBean>) {
     fun start() {
         val url = Constant.WEBROOT + HtmlCode.APPUpdate + Version.getVersion(context)
-        val stringRequest = StringRequest(Request.Method.GET, url, Response.Listener { response ->
-            val gson = Gson()
-            val bean = gson.fromJson(response.toString(), CheckUpdateBean::class.java)
-            impl.success(bean)
-        }, Response.ErrorListener {
+        get<CheckUpdateBean>(context, url, CheckUpdateBean::class.java, object : APPRestClient.HttpCallBack<CheckUpdateBean> {
+            override fun onSuccess(bean: CheckUpdateBean) {
+                impl.success(bean)
+            }
+
+            override fun onFailed(errorCode: String, errorMsg: String) {
+            }
+
         })
-        Volley.newRequestQueue(context).add(stringRequest)
     }
 
 }

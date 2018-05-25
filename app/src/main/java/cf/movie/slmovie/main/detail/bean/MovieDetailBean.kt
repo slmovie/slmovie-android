@@ -11,9 +11,9 @@ import cf.movie.slmovie.bean.StatusBean
  * Created by 包俊 on 2017/8/6.
  */
 
-class MovieDetail : BaseVo() {
+class MovieDetailBean : BaseVo() {
     var status: StatusBean? = null
-    var movies: MovieDetail.movie? = null
+    var movies: MovieDetailBean.movie? = null
 
     inner class movie {
         var name: String? = null

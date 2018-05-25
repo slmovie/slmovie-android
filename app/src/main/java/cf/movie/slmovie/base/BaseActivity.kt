@@ -2,6 +2,8 @@ package cf.movie.slmovie.base
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * Created by 包俊 on 2017/7/19.
@@ -16,6 +18,10 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     protected abstract val contentLayout: Int
 
+    init {
+        EventBus.getDefault().register(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (contentLayout != 0) {
@@ -24,6 +30,11 @@ abstract class BaseActivity : AppCompatActivity() {
         initGui()
         initAction()
         initData()
+    }
+
+    @Subscribe
+    fun onEvent(`object`: Any) {
+
     }
 
     /**

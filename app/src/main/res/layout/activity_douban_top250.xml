@@ -19,9 +19,7 @@
             android:id="@+id/swipe_target"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/recycleViewBackground">
-
-        </android.support.v7.widget.RecyclerView>
+            android:background="@color/recycleViewBackground" />
 
         <cf.movie.slmovie.main.douban.view.RefreshView.RefreshFootView
             android:id="@id/swipe_load_more_footer"
