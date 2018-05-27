@@ -27,7 +27,7 @@ class Top250Bean : BaseVo() {
 
     inner class rating : BaseVo() {
         var max: String? = null
-        var average: String? = null
+        var average: Double? = null
         var stars: String? = null
         var min: String? = null
     }

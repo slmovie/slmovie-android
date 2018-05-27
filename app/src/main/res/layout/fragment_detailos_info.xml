@@ -32,17 +32,75 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_post" />
 
+        <RelativeLayout
+            android:id="@+id/ll_average"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title">
+
+            <TextView
+                android:id="@+id/tv_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="111"
+                android:textColor="#ffffff"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/iv_start1"
+                android:layout_width="25dip"
+                android:layout_height="25dip"
+                android:layout_marginLeft="5dip"
+                android:layout_toRightOf="@id/tv_average"
+                android:src="@drawable/ic_rating_star_off" />
+
+            <ImageView
+                android:id="@+id/iv_start2"
+                android:layout_width="25dip"
+                android:layout_height="25dip"
+                android:layout_toRightOf="@id/iv_start1"
+                android:src="@drawable/ic_rating_star_off" />
+
+            <ImageView
+                android:id="@+id/iv_start3"
+                android:layout_width="25dip"
+                android:layout_height="25dip"
+                android:layout_toRightOf="@id/iv_start2"
+                android:src="@drawable/ic_rating_star_off" />
+
+            <ImageView
+                android:id="@+id/iv_start4"
+                android:layout_width="25dip"
+                android:layout_height="25dip"
+                android:layout_toRightOf="@id/iv_start3"
+                android:src="@drawable/ic_rating_star_off" />
+
+            <ImageView
+                android:id="@+id/iv_start5"
+                android:layout_width="25dip"
+                android:layout_height="25dip"
+                android:layout_toRightOf="@id/iv_start4"
+                android:src="@drawable/ic_rating_star_off" />
+
+        </RelativeLayout>
+
+
         <TextView
             android:id="@+id/tv_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dip"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="年代："
             android:textColor="#ffffff"
             android:textSize="15sp"
             app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+            app:layout_constraintTop_toBottomOf="@id/ll_average" />
 
         <TextView
             android:id="@+id/tv_year_c"
