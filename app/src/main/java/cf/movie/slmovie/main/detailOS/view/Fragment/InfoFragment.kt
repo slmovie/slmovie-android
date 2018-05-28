@@ -3,18 +3,14 @@ package cf.movie.slmovie.main.detailOS.view.Fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.TextUtils
-import android.text.method.LinkMovementMethod
 import android.view.View
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseFragment
-import cf.movie.slmovie.main.detailOS.model.bean.DoubanDetailBean
 import cf.movie.slmovie.main.detailOS.model.event.DetailOsEvent
 import cf.movie.slmovie.main.detailOS.model.event.DoubanDetailOsEvent
 import cf.movie.slmovie.main.douban.model.Top250.Top250Bean
-import cf.movie.slmovie.utils.TextClickSpan
+import cf.movie.slmovie.utils.SpanTextClick
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_detailos_info.*
 import org.greenrobot.eventbus.Subscribe
@@ -66,20 +62,16 @@ class InfoFragment : BaseFragment() {
         var genres = ""
         if (movie?.genres?.size!! > 0) {
             movie?.genres?.forEach {
-                genres = if (TextUtils.isEmpty(genres)) it else (genres + '、' + it)
+                genres = if (TextUtils.isEmpty(genres)) it else ("$genres、$it")
             }
         }
         tv_type_c.text = genres
-        var strAll = SpannableString(movie?.id)
-        strAll.setSpan(TextClickSpan(object : TextClickSpan.TextClickSpanListener {
-            override fun click() {
-                var intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse("https://movie.douban.com/subject/${movie?.id}/")
-                activity.startActivity(intent)
-            }
-        }), 0, strAll.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        tv_db_c.text = strAll
-        tv_db_c.movementMethod = LinkMovementMethod.getInstance()
+
+        SpanTextClick.setSpan(tv_db_c, movie?.id.toString(), {
+            var intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("https://movie.douban.com/subject/${movie?.id}/")
+            activity.startActivity(intent)
+        })
 
         tv_average.text = movie?.rating?.average.toString() + "分"
 

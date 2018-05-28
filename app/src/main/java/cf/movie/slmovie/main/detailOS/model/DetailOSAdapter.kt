@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import cf.movie.slmovie.main.detailOS.view.Fragment.InfoFragment
-import cf.movie.slmovie.main.detailOS.view.Fragment.UrlFragment
+import cf.movie.slmovie.main.detailOS.view.Fragment.UrlFragment.UrlFragment
 import cf.movie.slmovie.main.douban.model.Top250.Top250Bean
 
 /**

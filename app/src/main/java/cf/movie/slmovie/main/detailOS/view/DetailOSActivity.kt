@@ -53,6 +53,7 @@ class DetailOSActivity : BaseActivity() {
 
         override fun failed(errorCode: String?, errorMsg: String?) {
             if (errorCode.equals("0")) {
+                EventBus.getDefault().post(DetailOsEvent(null, false, ""))
                 presenter!!.getDouban(movie?.id!!, object : BaseReqListener<DoubanDetailBean> {
                     override fun success(result: DoubanDetailBean) {
                         EventBus.getDefault().post(DoubanDetailOsEvent(result, true, ""))

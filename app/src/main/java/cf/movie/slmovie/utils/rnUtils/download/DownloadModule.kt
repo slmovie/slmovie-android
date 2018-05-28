@@ -1,5 +1,8 @@
 package cf.movie.slmovie.utils.rnUtils.download
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 
@@ -28,6 +31,9 @@ class DownloadModule(private val context: ReactApplicationContext) : ReactContex
             intent.addCategory("android.intent.category.DEFAULT")
             context.startActivity(intent)
         } catch (e: Exception) {
+            val myClipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val myClip = ClipData.newPlainText("text", url)
+            myClipboard.primaryClip = myClip
             isFind = false
             e.printStackTrace()
         }
