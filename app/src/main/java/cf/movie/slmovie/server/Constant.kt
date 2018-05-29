@@ -7,16 +7,15 @@ import com.facebook.soloader.SoLoader.init
  */
 
 object Constant {
-    private val ENVIRONMENT_TYPE = "P"
+    val ENVIRONMENT_TYPE = "P"
     var Log = true
     var WEBROOT: String? = null
+    var RNVersion: Int = 1
 
     init {
-        if (ENVIRONMENT_TYPE == "T") {
-            WEBROOT = "http://192.168.43.22:3000"
-        }
-        if (ENVIRONMENT_TYPE == "P") {
-            WEBROOT = "http://45.32.41.169:3000"
+        when (ENVIRONMENT_TYPE) {
+            "T" -> WEBROOT = "http://192.168.43.22:3000"
+            "P" -> WEBROOT = "http://45.32.41.169:3000"
         }
     }
 

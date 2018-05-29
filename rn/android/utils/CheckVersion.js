@@ -12,11 +12,13 @@ let CheckVersionModule = NativeModules.CheckVersionNative
 
 export async function check(moudle, version) {
     let url = WebRoot + CheckVersion + moudle + "?version=" + version
+    console.log(url)
     let response = await
         fetch(url, {
             method: 'GET',
         });
     if (response.status == 200) {
+        console.log(response)
         let responseJson = await
             response.json()
         console.log(responseJson)

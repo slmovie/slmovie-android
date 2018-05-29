@@ -1,6 +1,9 @@
 package cf.movie.slmovie.commonModels.reactUpdate
 
 import android.content.Context
+import android.content.SharedPreferences
+import cf.movie.slmovie.server.Constant
+import cf.movie.slmovie.server.SharePerfConstent
 
 import java.io.File
 
@@ -23,7 +26,10 @@ class UpdateModel(private val context: Context) {
      */
     fun checkZip(zipName: String, jsPath: String, bundle: String): Boolean {
         val file = File(context.externalCacheDir, jsPath + File.separator + bundle)
-        if (!file.exists()) {
+        val sharedPreferences = context.getSharedPreferences("slmovie", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val HisRNVersion = sharedPreferences.getInt(SharePerfConstent.RNVersionShare, 0)
+        if (!file.exists() || HisRNVersion != Constant.RNVersion) {
             val fileRn = File(context.externalCacheDir.toString() + File.separator + "rn")
             if (!fileRn.exists())
                 fileRn.mkdir()
@@ -31,6 +37,8 @@ class UpdateModel(private val context: Context) {
             val over = ZipUtils.upZip(context.externalCacheDir!!.absolutePath + File.separator + zipName, context.externalCacheDir!!.absolutePath + File.separator + jsPath)
             if (over) {
                 val fileD = File(context.externalCacheDir!!.absolutePath, zipName)
+                editor.putInt(SharePerfConstent.RNVersionShare, Constant.RNVersion)
+                editor.commit()
                 fileD.delete()
             }
             return over

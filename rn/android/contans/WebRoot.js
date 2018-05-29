@@ -9,6 +9,6 @@ function getWebRoot() {
     if (Service == "T") {
         return "http://192.168.43.22:3000"
     } else if (Service == "P") {
-        return "http://www.slys.cf"
+        return "http://www.slys.ml"
     }
 }

@@ -28,7 +28,7 @@ class DetailPresenter(private val context: Activity, private val impl: IDetailVi
     fun initReact(): ReactInstanceManagerBuilder {
         val builder = ReactInstanceManager.builder()
         builder.setApplication(context.application)
-        //                .setBundleAssetName("rn/detail/detail.android.bundle")
+//        builder.setBundleAssetName("rn/detail/detail.android.bundle")
         builder.setJSBundleFile(context.externalCacheDir!!.absolutePath + "/rn/detail/detail.android.bundle")
         builder.setJSMainModuleName("slmovie/rn/android/main/detail/detail.android")
         builder.setUseDeveloperSupport(BuildConfig.DEBUG)

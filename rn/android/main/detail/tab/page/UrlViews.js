@@ -67,7 +67,7 @@ export default class UrlViews extends React.Component {
         let {result} = await  DownloadModule.pushDownload(url)
         if (!result) {
             // Alert.alert("提示", "启动下载器失败，下载地址已复制到剪切板，请自行粘贴下载", [{text: '确认'}])
-            ToastDialog.show("提示", "启动迅雷失败，下载地址已复制到剪切板，请自行粘贴下载", ["确定"], () => {
+            ToastDialog.show("提示", "启动下载器失败，下载地址已复制到剪切板，请自行粘贴下载", ["确定"], () => {
                     ToastDialog.dismiss()
                 }, () => {
                 }

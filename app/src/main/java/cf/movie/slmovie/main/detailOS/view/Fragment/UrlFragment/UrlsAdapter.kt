@@ -55,7 +55,7 @@ class UrlsAdapter(var activity: Activity, var files: ArrayList<FilesBean>) : Rec
             myClipboard.primaryClip = myClip
             var builder: AlertDialog.Builder = AlertDialog.Builder(activity, R.style.AlertDialog);
             builder.setTitle("提示")
-            builder.setMessage("启动迅雷失败，下载地址已复制到剪切板，请自行粘贴下载")
+            builder.setMessage("启动下载器失败，下载地址已复制到剪切板，请自行粘贴下载")
             builder.setPositiveButton("确定") { dialog, p1 ->
                 dialog.dismiss()
             }
