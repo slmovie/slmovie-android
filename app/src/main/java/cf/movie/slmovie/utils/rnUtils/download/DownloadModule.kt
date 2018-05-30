@@ -5,13 +5,8 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.WritableMap
+import android.widget.Toast
+import com.facebook.react.bridge.*
 
 /**
  * Created by 包俊 on 2017/8/9.
@@ -31,6 +26,7 @@ class DownloadModule(private val context: ReactApplicationContext) : ReactContex
             intent.addCategory("android.intent.category.DEFAULT")
             context.startActivity(intent)
         } catch (e: Exception) {
+            Toast.makeText(context, url, Toast.LENGTH_LONG).show()
             val myClipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val myClip = ClipData.newPlainText("text", url)
             myClipboard.primaryClip = myClip

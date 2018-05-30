@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import cf.movie.slmovie.R
 import cf.movie.slmovie.bean.FilesBean
 import cf.movie.slmovie.utils.SpanTextClick
@@ -50,6 +51,7 @@ class UrlsAdapter(var activity: Activity, var files: ArrayList<FilesBean>) : Rec
             intent.addCategory("android.intent.category.DEFAULT")
             activity.startActivity(intent)
         } catch (e: Exception) {
+            Toast.makeText(activity, url, Toast.LENGTH_LONG).show()
             val myClipboard = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val myClip = ClipData.newPlainText("text", url)
             myClipboard.primaryClip = myClip

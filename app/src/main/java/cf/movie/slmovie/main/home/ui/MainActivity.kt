@@ -6,15 +6,11 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-
 import cf.movie.slmovie.R
-import cf.movie.slmovie.R.id.tv_name
 import cf.movie.slmovie.base.BaseActivity
 import cf.movie.slmovie.base.BaseMovies.constant.Which
 import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment
@@ -24,16 +20,15 @@ import cf.movie.slmovie.main.newMovies.ui.NewMoviesFragment
 import cf.movie.slmovie.main.newMovies.ui.NewTVsFragment
 import cf.movie.slmovie.main.search.ui.SearchActivity
 import cf.movie.slmovie.utils.LogUtils
+import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.EasyPermissions
+
 
 /**
  * Created by 包俊 on 2017/7/19.
  */
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, EasyPermissions.PermissionCallbacks {
 
-    private var toolbar: Toolbar? = null
-    private var navigationView: NavigationView? = null
-    private var drawer: DrawerLayout? = null
     private var fragmentManager: FragmentManager? = null
     private var hotMoviesFragment: BaseMoviesFragment? = null
     private var newMoviesFragment: NewMoviesFragment? = null
@@ -69,10 +64,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
 
     override fun initGui() {
-        toolbar = findViewById(R.id.toolbar) as Toolbar
-        drawer = findViewById(R.id.drawer_layout) as DrawerLayout
-        navigationView = findViewById(R.id.nav_view) as NavigationView
-        val HeadView = navigationView!!.getHeaderView(0)
+        val HeadView = nav_view!!.getHeaderView(0)
         tv_name = HeadView.findViewById(R.id.tv_name) as TextView
         LogUtils.e("viewPage", "Main>>>" + tv_name!!.id)
     }
@@ -91,10 +83,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             true
         }
         val toggle = ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer!!.setDrawerListener(toggle)
+                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer_layout!!.setDrawerListener(toggle)
         toggle.syncState()
-        navigationView!!.menu.getItem(0).isChecked = true
+        nav_view!!.menu.getItem(0).isChecked = true
         fragmentManager = supportFragmentManager
         hotMoviesFragment = BaseMoviesFragment.newInstance(Which.UrlType.HotMovie)
         newTVsFragment = NewTVsFragment.newInstance()
@@ -106,7 +98,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun initAction() {
-        navigationView!!.setNavigationItemSelectedListener(this)
+        nav_view!!.setNavigationItemSelectedListener(this)
     }
 
     override fun onBackPressed() {
@@ -157,6 +149,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when (requestCode) {
             WRITE_EXTERNAL_STORAGE -> {
                 Toast.makeText(this, "用户授权成功！", Toast.LENGTH_SHORT).show()
+                presenter!!.checkUpdate()
             }
         }
     }

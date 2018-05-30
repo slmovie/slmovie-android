@@ -5,19 +5,15 @@
         <item android:title="电影">
             <item
                 android:id="@+id/movie_hot"
-                android:icon="@drawable/ic_menu_gallery"
                 android:title="热门电影" />
             <item
                 android:id="@+id/tv_top250"
-                android:icon="@drawable/ic_menu_share"
                 android:title="豆瓣Top250" />
             <item
                 android:id="@+id/movie_new"
-                android:icon="@drawable/ic_menu_camera"
                 android:title="最新电影" />
             <item
                 android:id="@+id/tv_new"
-                android:icon="@drawable/ic_menu_share"
                 android:title="最新电视剧" />
         </item>
     </group>
