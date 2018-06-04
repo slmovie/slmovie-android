@@ -1,12 +1,10 @@
 package cf.movie.slmovie.main.douban.view
 
 import android.content.Intent
-import android.graphics.Color
-import android.support.design.widget.BaseTransientBottomBar
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.OrientationHelper
 import android.view.View
+import android.widget.Toast
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseFragment
 import cf.movie.slmovie.main.detailOS.view.DetailOSActivity
@@ -59,14 +57,6 @@ class DoubanView : BaseFragment(), DoubanPresenterImpl {
         })
     }
 
-    fun SnackToast(msg: String) {
-        Snackbar.make(container!!, msg, BaseTransientBottomBar.LENGTH_INDEFINITE)
-                .setAction("重新加载") {
-                }
-                .setActionTextColor(Color.parseColor("#3CC48D"))
-                .show()
-    }
-
     override fun setAdapter(adapter: Top250Adapter?, position: Int) {
         if (adapter != null) {
             swipe_target?.adapter = adapter
@@ -78,7 +68,7 @@ class DoubanView : BaseFragment(), DoubanPresenterImpl {
     }
 
     override fun reqError(msg: String) {
-        SnackToast(msg)
+        Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
     }
 
 }

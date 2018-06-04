@@ -16,6 +16,10 @@ class DoubanPresenter(private val context: Context, private val impl: DoubanPres
     private var adapter: Top250Adapter? = null
 
     fun getTop250(refresh: Boolean) {
+        if (movies!!.size >= 250) {
+            impl.reqError("没有更多数据")
+            return
+        }
         var start = 0
         if (!refresh) {
             start = movies!!.size + 1
