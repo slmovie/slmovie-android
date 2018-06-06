@@ -2,7 +2,7 @@ package cf.movie.slmovie.main.detailOS.presenter
 
 import android.content.Context
 import cf.movie.slmovie.base.BaseReqListener
-import cf.movie.slmovie.main.detail.bean.MovieDetailBean
+import cf.movie.slmovie.main.detail.model.bean.MovieDetailBean
 import cf.movie.slmovie.main.detailOS.model.DoubanQueryModel
 import cf.movie.slmovie.main.detailOS.model.MovieByDoubanModel
 import cf.movie.slmovie.main.detailOS.model.bean.DoubanDetailBean

@@ -1,4 +1,4 @@
-package cf.movie.slmovie.main.detail.bean
+package cf.movie.slmovie.main.detail.model.bean
 
 import cf.movie.slmovie.base.BaseVo
 import java.util.ArrayList

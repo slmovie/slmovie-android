@@ -11,15 +11,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.OrientationHelper
 import android.support.v7.widget.RecyclerView
 import android.view.View
-
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseFragment
 import cf.movie.slmovie.base.BaseMovies.constant.Which
 import cf.movie.slmovie.base.BaseMovies.model.BaseMoviesAdapter
-import cf.movie.slmovie.utils.impl.RecyclerItemClickListener
 import cf.movie.slmovie.base.BaseMovies.presenter.BaseMoviesPresenter
-import cf.movie.slmovie.main.detail.ui.DetailActivity
+import cf.movie.slmovie.main.detail.ui.DetailRNActivity
 import cf.movie.slmovie.utils.LogUtils
+import cf.movie.slmovie.utils.impl.RecyclerItemClickListener
 
 /**
  * Created by 包俊 on 2017/7/21.
@@ -90,7 +89,7 @@ class BaseMoviesFragment : BaseFragment(), IBaseMovies {
         recyclerView!!.adapter = adapter
         recyclerView!!.addOnItemTouchListener(RecyclerItemClickListener(activity!!, object : RecyclerItemClickListener.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                val intent = Intent(activity, DetailActivity::class.java)
+                val intent = Intent(activity, DetailRNActivity::class.java)
                 intent.putExtra("address", adapter.getMovies(position).address)
                 intent.putExtra("name", adapter.getMovies(position).name)
                 startActivity(intent)

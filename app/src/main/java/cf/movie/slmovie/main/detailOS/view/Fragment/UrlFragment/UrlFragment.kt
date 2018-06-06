@@ -36,13 +36,13 @@ class UrlFragment : BaseFragment() {
             val linearLayoutManager = LinearLayoutManager(activity!!)
             linearLayoutManager.orientation = OrientationHelper.VERTICAL
             recycler.layoutManager = linearLayoutManager
-            var adapter = UrlsAdapter(activity, result.movie?.movies?.files!!)
+            var adapter = UrlsAdapter(activity!!, result.movie?.movies?.files!!)
             recycler.adapter = adapter
             recycler.visibility = View.VISIBLE
         } else {
             SpanTextClick.setSpan(tv_search, "点我去搜索", {
                 var intent = Intent(activity, SearchActivity::class.java)
-                activity.startActivity(intent)
+                activity!!.startActivity(intent)
             })
             tv_search.visibility = View.VISIBLE
         }

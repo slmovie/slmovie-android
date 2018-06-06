@@ -1,82 +1,36 @@
-package cf.movie.slmovie.main.detail.ui
+package cf.movie.slmovie.utils.rnUtils.baseRN.view
 
-import android.content.Intent
 import android.graphics.Color
-import android.support.design.widget.CoordinatorLayout
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.widget.Toast
-
-import com.facebook.react.ReactInstanceManager
-import com.facebook.react.ReactInstanceManagerBuilder
-import com.facebook.react.ReactRootView
-import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
-import com.facebook.react.shell.MainReactPackage
-
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseActivity
-import cf.movie.slmovie.main.detail.presenter.DetailPresenter
-import cf.movie.slmovie.main.detail.rn.DetailReactPackage
+import cf.movie.slmovie.utils.rnUtils.baseRN.presenter.BaseRNPresenter
 import cf.movie.slmovie.utils.rnUtils.checkVersion.CheckVersionReactPackage
-import cf.movie.slmovie.utils.rnUtils.toastDialog.ToastDialogReactPackage
 import cf.movie.slmovie.utils.rnUtils.download.DownloadReactPackage
 import cf.movie.slmovie.utils.rnUtils.snackbar.SnackbarReactPackage
+import cf.movie.slmovie.utils.rnUtils.toastDialog.ToastDialogReactPackage
+import com.facebook.react.ReactInstanceManager
+import com.facebook.react.ReactInstanceManagerBuilder
+import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
+import com.facebook.react.shell.MainReactPackage
+import kotlinx.android.synthetic.main.activity_rn.*
 
 /**
- * Created by 包俊 on 2017/8/5.
+ * Created by 包俊 on 2018/6/6.
  */
+abstract class BaseRNActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
 
-class DetailActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
-    private var mReactRootView: ReactRootView? = null
     private var mReactInstanceManager: ReactInstanceManager? = null
-    private var toolbar: Toolbar? = null
-    private var container: CoordinatorLayout? = null
-    private var swipeLayout: SwipeRefreshLayout? = null
-    private var address: String? = null
-    private var presenter: DetailPresenter? = null
+    private var presenter: BaseRNPresenter? = null
 
     override val contentLayout: Int
-        get() = R.layout.activity_detail
-
-    private val iDetailView = object : IDetailView {
-        /**
-         * swipeLayout刷新状态
-         *
-         * @param fresh
-         */
-        override fun refresh(fresh: Boolean) {
-            runOnUiThread { swipeLayout!!.isRefreshing = fresh }
-        }
-
-        override fun setReactPackage(builder: ReactInstanceManagerBuilder) {
-            builder.addPackage(MainReactPackage())
-                    .addPackage(DetailReactPackage(address!!, this))
-                    .addPackage(SnackbarReactPackage(container!!))
-                    .addPackage(DownloadReactPackage())
-                    .addPackage(ToastDialogReactPackage(this@DetailActivity))
-                    .addPackage(CheckVersionReactPackage(this))
-        }
-
-        override fun reCreateReactNative() {
-            runOnUiThread { mReactInstanceManager!!.recreateReactContextInBackground() }
-        }
-    }
-
-    private val up: Float = 0.toFloat()
-    private val down: Float = 0.toFloat()
+        get() = R.layout.activity_rn
 
     override fun initGui() {
-        mReactRootView = findViewById(R.id.react)
-        toolbar = findViewById(R.id.toolbar)
-        container = findViewById(R.id.container)
-        swipeLayout = findViewById(R.id.swipeLayout)
-    }
-
-    override fun initData() {
         val intent = intent
-        address = intent.getStringExtra("address")
         val name = intent.getStringExtra("name")
         setSupportActionBar(toolbar)
         supportActionBar!!.title = name
@@ -89,18 +43,54 @@ class DetailActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
         swipeLayout!!.setSize(SwipeRefreshLayout.DEFAULT)
         swipeLayout!!.isEnabled = false
         swipeLayout!!.isRefreshing = true
-        presenter = DetailPresenter(this, iDetailView)
+    }
+
+    private val IBaseRNView = object : IBaseRNView {
+        /**
+         * swipeLayout刷新状态
+         *
+         * @param fresh
+         */
+        override fun refresh(fresh: Boolean) {
+            runOnUiThread { swipeRefresh(fresh) }
+        }
+
+        override fun setReactPackage(builder: ReactInstanceManagerBuilder) {
+            builder.addPackage(MainReactPackage())
+                    .addPackage(SnackbarReactPackage(container!!))
+                    .addPackage(DownloadReactPackage())
+                    .addPackage(CheckVersionReactPackage(this))
+                    .addPackage(ToastDialogReactPackage(this@BaseRNActivity))
+            setMyReactPackage(builder)
+        }
+
+        override fun reCreateReactNative() {
+            runOnUiThread { mReactInstanceManager!!.recreateReactContextInBackground() }
+        }
+    }
+
+    override fun initData() {
+        presenter = BaseRNPresenter(this, IBaseRNView)
         if (presenter!!.checkVersion()) {
             mReactInstanceManager = presenter!!.initReact().build()
-            mReactRootView!!.startReactApplication(mReactInstanceManager, "DetailActivity", null)
+            react!!.startReactApplication(mReactInstanceManager, moduleName, null)
         } else {
             Toast.makeText(this, "失败", Toast.LENGTH_LONG).show()
         }
     }
 
     override fun initAction() {
-
     }
+
+    fun swipeRefresh(fresh: Boolean) {
+        runOnUiThread { swipeLayout!!.isRefreshing = fresh }
+    }
+
+    //设置各自需要的方法
+    protected abstract fun setMyReactPackage(builder: ReactInstanceManagerBuilder)
+
+    //设置RN加载的名字
+    protected abstract val moduleName: String
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -133,7 +123,7 @@ class DetailActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
         super.onDestroy()
 
         if (mReactInstanceManager != null) {
-            mReactInstanceManager!!.onHostDestroy()
+            mReactInstanceManager!!.onHostDestroy(this)
         }
     }
 
@@ -152,5 +142,4 @@ class DetailActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
         }
         return super.onKeyUp(keyCode, event)
     }
-
 }

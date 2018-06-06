@@ -23,16 +23,12 @@ import cf.movie.slmovie.utils.SpanTextClick
  * Created by 包俊 on 2018/5/28.
  */
 class UrlsAdapter(var activity: Activity, var files: ArrayList<FilesBean>) : RecyclerView.Adapter<UrlsAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(activity).inflate(R.layout.item_fragment_url, parent, false)
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return files.size
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var file = files.get(position)
         var name = ""
         if (!TextUtils.isEmpty(file.fileSize)) {
@@ -43,6 +39,10 @@ class UrlsAdapter(var activity: Activity, var files: ArrayList<FilesBean>) : Rec
         SpanTextClick.setSpan(holder!!.tv, name, {
             pushDownload(file.download!!)
         })
+    }
+
+    override fun getItemCount(): Int {
+        return files.size
     }
 
     fun pushDownload(url: String) {

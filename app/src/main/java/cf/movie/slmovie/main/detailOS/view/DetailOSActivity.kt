@@ -5,7 +5,7 @@ import android.view.MenuItem
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseActivity
 import cf.movie.slmovie.base.BaseReqListener
-import cf.movie.slmovie.main.detail.bean.MovieDetailBean
+import cf.movie.slmovie.main.detail.model.bean.MovieDetailBean
 import cf.movie.slmovie.main.detailOS.model.DetailOSAdapter
 import cf.movie.slmovie.main.detailOS.model.bean.DoubanDetailBean
 import cf.movie.slmovie.main.detailOS.model.event.DetailOsEvent

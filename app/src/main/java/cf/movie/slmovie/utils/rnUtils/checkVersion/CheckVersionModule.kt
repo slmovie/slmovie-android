@@ -1,11 +1,11 @@
 package cf.movie.slmovie.utils.rnUtils.checkVersion
 
 import android.widget.Toast
-import cf.movie.slmovie.main.detail.ui.IDetailView
 import cf.movie.slmovie.server.Constant
 import cf.movie.slmovie.server.HtmlCode
 import cf.movie.slmovie.utils.DownloadUtil
 import cf.movie.slmovie.utils.ZipUtils
+import cf.movie.slmovie.utils.rnUtils.baseRN.view.IBaseRNView
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
@@ -15,7 +15,7 @@ import java.io.File
  * Created by 包俊 on 2017/8/15.
  */
 
-class CheckVersionModule(private val context: ReactApplicationContext, private val iDetailView: IDetailView) : ReactContextBaseJavaModule(context) {
+class CheckVersionModule(private val context: ReactApplicationContext, private val impl: IBaseRNView) : ReactContextBaseJavaModule(context) {
 
     override fun getName(): String {
         return "CheckVersionNative"
@@ -31,7 +31,7 @@ class CheckVersionModule(private val context: ReactApplicationContext, private v
                     val file = File(context.externalCacheDir!!.absolutePath + File.separator + "rn" + File.separator + module + ".zip")
                     file.delete()
                 }
-                iDetailView.reCreateReactNative()
+                impl.reCreateReactNative()
             }
 
             override fun onDownloading(progress: Int) {

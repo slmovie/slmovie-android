@@ -6,18 +6,13 @@ import android.support.design.widget.BaseTransientBottomBar
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.OrientationHelper
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.Toolbar
+import android.support.v7.widget.*
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseActivity
-import cf.movie.slmovie.main.detail.ui.DetailActivity
+import cf.movie.slmovie.main.detail.ui.DetailRNActivity
 import cf.movie.slmovie.main.search.bean.SearchAdapter
 import cf.movie.slmovie.main.search.presenter.SearchPresenter
 import cf.movie.slmovie.utils.impl.RecyclerItemClickListener
@@ -96,7 +91,7 @@ class SearchActivity : BaseActivity(), ISearchActivity {
         recyclerView!!.adapter = adapter
         recyclerView!!.addOnItemTouchListener(RecyclerItemClickListener(this, object : RecyclerItemClickListener.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                val intent = Intent(this@SearchActivity, DetailActivity::class.java)
+                val intent = Intent(this@SearchActivity, DetailRNActivity::class.java)
                 intent.putExtra("address", adapter.getMovies(position).id)
                 intent.putExtra("name", adapter.getMovies(position).name)
                 startActivity(intent)

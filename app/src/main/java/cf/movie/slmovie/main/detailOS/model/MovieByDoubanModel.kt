@@ -2,7 +2,7 @@ package cf.movie.slmovie.main.detailOS.model
 
 import android.content.Context
 import cf.movie.slmovie.base.BaseReqListener
-import cf.movie.slmovie.main.detail.bean.MovieDetailBean
+import cf.movie.slmovie.main.detail.model.bean.MovieDetailBean
 import cf.movie.slmovie.server.APPRestClient
 import cf.movie.slmovie.server.APPRestClient.Companion.get
 import cf.movie.slmovie.server.Constant
