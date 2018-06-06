@@ -12,13 +12,13 @@ import {
     Alert,
 } from 'react-native';
 
-let DownloadModule = NativeModules.DownloadNative
-let ToastDialog = NativeModules.ToastDialogNative
+let DownloadModule = NativeModules.DownloadNative;
+let ToastDialog = NativeModules.ToastDialogNative;
 
 export default class UrlViews extends React.Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             choosen: -1,
         }
@@ -37,7 +37,7 @@ export default class UrlViews extends React.Component {
     }
 
     _renderUrls(urls) {
-        let lists = []
+        let lists = [];
         for (let i = 0; i < urls.length; i++) {
             lists.push(this._renderUrl(i, urls[i]))
         }
@@ -47,7 +47,7 @@ export default class UrlViews extends React.Component {
     _renderUrl(i, url) {
         return (
             <TouchableOpacity onPress={() => {
-                this._start(url.download)
+                this._start(url.download);
                 this.setState({choosen: i})
             }} key={i}>
                 <Text style={[styles.text, this._choosen(i)]}>
@@ -64,7 +64,7 @@ export default class UrlViews extends React.Component {
     }
 
     async _start(url) {
-        let {result} = await  DownloadModule.pushDownload(url)
+        let {result} = await  DownloadModule.pushDownload(url);
         if (!result) {
             // Alert.alert("提示", "启动下载器失败，下载地址已复制到剪切板，请自行粘贴下载", [{text: '确认'}])
             ToastDialog.show("提示", "启动下载器失败，下载地址已复制到剪切板，请自行粘贴下载", ["确定"], () => {
@@ -98,4 +98,4 @@ let styles = StyleSheet.create({
         marginLeft: 8,
         marginRight: 8,
     }
-})
+});

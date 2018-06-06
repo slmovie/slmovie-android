@@ -49,7 +49,7 @@ export default class InfoViews extends React.Component {
     }
 
     _renderInfos(infos) {
-        let lists = []
+        let lists = [];
         for (let i = 0; i < infos.length; i++) {
             lists.push(this._renderText(i, infos[i]))
         }
@@ -101,4 +101,4 @@ let styles = StyleSheet.create({
         marginRight:
             30
     }
-})
+});

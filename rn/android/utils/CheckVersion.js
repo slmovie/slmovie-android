@@ -8,20 +8,20 @@ import {
     NativeModules,
 } from 'react-native';
 
-let CheckVersionModule = NativeModules.CheckVersionNative
+let CheckVersionModule = NativeModules.CheckVersionNative;
 
 export async function check(moudle, version) {
-    let url = WebRoot + CheckVersion + moudle + "?version=" + version
-    console.log(url)
+    let url = WebRoot + CheckVersion + moudle + "?version=" + version;
+    console.log(url);
     let response = await
         fetch(url, {
             method: 'GET',
         });
     if (response.status == 200) {
-        console.log(response)
+        console.log(response);
         let responseJson = await
-            response.json()
-        console.log(responseJson)
+            response.json();
+        console.log(responseJson);
         if (responseJson.version) {
             CheckVersionModule.Download(moudle)
         }

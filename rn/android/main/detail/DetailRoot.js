@@ -16,10 +16,10 @@ import DetailView from "./DetailView.js";
 import {version} from "./Version.js"
 import {check} from "../../utils/CheckVersion.js"
 
-class HelloWorld extends React.Component {
+export default class DetailActivity extends React.Component {
 
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             movies: {}
         }
@@ -75,5 +75,3 @@ let styles = StyleSheet.create({
         margin: 10,
     },
 });
-
-AppRegistry.registerComponent('DetailActivity', () => HelloWorld);

@@ -6,4 +6,4 @@ exports.isEmptyObj = function (obj) {
         return false
     }
     return true
-}
+};

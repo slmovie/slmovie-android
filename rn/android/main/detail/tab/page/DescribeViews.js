@@ -36,4 +36,4 @@ let styles = StyleSheet.create({
         fontSize: 14,
         margin: 15,
     },
-})
+});
