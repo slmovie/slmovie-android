@@ -7,11 +7,11 @@ import android.view.MenuItem
 import android.widget.Toast
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseActivity
+import cf.movie.slmovie.utils.rnUtils.baseRN.model.Dialog.DialogReactPackage
+import cf.movie.slmovie.utils.rnUtils.baseRN.model.checkVersion.CheckVersionReactPackage
+import cf.movie.slmovie.utils.rnUtils.baseRN.model.download.DownloadReactPackage
+import cf.movie.slmovie.utils.rnUtils.baseRN.model.snackbar.SnackbarReactPackage
 import cf.movie.slmovie.utils.rnUtils.baseRN.presenter.BaseRNPresenter
-import cf.movie.slmovie.utils.rnUtils.checkVersion.CheckVersionReactPackage
-import cf.movie.slmovie.utils.rnUtils.download.DownloadReactPackage
-import cf.movie.slmovie.utils.rnUtils.snackbar.SnackbarReactPackage
-import cf.movie.slmovie.utils.rnUtils.toastDialog.ToastDialogReactPackage
 import com.facebook.react.ReactInstanceManager
 import com.facebook.react.ReactInstanceManagerBuilder
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
@@ -60,7 +60,7 @@ abstract class BaseRNActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
                     .addPackage(SnackbarReactPackage(container!!))
                     .addPackage(DownloadReactPackage())
                     .addPackage(CheckVersionReactPackage(this))
-                    .addPackage(ToastDialogReactPackage(this@BaseRNActivity))
+                    .addPackage(DialogReactPackage(this@BaseRNActivity))
             setMyReactPackage(builder)
         }
 

@@ -1,6 +1,7 @@
 package cf.movie.slmovie.main.detail.ui
 
 import cf.movie.slmovie.main.detail.rn.DetailReactPackage
+import cf.movie.slmovie.main.download.rn.download.XLDownloadReactPackage
 import cf.movie.slmovie.utils.rnUtils.baseRN.view.BaseRNActivity
 import com.facebook.react.ReactInstanceManagerBuilder
 
@@ -32,6 +33,7 @@ class DetailRNActivity : BaseRNActivity() {
 
     override fun setMyReactPackage(builder: ReactInstanceManagerBuilder) {
         builder.addPackage(DetailReactPackage(address!!, iDetailView))
+        builder.addPackage(XLDownloadReactPackage(this))
     }
 
 }
