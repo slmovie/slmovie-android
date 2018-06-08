@@ -6,12 +6,14 @@ import {WebRoot} from "../contans/WebRoot.js"
 import {CheckVersion} from "../contans/HtmlCode.js"
 import {
     NativeModules,
+    Alert
 } from 'react-native';
 
 let CheckVersionModule = NativeModules.CheckVersionNative;
+import {version} from '../contans/Version.js'
 
-export async function check(moudle, version) {
-    let url = WebRoot + CheckVersion + moudle + "?version=" + version;
+export async function check() {
+    let url = WebRoot + CheckVersion + "detail?version=" + version;
     console.log(url);
     let response = await
         fetch(url, {
@@ -23,7 +25,7 @@ export async function check(moudle, version) {
             response.json();
         console.log(responseJson);
         if (responseJson.version) {
-            CheckVersionModule.Download(moudle)
+            CheckVersionModule.Download("detail")
         }
     }
 }

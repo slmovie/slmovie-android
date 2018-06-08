@@ -2,7 +2,6 @@
 
 import React from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
@@ -13,7 +12,6 @@ let DetailModule = NativeModules.DetailNative
 let SnackbarModule = NativeModules.SnackbarNative
 import CommonUtils from '../../utils/CommonUtils.js'
 import DetailView from "./DetailView.js";
-import {version} from "./Version.js"
 import {check} from "../../utils/CheckVersion.js"
 
 export default class DetailActivity extends React.Component {
@@ -27,7 +25,7 @@ export default class DetailActivity extends React.Component {
 
     componentDidMount() {
         this._getMovie()
-        check("detail", version)
+        check()
     }
 
     render() {

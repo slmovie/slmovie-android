@@ -9,11 +9,10 @@ import {
     ScrollView,
     TouchableOpacity,
     NativeModules,
-    Alert,
 } from 'react-native';
 
-let DownloadModule = NativeModules.DownloadNative;
 let ToastDialog = NativeModules.ToastDialogNative;
+let XLDownload = NativeModules.XLDownloadNative;
 
 export default class UrlViews extends React.Component {
 
@@ -47,7 +46,7 @@ export default class UrlViews extends React.Component {
     _renderUrl(i, url) {
         return (
             <TouchableOpacity onPress={() => {
-                this._start(url.download);
+                this._start(url);
                 this.setState({choosen: i})
             }} key={i}>
                 <Text style={[styles.text, this._choosen(i)]}>
@@ -64,14 +63,20 @@ export default class UrlViews extends React.Component {
     }
 
     async _start(url) {
-        let {result} = await  DownloadModule.pushDownload(url);
-        if (!result) {
-            // Alert.alert("提示", "启动下载器失败，下载地址已复制到剪切板，请自行粘贴下载", [{text: '确认'}])
-            ToastDialog.show("提示", "启动下载器失败，下载地址已复制到剪切板，请自行粘贴下载", ["确定"], () => {
+        let str = JSON.stringify(url)
+        if (url.download.indexOf("ed2k://") != -1) {
+            XLDownload.ed2kDownload(str)
+        } else if (url.download.indexOf("magnet:?") != -1) {
+            let {status} = await XLDownload.scanTorrent(str)
+            if (!status) {
+                ToastDialog.show("提示", "下载失败", ["确定"], () => {
                     ToastDialog.dismiss()
                 }, () => {
-                }
-            )
+                    XLDownload.sysDownload(url.download)
+                })
+            }
+        } else {
+            XLDownload.sysDownload(url.download)
         }
     }
 
