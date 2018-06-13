@@ -19,6 +19,17 @@ class ProgressDialog(context: Context, var info: String) : Dialog(context) {
             initData()
         }
 
+    companion object {
+
+        private var dialog: ProgressDialog? = null
+
+        fun show(context: Context, info: String): ProgressDialog {
+            dialog = ProgressDialog(context, info)
+            dialog!!.show()
+            return dialog!!
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_progress)
@@ -32,8 +43,6 @@ class ProgressDialog(context: Context, var info: String) : Dialog(context) {
             tv_info.visibility = View.VISIBLE
             tv_info.text = info
         }
-
-
     }
 
 }

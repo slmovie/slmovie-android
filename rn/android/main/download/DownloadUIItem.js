@@ -31,7 +31,7 @@ export default class DownloadUIItem extends React.Component {
                     <View style={styles.nameView}>
                         <Text style={styles.textName}>{this.state.data.Name}</Text>
                         <View style={styles.playView}>
-                            <Image source={require('../../../../image/ic_download_play.png')}
+                            <Image source={{uri: 'ic_download_play'}}
                                    style={{width: 30, height: 30}}/>
                             <Text>边下边播</Text>
                         </View>
@@ -42,7 +42,7 @@ export default class DownloadUIItem extends React.Component {
                                  color={"#ffffff"}/>
                     <View style={styles.sizeView}>
                         <Text style={styles.textSize}>
-                            {this.state.data.DownloadSize + "/" + this.state.data.TotalSize}</Text>
+                            {this._convertFileSize(this.state.data.DownloadSize) + "/" + this._convertFileSize(this.state.data.TotalSize)}</Text>
                         <Text style={styles.textProgress}>
                             {this._calculateProgress(this.state.data.DownloadSize, this.state.data.TotalSize)}
                         </Text>
@@ -68,19 +68,19 @@ export default class DownloadUIItem extends React.Component {
         switch (this.state.data.DownloadStatus) {
             case 0, 1:
                 return (
-                    <Image source={require('../../../../image/ic_download_stop.png')}
+                    <Image source={{uri: 'ic_download_stop'}}
                            style={{width: 50, height: 50}}/>
                 )
                 break
             case 2:
                 return (
-                    <Image source={require('../../../../image/ic_download_play.png')}
+                    <Image source={{uri: 'ic_download_play'}}
                            style={{width: 50, height: 50}}/>
                 )
                 break
             case 3:
                 return (
-                    <Image source={require('../../../../image/ic_download_retry.png')}
+                    <Image source={{uri: 'ic_download_retry'}}
                            style={{width: 50, height: 50}}/>
                 )
                 break
@@ -91,6 +91,20 @@ export default class DownloadUIItem extends React.Component {
     _calculateProgress(downloadSize, totalSize) {
         let str = Number(downloadSize / totalSize).toFixed(2) + "%";
         return str
+    }
+
+    _convertFileSize(value) {
+        if (null == value || value == '') {
+            return "0B";
+        }
+        var unitArr = new Array("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB");
+        var index = 0,
+            srcsize = parseFloat(value);
+        index = Math.floor(Math.log(srcsize) / Math.log(1024));
+        var size = srcsize / Math.pow(1024, index);
+        //  保留的小数位数
+        size = size.toFixed(2);
+        return size + unitArr[index];
     }
 }
 

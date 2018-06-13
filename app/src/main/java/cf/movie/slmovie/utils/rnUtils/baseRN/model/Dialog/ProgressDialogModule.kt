@@ -23,13 +23,12 @@ class ProgressDialogModule(reactContext: ReactApplicationContext, private val co
      */
     @ReactMethod
     fun show(msg: String) {
-        dialog = ProgressDialog(context, msg)
-        dialog!!.show()
+        dialog = ProgressDialog.show(context, msg)
     }
 
     @ReactMethod
     fun dismiss() {
-        if (dialog != null) {
+        if (dialog != null && dialog!!.isShowing()) {
             dialog!!.dismiss()
         }
     }

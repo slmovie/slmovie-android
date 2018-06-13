@@ -65,24 +65,26 @@ export default class DownloadRoot extends React.Component {
 
     //获取所有下载信息
     _findAllInfo() {
-        DownloadUI.test().then(result => {
-            this.setState(this.state.data = result)
-        }).catch(error => {
-        }).finally(() => {
-            ProgressDialogNative.dismiss()
-            LoadUtilNative.loadFinish()
-        })
+        // DownloadUI.test().then(result => {
+        //     this.setState(this.state.data = result)
+        // }).catch(error => {
+        // }).finally(() => {
+        //     ProgressDialogNative.dismiss()
+        //     LoadUtilNative.loadFinish()
+        // })
         // DownloadUI.test1().then(NativeMap => {
         //     this.setState(this.state.test = NativeMap)
         //     console.log(NativeMap)
         // }).catch(error => {
         //
         // })
-        // DownloadUI.findAllInfo().then(result => {
-        //     this.setState(this.state.data = result)
-        //     console.log(result)
-        // }).catch(error => {
-        // }).finally(() => ProgressDialogNative.dismiss())
+        DownloadUI.findAllInfo().then(result => {
+            this.setState(this.state.data = result)
+        }).catch(error => {
+        }).finally(() => {
+            ProgressDialogNative.dismiss()
+            LoadUtilNative.loadFinish()
+        })
     }
 }
 

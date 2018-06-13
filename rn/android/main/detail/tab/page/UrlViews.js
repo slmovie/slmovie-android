@@ -13,6 +13,7 @@ import {
 
 let ToastDialog = NativeModules.ToastDialogNative;
 let XLDownload = NativeModules.XLDownloadNative;
+let ProgressDialogNative = NativeModules.ProgressDialogNative;
 
 export default class UrlViews extends React.Component {
 
@@ -62,19 +63,12 @@ export default class UrlViews extends React.Component {
         }
     }
 
-    async _start(url) {
+    _start(url) {
         let str = JSON.stringify(url)
         if (url.download.indexOf("ed2k://") != -1) {
             XLDownload.ed2kDownload(str)
         } else if (url.download.indexOf("magnet:?") != -1) {
-            let {status} = await XLDownload.scanTorrent(str)
-            if (!status) {
-                ToastDialog.show("提示", "下载失败", ["确定"], () => {
-                    ToastDialog.dismiss()
-                }, () => {
-                    XLDownload.sysDownload(url.download)
-                })
-            }
+            XLDownload.scanTorrent(str)
         } else {
             XLDownload.sysDownload(url.download)
         }

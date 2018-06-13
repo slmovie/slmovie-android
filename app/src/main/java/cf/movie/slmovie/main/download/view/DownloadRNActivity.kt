@@ -16,6 +16,7 @@ class DownloadRNActivity : BaseRNActivity() {
 
     init {
         isSwipe = false
+        title = "下载管理"
     }
 
     override val moduleName: String
