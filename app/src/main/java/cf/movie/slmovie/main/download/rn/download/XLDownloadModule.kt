@@ -1,18 +1,21 @@
 package cf.movie.slmovie.main.download.rn.download
 
+import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.widget.Toast
 import cf.movie.slmovie.bean.FilesBean
 import cf.movie.slmovie.dialog.ProgressDialog.ProgressDialog
-import cf.movie.slmovie.dialog.XLDownloadDialog.XLDownloadBean
 import cf.movie.slmovie.dialog.XLDownloadDialog.XLDownloadDialog
-import cf.movie.slmovie.main.download.rn.download.XLDownloadUtils.Companion.convertFileSize
+import cf.movie.slmovie.main.download.model.bean.XLDownloadDBBean
 import cf.movie.slmovie.main.download.rn.download.XLDownloadUtils.Companion.getEd2kName
 import cf.movie.slmovie.main.download.rn.download.XLDownloadUtils.Companion.getEd2kSize
 import cf.movie.slmovie.main.download.rn.download.XLDownloadUtils.Companion.isMediaFile
+import cf.movie.slmovie.main.download.view.DownloadRNActivity
+import cf.movie.slmovie.main.home.ui.MainActivity
 import cf.movie.slmovie.server.Constant
 import cf.movie.slmovie.utils.LogUtils
 import cf.movie.slmovie.utils.OutsideDownloadUtils
@@ -21,14 +24,15 @@ import com.google.gson.Gson
 import com.xunlei.downloadlib.XLTaskHelper
 import com.xunlei.downloadlib.parameter.TorrentInfo
 import org.json.JSONObject
+import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
+
 
 /**
  * Created by 包俊 on 2018/6/6.
  */
 class XLDownloadModule(val activity: Activity, val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
-    private var fileBean: FilesBean? = null
     private var scanTorrentPromise: Promise? = null
     private val ScanTorrent: Int = 0
     private var progressDialog: ProgressDialog? = null
@@ -52,13 +56,14 @@ class XLDownloadModule(val activity: Activity, val reactContext: ReactApplicatio
                         var json1 = JSONObject()
                         json1.put("taskId", json.getLong("taskId"))
                         json1.put("savePath", json.optString("savePath"))
+                        json1.put("magent", json.optString("magent"))
                         var message = Message()
                         message.what = ScanTorrent
                         message.obj = json1
                         this.sendMessageDelayed(message, 1000)
                     }
                     2 -> {
-                        analyzeTorrent(json.optString("savePath"))
+                        analyzeTorrent(json.optString("savePath"), json.optString("magent"))
                     }
                     3 -> {
                         val maps = Arguments.createMap()
@@ -75,17 +80,24 @@ class XLDownloadModule(val activity: Activity, val reactContext: ReactApplicatio
     @ReactMethod
     fun ed2kDownload(fileStr: String) {
         var gson = Gson()
-        this.fileBean = gson.fromJson(fileStr, FilesBean::class.java)
-        var bean = XLDownloadBean()
-        bean.name = getEd2kName(fileBean!!.download!!)
-        bean.size = getEd2kSize(fileBean!!.download!!)
-        bean.savePath = Constant.DownloadPath + fileBean!!.name
-        var list = ArrayList<XLDownloadBean>()
+        var fileBean = gson.fromJson(fileStr, FilesBean::class.java)
+        var bean = XLDownloadDBBean()
+        bean.Name = getEd2kName(fileBean.download!!)
+        bean.TotalSize = getEd2kSize(fileBean.download!!)
+        bean.SavePath = Constant.DownloadPath + fileBean.name
+        bean.IsTorrent = 0
+        bean.DownloadPath = fileBean!!.download!!
+        bean.DownloadStatus = 1
+        val list = ArrayList<XLDownloadDBBean>()
         list.add(bean)
-        var dialog = XLDownloadDialog(activity, list)
+        val dialog = XLDownloadDialog(activity, list)
         dialog.show()
         dialog.setOnClickDownloadListner(object : XLDownloadDialog.onClickDownloadListener {
             override fun myDownload(dialog: XLDownloadDialog) {
+                dialog.dismiss()
+                var intent = Intent(activity, DownloadRNActivity::class.java)
+                intent.putExtra("download", bean)
+                activity.startActivity(intent)
             }
 
             override fun sysDownload(dialog: XLDownloadDialog) {
@@ -98,7 +110,7 @@ class XLDownloadModule(val activity: Activity, val reactContext: ReactApplicatio
     @ReactMethod
     fun sysDownload(fileStr: String) {
         var gson = Gson()
-        this.fileBean = gson.fromJson(fileStr, FilesBean::class.java)
+        var fileBean = gson.fromJson(fileStr, FilesBean::class.java)
         if (!OutsideDownloadUtils.start(reactContext, fileBean!!.download!!))
             OutsideDownloadUtils.copy(reactContext, fileBean!!.download!!)
         Toast.makeText(reactContext, "无可下载应用，下载地址已复制到剪切板！", Toast.LENGTH_LONG).show()
@@ -107,23 +119,33 @@ class XLDownloadModule(val activity: Activity, val reactContext: ReactApplicatio
     //下载种子文件
     @ReactMethod
     fun scanTorrent(fileStr: String, scanTorrentPromise: Promise) {
-        if (progressDialog == null)
-            progressDialog = ProgressDialog(activity, "分析种子中")
-        progressDialog!!.show()
-        progressDialog!!.data = "分析种子中"
-        this.scanTorrentPromise = scanTorrentPromise
-        var gson = Gson()
-        this.fileBean = gson.fromJson(fileStr, FilesBean::class.java)
-//        var taskId = XLTaskHelper.instance().addMagentTask(fileBean!!.download!!, "/sdcard/slys/", fileBean!!.name)
-        var taskId = XLTaskHelper.instance().addMagentTask(fileBean!!.download!!, Constant.DownloadPath, fileBean!!.name)
-        LogUtils.e("scanTorrent", "taskId=" + taskId)
-        var json = JSONObject()
-        json.put("taskId", taskId)
-        json.put("savePath", Constant.DownloadPath + fileBean!!.name)
-        var message = Message()
-        message.what = ScanTorrent
-        message.obj = json
-        handler.sendMessage(message)
+        val perms = arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (EasyPermissions.hasPermissions(activity, *perms)) {
+            if (progressDialog == null)
+                progressDialog = ProgressDialog(activity, "分析种子中")
+            progressDialog!!.show()
+            progressDialog!!.data = "分析种子中"
+            this.scanTorrentPromise = scanTorrentPromise
+            var gson = Gson()
+            var fileBean = gson.fromJson(fileStr, FilesBean::class.java)
+            val savePath = Constant.DownloadPath + fileBean!!.name
+            val file = File(savePath)
+            if (file.exists()) {
+                analyzeTorrent(savePath, fileBean!!.download!!)
+            } else {
+                var taskId = XLTaskHelper.instance().addMagentTask(fileBean!!.download!!, Constant.DownloadPath, fileBean!!.name)
+                var json = JSONObject()
+                json.put("taskId", taskId)
+                json.put("savePath", savePath)
+                json.put("magent", fileBean!!.download)
+                var message = Message()
+                message.what = ScanTorrent
+                message.obj = json
+                handler.sendMessage(message)
+            }
+        } else {
+            EasyPermissions.requestPermissions(activity, "下载电影", MainActivity.READ_PHONE_STATE, *perms)
+        }
     }
 
     private var torrentMediaIndexs: IntArray? = null
@@ -131,7 +153,7 @@ class XLDownloadModule(val activity: Activity, val reactContext: ReactApplicatio
 
     //分析种子
     @ReactMethod
-    private fun analyzeTorrent(path: String) {
+    private fun analyzeTorrent(path: String, magent: String) {
         var torrentInfo = XLTaskHelper.instance().getTorrentInfo(path)
         var currentPlayMediaIndex = initTorrentIndex(torrentInfo)
         if (progressDialog != null && progressDialog!!.isShowing)
@@ -140,17 +162,21 @@ class XLDownloadModule(val activity: Activity, val reactContext: ReactApplicatio
         //没有视频文件
             0 -> {
                 Toast.makeText(reactContext, "种子没有可播放文件,下载地址已复制至剪切板", Toast.LENGTH_LONG).show()
-                OutsideDownloadUtils.copy(reactContext, fileBean!!.download!!)
+                OutsideDownloadUtils.copy(reactContext, magent)
             }
         //有视频文件
             else -> {
-                var list = ArrayList<XLDownloadBean>()
+                var list = ArrayList<XLDownloadDBBean>()
                 currentPlayMediaIndex.forEach {
                     var torrentFileInfo = torrentInfo.mSubFileInfo[it]
-                    var bean = XLDownloadBean()
-                    bean.name = torrentFileInfo.mFileName
-                    bean.size = convertFileSize(torrentFileInfo.mFileSize)
-                    bean.savePath = Constant.DownloadPath + bean.name
+                    var bean = XLDownloadDBBean()
+                    bean.Name = torrentFileInfo.mFileName
+                    bean.TotalSize = torrentFileInfo.mFileSize
+                    bean.SavePath = Constant.DownloadPath + bean.Name
+                    bean.IsTorrent = 1
+                    bean.DownloadPath = magent
+                    bean.TorrentPath = path
+                    bean.DownloadStatus = 1
                     list.add(bean)
                 }
                 var dialog = XLDownloadDialog(activity, list)
@@ -158,6 +184,9 @@ class XLDownloadModule(val activity: Activity, val reactContext: ReactApplicatio
                 dialog.setOnClickDownloadListner(object : XLDownloadDialog.onClickDownloadListener {
                     override fun myDownload(dialog: XLDownloadDialog) {
                         dialog.dismiss()
+                        var intent = Intent(activity, DownloadRNActivity::class.java)
+                        intent.putExtra("download", list.get(0))
+                        activity.startActivity(intent)
                     }
 
                     override fun sysDownload(dialog: XLDownloadDialog) {

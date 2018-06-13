@@ -1,5 +1,7 @@
 package cf.movie.slmovie.server
 
+import android.os.Environment
+
 /**
  * Created by 包俊 on 2017/7/21.
  */
@@ -9,7 +11,7 @@ object Constant {
     var Log = true
     var WEBROOT: String? = null
     var RNVersion: Int = 1
-    var DownloadPath = "/sdcard/slys/download/"
+    var DownloadPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/slys/download/"
 
     init {
         when (ENVIRONMENT_TYPE) {

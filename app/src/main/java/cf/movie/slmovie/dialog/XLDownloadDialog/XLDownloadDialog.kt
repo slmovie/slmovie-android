@@ -3,33 +3,30 @@ package cf.movie.slmovie.dialog.XLDownloadDialog
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.OrientationHelper
 import cf.movie.slmovie.R
-import kotlinx.android.synthetic.main.dialog_xldownload.*
+import cf.movie.slmovie.main.download.model.bean.XLDownloadDBBean
+import cf.movie.slmovie.main.download.rn.download.XLDownloadUtils
+import kotlinx.android.synthetic.main.dialog_xldownloadui.*
 
 /**
  * Created by 包俊 on 2018/6/6.
  */
-class XLDownloadDialog(context: Context?, var list: ArrayList<XLDownloadBean>) : AlertDialog(context) {
+class XLDownloadDialog(context: Context?, var list: ArrayList<XLDownloadDBBean>) : AlertDialog(context) {
 
     private var listener: onClickDownloadListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_xldownload)
+        setContentView(R.layout.dialog_xldownloadui)
         initData()
         initAction()
     }
 
     private fun initData() {
-        if (list != null && list.size != 0) {
-            val linearLayoutManager = LinearLayoutManager(context)
-            linearLayoutManager.orientation = OrientationHelper.VERTICAL
-            recycler!!.layoutManager = linearLayoutManager
-            var adapter = FileInfoAdapter(list)
-            recycler.adapter = adapter
-            tv_path.text = list[0]!!.savePath
+        if (list.size != 0) {
+            tv_path.text = list[0].SavePath
+            tv_name.text = list[0].Name
+            tv_size.text = XLDownloadUtils.convertFileSize(list[0].TotalSize)
         }
     }
 
@@ -44,7 +41,7 @@ class XLDownloadDialog(context: Context?, var list: ArrayList<XLDownloadBean>) :
         }
     }
 
-    fun setData(list: ArrayList<XLDownloadBean>) {
+    fun setData(list: ArrayList<XLDownloadDBBean>) {
         this.list = list
         initData()
     }

@@ -25,7 +25,7 @@ class CheckVersionModule(private val context: ReactApplicationContext, private v
     fun Download(module: String) {
         DownloadUtil.download(Constant.WEBROOT + HtmlCode.RNUpdate + module + ".zip", context.externalCacheDir!!.absolutePath + File.separator + "rn", object : DownloadUtil.OnDownloadListener {
             override fun onDownloadSuccess() {
-                var filePath = context.externalCacheDir!!.absolutePath + File.separator + "rn" + File.separator + module;
+                var filePath = context.externalCacheDir!!.absolutePath + File.separator + "rn";
                 val ok = ZipUtils.upZip(context.externalCacheDir!!.absolutePath + File.separator + "rn" + File.separator + module + ".zip", filePath)
                 if (ok) {
                     val file = File(context.externalCacheDir!!.absolutePath + File.separator + "rn" + File.separator + module + ".zip")

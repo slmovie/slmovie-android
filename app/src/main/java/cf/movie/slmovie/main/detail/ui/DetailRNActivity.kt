@@ -15,6 +15,9 @@ class DetailRNActivity : BaseRNActivity() {
     override val moduleName: String
         get() = "DetailActivity"
 
+    override fun loadFinished() {
+    }
+
     override fun initData() {
         address = intent.getStringExtra("address")
         super.initData()

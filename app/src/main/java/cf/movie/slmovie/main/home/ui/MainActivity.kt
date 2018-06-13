@@ -40,6 +40,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     companion object {
         val WRITE_EXTERNAL_STORAGE: Int = 5001
+        val READ_PHONE_STATE: Int = 5002
     }
 
 

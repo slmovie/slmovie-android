@@ -31,13 +31,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dip"
-        android:layout_marginTop="5dip"
-        app:layout_constraintTop_toBottomOf="@id/tv_files_title" />
+        android:layout_marginTop="5dp"
+        android:textColor="@color/default_text"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_size"
+        app:layout_constraintTop_toBottomOf="@+id/tv_files_title" />
+
+    <TextView
+        android:id="@+id/tv_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:singleLine="true"
+        android:textColor="@color/default_text"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_name"
+        app:layout_constraintTop_toTopOf="@id/tv_name" />
 
     <TextView
         android:id="@+id/tv_path_title"
@@ -49,7 +67,7 @@
         android:textColor="@color/colorPrimary"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recycler" />
+        app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
     <TextView
         android:id="@+id/tv_path"
@@ -57,8 +75,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dip"
         android:layout_marginRight="15dip"
-        android:layout_marginTop="5dp"
-        android:text="xxxxxxxxxxxxxxxxxxxx"
+        android:layout_marginTop="8dp"
+        android:singleLine="true"
         android:textColor="@color/default_text"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +93,6 @@
         android:text="外部下载"
         android:textColor="@color/default_text"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tv_my_download"
         app:layout_constraintTop_toBottomOf="@+id/tv_path" />

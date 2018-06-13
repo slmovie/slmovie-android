@@ -46,10 +46,10 @@ class XLDownloadUtils {
             return split[2]
         }
 
-        fun getEd2kSize(url: String): String {
+        fun getEd2kSize(url: String): Long {
             var split = url.split("|")
             var size = split[3].toLong()
-            return convertFileSize(size)
+            return size
         }
     }
 }

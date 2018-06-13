@@ -74,8 +74,7 @@ let styles = StyleSheet.create({
     },
     text: {
         color: "#ffffff",
-        fontSize:
-            14,
+        fontSize:14,
     }
     ,
     post: {
