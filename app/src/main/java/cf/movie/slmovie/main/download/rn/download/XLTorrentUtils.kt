@@ -1,6 +1,5 @@
 package cf.movie.slmovie.main.download.rn.download
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Handler
@@ -23,27 +22,14 @@ import java.io.File
 /**
  * Created by 包俊 on 2018/6/13.
  */
-class XLTorrentUtils(var activity: Activity) {
+class XLTorrentUtils(var activity: Activity, var handler: Handler) {
 
     private var progressDialog: ProgressDialog? = null
 
-    companion object {
-        private var instance: XLTorrentUtils? = null
-        private var handler: Handler? = null
-
-        @Synchronized
-        fun get(activity: Activity, handler: Handler): XLTorrentUtils {
-            instance = XLTorrentUtils(activity)
-            this.handler = handler
-            return instance!!
-        }
-    }
-
-
     //下载种子文件
     fun scanTorrent(fileStr: String) {
-        val perms = arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        progressDialog = ProgressDialog.show(activity, "分析种子中")
+        progressDialog = ProgressDialog(activity, "分析种子中")
+        progressDialog!!.show()
         var gson = Gson()
         var fileBean = gson.fromJson(fileStr, FilesBean::class.java)
         val savePath = Constant.DownloadPath + fileBean!!.name
@@ -70,8 +56,8 @@ class XLTorrentUtils(var activity: Activity) {
     fun analyzeTorrent(path: String, magent: String) {
         var torrentInfo = XLTaskHelper.instance().getTorrentInfo(path)
         var currentPlayMediaIndex = initTorrentIndex(torrentInfo)
-//        if (progressDialog != null && progressDialog!!.isShowing)
-        progressDialog!!.dismiss()
+        if (progressDialog != null && progressDialog!!.isShowing)
+            progressDialog!!.dismiss()
         when (currentPlayMediaIndex.size) {
         //没有视频文件
             0 -> {

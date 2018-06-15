@@ -42,6 +42,7 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
     }
 
     private var dao = XLDownloadDao(reactContext)
+    private var XLTorrentUtils: XLTorrentUtils? = null
 
     override fun getName(): String {
         XLTaskHelper.init(activity.applicationContext)
@@ -82,6 +83,7 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
                 val taskInfo = XLTaskHelper.instance().getTaskInfo(bean.TastId)
                 bean.DownloadStatus = taskInfo.mTaskStatus
                 bean.DownloadSize = taskInfo.mDownloadSize
+                bean.Speed = taskInfo.mDownloadSpeed
                 when (taskInfo.mTaskStatus) {
                     0 -> {
 
@@ -90,7 +92,7 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
                         var message = Message()
                         message.what = ED2K
                         message.obj = bean
-                        this.sendMessageDelayed(message, 2000)
+                        this.sendMessageDelayed(message, 1000)
                     }
                 }
                 when (taskInfo.mTaskStatus) {
@@ -178,13 +180,14 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
     //下载种子文件
     @ReactMethod
     fun scanTorrent(fileStr: String) {
-        XLTorrentUtils.get(activity, handler).scanTorrent(fileStr)
+        XLTorrentUtils = XLTorrentUtils(activity, handler)
+        XLTorrentUtils!!.scanTorrent(fileStr)
     }
 
     //分析种子
     @ReactMethod
     fun analyzeTorrent(path: String, magent: String) {
-        XLTorrentUtils.get(activity, handler).analyzeTorrent(path, magent)
+        XLTorrentUtils!!.analyzeTorrent(path, magent)
     }
 
     @ReactMethod

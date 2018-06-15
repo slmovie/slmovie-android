@@ -33,15 +33,6 @@ export default class DownloadUIItem extends React.Component {
             if (this.state.data.DownloadPath == event.DownloadPath && event.DownloadStatus != 0) {
                 this.setState({data: event, downloadStatus: event.DownloadStatus})
             }
-            // const newArr = []
-            // Object.keys(this.state.data).map((key, index) => {
-            //     if (this.state.data[key].DownloadPath == event.DownloadPath) {
-            //         newArr.push(event)
-            //     } else {
-            //         newArr.push(this.state.data[key]);
-            //     }
-            // });
-            // this.setState({data: newArr})
         });
     }
 
@@ -61,19 +52,24 @@ export default class DownloadUIItem extends React.Component {
                                  indeterminate={false}
                                  color={"#ffffff"}/>
                     <View style={styles.sizeView}>
-                        <Text style={styles.textSize}>
-                            {this._convertFileSize(this.state.data.DownloadSize) + "/" + this._convertFileSize(this.state.data.TotalSize)}</Text>
+                        <Text
+                            style={styles.textSize}>{this._convertFileSize(this.state.data.Speed) + "/S"}</Text>
                         <View style={styles.playView}>
                             <Image source={{uri: 'ic_download_play'}}
                                    style={{width: 13, height: 13}}/>
                             <Text style={styles.textSize}>边下边播</Text>
                         </View>
+                    </View>
+                    <View style={styles.sizeView}>
+                        <Text style={styles.textSize}>
+                            {this._convertFileSize(this.state.data.DownloadSize) + "/" + this._convertFileSize(this.state.data.TotalSize)}</Text>
                         <Text style={styles.textProgress}>
                             {this._calculateProgress(this.state.data.DownloadSize, this.state.data.TotalSize)}
                         </Text>
                     </View>
                 </View>
-                <TouchableWithoutFeedback onPress={() => this._download()}>
+                <TouchableWithoutFeedback onPress={() => this._download()}
+                                          style={styles.touchView}>
                     {this._download_img()}
                 </TouchableWithoutFeedback>
             </View>
@@ -84,10 +80,12 @@ export default class DownloadUIItem extends React.Component {
     _download() {
         if (this.state.downloadStatus == 0 || this.state.downloadStatus == 1) {
             XLDownload.stopTask(this.state.data.TastId)
-            this.setState({downloadStatus: 3})
+            var bean = this.state.data
+            bean.Speed = 0
+            this.setState({downloadStatus: 3, data: bean})
         } else if (this.state.downloadStatus == 2) {
 
-        } else if (this.state.downloadStatus == 3) {
+        } else if (this.state.downloadStatus == 3 || this.state.downloadStatus == 4) {
             if (this.state.data.IsTorrent == 0) {
                 XLDownload.ed2kDownload(JSON.stringify(this.state.data))
             } else {
@@ -98,8 +96,7 @@ export default class DownloadUIItem extends React.Component {
 
     //0连接中1下载中 2下载完成 3失败
     _download_img() {
-        // console.log(this.state.data.DownloadStatus)
-        switch (this.state.data.DownloadStatus) {
+        switch (this.state.downloadStatus) {
             case 0:
                 return (
                     <View style={styles.buttonView}>
@@ -130,9 +127,9 @@ export default class DownloadUIItem extends React.Component {
             case 3:
                 return (
                     <View style={styles.buttonView}>
-                        <Image source={{uri: 'ic_download_retry'}}
+                        <Image source={{uri: 'ic_download_start'}}
                                style={{width: 50, height: 50}}/>
-                        <Text style={styles.textDownload}>下载失败</Text>
+                        <Text style={styles.textName}>下载暂停</Text>
                     </View>
                 )
                 break
@@ -142,7 +139,7 @@ export default class DownloadUIItem extends React.Component {
     //计算下载百分比
     _calculateProgress(downloadSize, totalSize) {
         let long = Number(downloadSize / totalSize).toFixed(2)
-        // this.setState({progress: long})
+        // this.setState({progress: long * 100})
         let str = long + "%";
         return str
     }
@@ -167,6 +164,8 @@ let styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         backgroundColor: '#3c3c3c',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
         marginLeft: 10,
         marginTop: 10,
         marginRight: 10,
@@ -192,19 +191,23 @@ let styles = StyleSheet.create({
     buttonView: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        marginTop: 15,
+    },
+    touchView: {
+        flex: 1,
+        alignSelf: 'flex-end'
     },
     playView: {
-        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft: 5,
+        alignSelf: 'flex-end',
     },
     textName: {
         flex: 4,
         color: "#ffffff",
-        fontSize: 12,
+        fontSize: 14,
     },
     textSize: {
         color: "#ffffff",

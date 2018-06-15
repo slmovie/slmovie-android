@@ -36,17 +36,24 @@ export default class DownloadRoot extends React.Component {
         check()
         this._findAllInfo()
         this.DownloadBeanEmit = DeviceEventEmitter.addListener('DownloadBean', event => {
-            if (this.state.data.sizes == 0) {
-                this.setState({data: event})
+            console.log(event)
+            if (this.state.data.length == 0) {
+                var arr = this.state.data.concat(event)
+                this.setState({data: arr})
             } else {
-                const newArr = []
+                var newArr = []
+                var update = false
                 Object.keys(this.state.data).map((key, index) => {
                     if (this.state.data[key].DownloadPath == event.DownloadPath) {
-                        newArr.push(event)
+                        update = true
+                        newArr = newArr.concat(event)
                     } else {
-                        newArr.push(this.state.data[key]);
+                        newArr = newArr.concat(this.state.data[key]);
                     }
                 });
+                if (!update)
+                    newArr = newArr.concat(event)
+                console.log(newArr)
                 this.setState({data: newArr})
             }
             if (event.IsTorrent == 0) {

@@ -105,4 +105,11 @@ class XLDownloadUIModule(val reactContext: ReactApplicationContext) : ReactConte
     fun deleteAll() {
         dao.deleteAll()
     }
+
+    @ReactMethod
+    fun update(json: String) {
+        var gson = Gson()
+        var bean = gson.fromJson<XLDownloadDBBean>(json, XLDownloadDBBean::class.java)
+        dao.update(bean)
+    }
 }

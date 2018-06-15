@@ -17,4 +17,5 @@ class XLDownloadDBBean : BaseVo() {
     var DownloadStatus: Int = 0
     var IsTorrent: Int = 0
     var Data: String = "1"
+    var Speed: Long = 0
 }
