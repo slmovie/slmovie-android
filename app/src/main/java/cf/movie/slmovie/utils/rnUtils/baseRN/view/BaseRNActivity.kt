@@ -8,6 +8,9 @@ import android.view.MenuItem
 import android.widget.Toast
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseActivity
+import cf.movie.slmovie.main.download.rn.download.XLDownloadModule
+import cf.movie.slmovie.main.home.ui.MainActivity
+import cf.movie.slmovie.utils.PermissionUtils
 import cf.movie.slmovie.utils.rnUtils.baseRN.model.Dialog.DialogReactPackage
 import cf.movie.slmovie.utils.rnUtils.baseRN.model.LoadModule.LoadModule
 import cf.movie.slmovie.utils.rnUtils.baseRN.model.LoadModule.LoadReactPackage
@@ -21,12 +24,12 @@ import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 import com.facebook.react.shell.MainReactPackage
 import kotlinx.android.synthetic.main.activity_rn.*
-import pub.devrel.easypermissions.EasyPermissions
+
 
 /**
  * Created by 包俊 on 2018/6/6.
  */
-abstract class BaseRNActivity : BaseActivity(), DefaultHardwareBackBtnHandler, EasyPermissions.PermissionCallbacks {
+abstract class BaseRNActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
 
     private var mReactInstanceManager: ReactInstanceManager? = null
     private var presenter: BaseRNPresenter? = null
@@ -118,15 +121,21 @@ abstract class BaseRNActivity : BaseActivity(), DefaultHardwareBackBtnHandler, E
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        Toast.makeText(this, "用户授权成功！", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        Toast.makeText(this, "用户授权失败！", Toast.LENGTH_SHORT).show()
+        when (requestCode) {
+            MainActivity.XLDownload -> {
+                PermissionUtils.requestResult(this, grantResults, permissions, {
+                    if (XLDownloadModule.perCallback != null) {
+                        XLDownloadModule.perCallback!!.invoke(true)
+                        XLDownloadModule.perCallback = null
+                    }
+                }, {
+                    if (XLDownloadModule.perCallback != null) {
+                        XLDownloadModule.perCallback!!.invoke(false)
+                        XLDownloadModule.perCallback = null
+                    }
+                })
+            }
+        }
     }
 
     //设置各自需要的方法

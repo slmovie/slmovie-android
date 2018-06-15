@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.net.Uri
 import android.os.Environment
+import android.support.v4.app.ActivityCompat
 import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseReqListener
 import cf.movie.slmovie.main.home.model.CheckUpdateBean
@@ -13,7 +14,7 @@ import cf.movie.slmovie.main.home.ui.MainActivity
 import cf.movie.slmovie.server.Constant
 import cf.movie.slmovie.server.HtmlCode
 import cf.movie.slmovie.utils.DownloadManagerUtil
-import pub.devrel.easypermissions.EasyPermissions
+import cf.movie.slmovie.utils.PermissionUtils
 import java.io.File
 
 /**
@@ -31,11 +32,11 @@ class MainActivityPresenter(private val context: Activity) {
                     builder.setTitle("升级提示")
                     builder.setMessage(result.movies!!.info)
                     builder.setPositiveButton("确定") { dialog, p1 ->
-                        if (EasyPermissions.hasPermissions(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        if (PermissionUtils.checkPermissionAllGranted(context, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
                             downloadAPK()
                             dialog?.dismiss()
                         } else {
-                            EasyPermissions.requestPermissions(context, "下载更新", MainActivity.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), MainActivity.XLDownload)
                         }
                     }
                     builder.setNegativeButton("取消") { dialog, p1 -> dialog?.dismiss() }

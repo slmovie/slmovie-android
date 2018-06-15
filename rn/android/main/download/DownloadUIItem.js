@@ -10,18 +10,43 @@ import {
     View,
     Image,
     TouchableWithoutFeedback,
-    NativeModules,
+    NativeModules, DeviceEventEmitter,
 } from 'react-native';
 
 let ProgressBar = require('ProgressBarAndroid');
 let XLDownload = NativeModules.XLDownloadNative;
+let DownloadUI = NativeModules.XLDownloadUINative;
 
 export default class DownloadUIItem extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: this.props.data
+            data: this.props.data,
+            progress: 0,
+            downloadStatus: 3,
         }
+    }
+
+    componentDidMount() {
+        this.QuerytaskEmit = DeviceEventEmitter.addListener('Querytask', event => {
+            console.log(event.DownloadStatus)
+            if (this.state.data.DownloadPath == event.DownloadPath && event.DownloadStatus != 0) {
+                this.setState({data: event, downloadStatus: event.DownloadStatus})
+            }
+            // const newArr = []
+            // Object.keys(this.state.data).map((key, index) => {
+            //     if (this.state.data[key].DownloadPath == event.DownloadPath) {
+            //         newArr.push(event)
+            //     } else {
+            //         newArr.push(this.state.data[key]);
+            //     }
+            // });
+            // this.setState({data: newArr})
+        });
+    }
+
+    componentWillUnmount() {
+        this.QuerytaskEmit.remove()
     }
 
     render() {
@@ -30,58 +55,85 @@ export default class DownloadUIItem extends React.Component {
                 <View style={styles.infoView}>
                     <View style={styles.nameView}>
                         <Text style={styles.textName}>{this.state.data.Name}</Text>
-                        <View style={styles.playView}>
-                            <Image source={{uri: 'ic_download_play'}}
-                                   style={{width: 30, height: 30}}/>
-                            <Text>边下边播</Text>
-                        </View>
                     </View>
                     <ProgressBar styleAttr="Horizontal"
-                                 progress={0.1}
+                                 progress={this.state.progress}
                                  indeterminate={false}
                                  color={"#ffffff"}/>
                     <View style={styles.sizeView}>
                         <Text style={styles.textSize}>
                             {this._convertFileSize(this.state.data.DownloadSize) + "/" + this._convertFileSize(this.state.data.TotalSize)}</Text>
+                        <View style={styles.playView}>
+                            <Image source={{uri: 'ic_download_play'}}
+                                   style={{width: 13, height: 13}}/>
+                            <Text style={styles.textSize}>边下边播</Text>
+                        </View>
                         <Text style={styles.textProgress}>
                             {this._calculateProgress(this.state.data.DownloadSize, this.state.data.TotalSize)}
                         </Text>
                     </View>
                 </View>
-                <View style={styles.buttonView}>
-                    <TouchableWithoutFeedback onPress={() => this._download}>
-                        {this._download_img()}
-                    </TouchableWithoutFeedback>
-                </View>
+                <TouchableWithoutFeedback onPress={() => this._download()}>
+                    {this._download_img()}
+                </TouchableWithoutFeedback>
             </View>
         )
     }
 
     //下载开始暂停播放按钮
     _download() {
+        if (this.state.downloadStatus == 0 || this.state.downloadStatus == 1) {
+            XLDownload.stopTask(this.state.data.TastId)
+            this.setState({downloadStatus: 3})
+        } else if (this.state.downloadStatus == 2) {
 
+        } else if (this.state.downloadStatus == 3) {
+            if (this.state.data.IsTorrent == 0) {
+                XLDownload.ed2kDownload(JSON.stringify(this.state.data))
+            } else {
+
+            }
+        }
     }
 
     //0连接中1下载中 2下载完成 3失败
     _download_img() {
-        console.log(this.state.data.DownloadStatus)
+        // console.log(this.state.data.DownloadStatus)
         switch (this.state.data.DownloadStatus) {
-            case 0, 1:
+            case 0:
                 return (
-                    <Image source={{uri: 'ic_download_stop'}}
-                           style={{width: 50, height: 50}}/>
+                    <View style={styles.buttonView}>
+                        <Image source={{uri: 'ic_download_stop'}}
+                               style={{width: 50, height: 50}}/>
+                        <Text style={styles.textName}>连接中</Text>
+                    </View>
+                )
+                break
+            case 1:
+                return (
+                    <View style={styles.buttonView}>
+                        <Image source={{uri: 'ic_download_stop'}}
+                               style={{width: 50, height: 50}}/>
+                        <Text style={styles.textName}>下载中</Text>
+                    </View>
                 )
                 break
             case 2:
                 return (
-                    <Image source={{uri: 'ic_download_play'}}
-                           style={{width: 50, height: 50}}/>
+                    <View style={styles.buttonView}>
+                        <Image source={{uri: 'ic_download_play'}}
+                               style={{width: 50, height: 50}}/>
+                        <Text style={styles.textName}>下载完成</Text>
+                    </View>
                 )
                 break
             case 3:
                 return (
-                    <Image source={{uri: 'ic_download_retry'}}
-                           style={{width: 50, height: 50}}/>
+                    <View style={styles.buttonView}>
+                        <Image source={{uri: 'ic_download_retry'}}
+                               style={{width: 50, height: 50}}/>
+                        <Text style={styles.textDownload}>下载失败</Text>
+                    </View>
                 )
                 break
         }
@@ -89,7 +141,9 @@ export default class DownloadUIItem extends React.Component {
 
     //计算下载百分比
     _calculateProgress(downloadSize, totalSize) {
-        let str = Number(downloadSize / totalSize).toFixed(2) + "%";
+        let long = Number(downloadSize / totalSize).toFixed(2)
+        // this.setState({progress: long})
+        let str = long + "%";
         return str
     }
 
@@ -123,17 +177,17 @@ let styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         marginTop: 3,
+        marginBottom: 10,
     },
     nameView: {
         flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
+        marginBottom: 3,
     },
     sizeView: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: 3,
     },
     buttonView: {
         flex: 1,
@@ -145,29 +199,32 @@ let styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    text: {
-        color: "#ffffff",
-        fontSize: 14,
+        marginLeft: 5,
     },
     textName: {
-        flex: 2,
+        flex: 4,
         color: "#ffffff",
-        fontSize: 16,
+        fontSize: 12,
     },
     textSize: {
         color: "#ffffff",
         fontSize: 12,
-        marginBottom: 3,
+        marginLeft: 2,
     },
     textProgress: {
         color: "#ffffff",
         fontSize: 12,
-        marginBottom: 3,
         alignSelf: 'flex-end',
     },
     textPlay: {
         color: "#ffffff",
         fontSize: 15,
-    }
+    },
+    textDownload: {
+        flex: 1,
+        color: "#ffffff",
+        fontSize: 12,
+        marginTop: 8,
+        alignSelf: 'flex-end',
+    },
 });

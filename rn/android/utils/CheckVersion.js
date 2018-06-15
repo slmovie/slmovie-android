@@ -14,16 +14,16 @@ import {version} from '../contans/Version.js'
 
 export async function check() {
     let url = WebRoot + CheckVersion + "detail?version=" + version;
-    console.log(url);
+    // console.log(url);
     let response = await
         fetch(url, {
             method: 'GET',
         });
     if (response.status == 200) {
-        console.log(response);
+        // console.log(response);
         let responseJson = await
             response.json();
-        console.log(responseJson);
+        // console.log(responseJson);
         if (responseJson.version) {
             CheckVersionModule.Download("detail")
         }

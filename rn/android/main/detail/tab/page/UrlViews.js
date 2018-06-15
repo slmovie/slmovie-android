@@ -8,7 +8,7 @@ import {
     View,
     ScrollView,
     TouchableOpacity,
-    NativeModules,
+    NativeModules, PermissionsAndroid
 } from 'react-native';
 
 let ToastDialog = NativeModules.ToastDialogNative;
@@ -64,14 +64,19 @@ export default class UrlViews extends React.Component {
     }
 
     _start(url) {
-        let str = JSON.stringify(url)
-        if (url.download.indexOf("ed2k://") != -1) {
-            XLDownload.ed2kDownload(str)
-        } else if (url.download.indexOf("magnet:?") != -1) {
-            XLDownload.scanTorrent(str)
-        } else {
-            XLDownload.sysDownload(url.download)
-        }
+        XLDownload.requestPermission((result => {
+            if (result) {
+                let str = JSON.stringify(url)
+                if (url.download.indexOf("ed2k://") != -1) {
+                    XLDownload.ed2kDownloadDialog(str)
+                } else if (url.download.indexOf("magnet:?") != -1) {
+                    XLDownload.scanTorrent(str)
+                } else {
+                    XLDownload.sysDownload(url.download)
+                }
+            }
+        }))
+
     }
 
     //地址拼接

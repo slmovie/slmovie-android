@@ -20,7 +20,7 @@ import FlatItem from "./DownloadUIItem.js"
 let DownloadUI = NativeModules.XLDownloadUINative;
 let ProgressDialogNative = NativeModules.ProgressDialogNative;
 let LoadUtilNative = NativeModules.LoadUtilNative;
-
+let XLDownload = NativeModules.XLDownloadNative;
 
 export default class DownloadRoot extends React.Component {
 
@@ -35,21 +35,30 @@ export default class DownloadRoot extends React.Component {
         ProgressDialogNative.show('加载中')
         check()
         this._findAllInfo()
-        DeviceEventEmitter.addListener('DownloadBean', event => {
-            const newArr = []
-            Object.keys(this.state.data).map((key, index) => {
-                newArr.push(this.state.data[key]);
-            });
-            newArr.push(event)
-            console.log(newArr)
-            this.setState({data: newArr})
-            // console.log(event)
-            // console.log(this.state.data)
-            // let temp = this.state.data
-            // temp = temp.push(event)
-            // console.log(temp)
-            // this.setState({data: temp})
+        this.DownloadBeanEmit = DeviceEventEmitter.addListener('DownloadBean', event => {
+            if (this.state.data.sizes == 0) {
+                this.setState({data: event})
+            } else {
+                const newArr = []
+                Object.keys(this.state.data).map((key, index) => {
+                    if (this.state.data[key].DownloadPath == event.DownloadPath) {
+                        newArr.push(event)
+                    } else {
+                        newArr.push(this.state.data[key]);
+                    }
+                });
+                this.setState({data: newArr})
+            }
+            if (event.IsTorrent == 0) {
+                XLDownload.ed2kDownload(JSON.stringify(event))
+            } else {
+
+            }
         });
+    }
+
+    componentWillUnmount() {
+        this.DownloadBeanEmit.remove()
     }
 
     render() {
@@ -87,10 +96,3 @@ export default class DownloadRoot extends React.Component {
         })
     }
 }
-
-let styles = StyleSheet.create({
-    text: {
-        color: "#ffffff",
-        fontSize: 14,
-    }
-});

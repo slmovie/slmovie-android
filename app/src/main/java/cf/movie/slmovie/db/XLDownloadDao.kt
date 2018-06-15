@@ -24,7 +24,7 @@ class XLDownloadDao(var context: Context) {
             values.put("Data", "1")
             values.put("TastId", bean.TastId)
             values.put("DownloadStatus", bean.DownloadStatus)
-            db.insert(DBConstans.XLDownloadDBName, null, values)
+            db.insert(DBConstans.XLDownliadDBTable, null, values)
         } catch (e: Exception) {
 
         } finally {
@@ -40,7 +40,7 @@ class XLDownloadDao(var context: Context) {
         var db = DBUtils.get(context).open()
         db.beginTransaction()
         try {
-            val sql = ("select * from " + DBConstans.XLDownloadDBName
+            val sql = ("select * from " + DBConstans.XLDownliadDBTable
                     + " where Data = ?")
             val cursor = db.rawQuery(sql, arrayOf("1"))
             if (cursor == null) {
@@ -66,6 +66,7 @@ class XLDownloadDao(var context: Context) {
                 vo.Data = "1"
                 list.add(vo)
             }
+            DBUtils.get(context).closeCursor(cursor)
         } catch (e: Exception) {
 
         } finally {
@@ -81,7 +82,7 @@ class XLDownloadDao(var context: Context) {
         var db = DBUtils.get(context).open()
         db.beginTransaction()
         try {
-            val sql = ("select * from " + DBConstans.XLDownloadDBName
+            val sql = ("select * from " + DBConstans.XLDownliadDBTable
                     + " where DownloadPath = ?")
             val cursor = db.rawQuery(sql, arrayOf(bean.DownloadPath))
             if (cursor == null) {
@@ -105,6 +106,7 @@ class XLDownloadDao(var context: Context) {
                 vo.DownloadStatus = cursor.getInt(cursor.getColumnIndex("DownloadStatus"))
                 vo.Data = "1"
             }
+            DBUtils.get(context).closeCursor(cursor)
         } catch (e: Exception) {
 
         } finally {
@@ -130,7 +132,7 @@ class XLDownloadDao(var context: Context) {
             values.put("Data", "1")
             values.put("TastId", bean.TastId)
             values.put("DownloadStatus", bean.DownloadStatus)
-            db.update(DBConstans.XLDownloadDBName, values, "Name = ?", arrayOf(bean.Name))
+            db.update(DBConstans.XLDownliadDBTable, values, "Name = ?", arrayOf(bean.Name))
         } catch (e: Exception) {
 
         } finally {
@@ -144,7 +146,7 @@ class XLDownloadDao(var context: Context) {
         var db = DBUtils.get(context).open()
         db.beginTransaction()
         try {
-            db.delete(DBConstans.XLDownloadDBName, "Name = ?", arrayOf(name))
+            db.delete(DBConstans.XLDownliadDBTable, "Name = ?", arrayOf(name))
         } catch (e: Exception) {
 
         } finally {
@@ -159,7 +161,7 @@ class XLDownloadDao(var context: Context) {
         var db = DBUtils.get(context).open()
         db.beginTransaction()
         try {
-            db.delete(DBConstans.XLDownloadDBName, "Data = ?", arrayOf("1"))
+            db.delete(DBConstans.XLDownliadDBTable, "Data = ?", arrayOf("1"))
         } catch (e: Exception) {
 
         } finally {

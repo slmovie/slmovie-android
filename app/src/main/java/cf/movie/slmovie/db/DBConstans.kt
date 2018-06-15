@@ -5,4 +5,5 @@ package cf.movie.slmovie.db
  */
 object DBConstans {
     var XLDownloadDBName = "download.db"
+    var XLDownliadDBTable="download"
 }
