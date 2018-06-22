@@ -18,6 +18,7 @@ let XLDownload = NativeModules.XLDownloadNative;
 let DownloadUI = NativeModules.XLDownloadUINative;
 
 export default class DownloadUIItem extends React.Component {
+
     constructor(props) {
         super(props)
         this.state = {
@@ -25,19 +26,7 @@ export default class DownloadUIItem extends React.Component {
             progress: 0,
             downloadStatus: 3,
         }
-    }
-
-    componentDidMount() {
-        this.QuerytaskEmit = DeviceEventEmitter.addListener('Querytask', event => {
-            console.log(event.DownloadStatus)
-            if (this.state.data.DownloadPath == event.DownloadPath && event.DownloadStatus != 0) {
-                this.setState({data: event, downloadStatus: event.DownloadStatus})
-            }
-        });
-    }
-
-    componentWillUnmount() {
-        this.QuerytaskEmit.remove()
+        this.query=false
     }
 
     render() {
@@ -76,21 +65,123 @@ export default class DownloadUIItem extends React.Component {
         )
     }
 
+    componentDidMount() {
+        // console.log("componentDidMount")
+        // this.QuerytaskEmit = DeviceEventEmitter.addListener('Querytask', event => {
+        //     if (this.state.data.mCid == event.mCid && event.DownloadStatus != 0) {
+        //         // console.log(event.Name + "下载状态" + event.DownloadStatus)
+        //         this.setState({data: event})
+        //         this.setState({downloadStatus: event.DownloadStatus})
+        //     }
+        // });
+        this.EmitTaskId = DeviceEventEmitter.addListener('EmitTaskId', NativeMap => {
+            //加入判断分别
+            // console.log(NativeMap)
+            if (NativeMap.Name == this.state.data.Name) {
+                // alert(NativeMap.Name + "===" + this.state.data.Name)
+                console.log("EmitTaskId>>>>>" + NativeMap.Name)
+                let bean = this.state.data
+                bean.TaskId = NativeMap.TaskId
+                this.setState({data: bean}, () => {
+                    console.log("EmitTaskId setState>>>>>"+this.query)
+                    if (!this.query) {
+                        this.query = true
+                        console.log("EmitTaskId setState>>>>>22222")
+                        this._getTaskInfo()
+                    }
+                })
+            }
+        })
+        if (this.state.data.TaskId != 0 && !this.props.data.addNew) {
+            XLDownload.queryTask(JSON.stringify(this.state.data)).then(NativeMap => {
+                if (NativeMap.mTaskStatus != 0)
+                    this.setState({downloadStatus: NativeMap.mTaskStatus})
+                if (NativeMap.mTaskStatus == 1) {
+                    if (!this.query) {
+                        this.query = true
+                        this._getTaskInfo()
+                    }
+                }
+            })
+        }
+
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.data.addNew) {
+            console.log("nextProps>>>" + nextProps.data.Name)
+            this.setState({data: nextProps.data}, () => {
+                if (this.state.data.TaskId != 0) {
+                    XLDownload.queryTask(JSON.stringify(this.state.data)).then(NativeMap => {
+                        console.log(NativeMap)
+                        this.setState({downloadStatus: NativeMap.mTaskStatus})
+                        if (NativeMap.mTaskStatus == 1) {
+                            if (!this.query) {
+                                this.query = true
+                                this._getTaskInfo()
+                            }
+                        } else if (NativeMap.mTaskStatus == 2) {
+                        } else {
+                            this.setState({downloadStatus: 3}, () => {
+                                this._download()
+                            })
+                        }
+                    })
+                } else {
+                    this.setState({downloadStatus: 3}, () => {
+                        this._download()
+                    })
+                }
+            })
+        }
+    }
+
+    componentWillUnmount() {
+        // this.QuerytaskEmit.remove()
+        this.EmitTaskId.remove()
+    }
+
+    //循环查询状态
+    _getTaskInfo() {
+        if (this.query) {
+            setTimeout(() => {
+                XLDownload.getTaskInfo(JSON.stringify(this.state.data)).then(NativeMap => {
+                    console.log("_getTaskInfo>>>>" + NativeMap.Name)
+                    if (this.state.downloadStatus == 0 || this.state.downloadStatus == 1) {
+                        this.setState({data: NativeMap, downloadStatus: NativeMap.DownloadStatus})
+                        if (NativeMap.DownloadStatus == 1 || NativeMap.DownloadStatus == 0) {
+                            this._getTaskInfo()
+                        } else {
+                            this.query = false
+                        }
+                    } else if (this.state.downloadStatus == 2) {
+                        this.query = false
+                    } else {
+                        this.query = false
+                    }
+
+                })
+            }, 2000)
+        }
+    }
+
     //下载开始暂停播放按钮
     _download() {
         if (this.state.downloadStatus == 0 || this.state.downloadStatus == 1) {
-            XLDownload.stopTask(this.state.data.TastId)
+            this.query = false
+            XLDownload.stopTask(this.state.data.TaskId)
             var bean = this.state.data
             bean.Speed = 0
             this.setState({downloadStatus: 3, data: bean})
         } else if (this.state.downloadStatus == 2) {
 
-        } else if (this.state.downloadStatus == 3 || this.state.downloadStatus == 4) {
+        } else if (this.state.downloadStatus == 3) {
             if (this.state.data.IsTorrent == 0) {
                 XLDownload.ed2kDownload(JSON.stringify(this.state.data))
             } else {
-
+                XLDownload.torrentDownload(JSON.stringify(this.state.data))
             }
+            this.setState({downloadStatus: 1})
         }
     }
 

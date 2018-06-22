@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
  */
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DBConstans.XLDownloadDBName, null, 1) {
     override fun onCreate(sqLiteDatabase: SQLiteDatabase?) {
-        val sql = "create table if not exists " + DBConstans.XLDownliadDBTable + " (Id integer primary key, TotalSize text, DownloadSize text, Name text, DownloadPath text, SavePath text, TorrentPath text, IsTorrent integer, Data text , DownloadStatus integer, TastId integer)"
+        val sql = "create table if not exists " + DBConstans.XLDownliadDBTable + " (Id integer primary key, TotalSize text, DownloadSize text, Name text, DownloadPath text, SavePath text, TorrentPath text, IsTorrent integer, Data text , DownloadStatus integer, TaskId integer , mCid String)"
         sqLiteDatabase!!.execSQL(sql)
     }
 

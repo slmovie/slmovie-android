@@ -22,15 +22,16 @@ class XLDownloadDao(var context: Context) {
             values.put("TorrentPath", bean.TorrentPath)
             values.put("IsTorrent", bean.IsTorrent)
             values.put("Data", "1")
-            values.put("TastId", bean.TastId)
+            values.put("TaskId", bean.TaskId)
             values.put("DownloadStatus", bean.DownloadStatus)
+            values.put("mCid", bean.mCid)
             db.insert(DBConstans.XLDownliadDBTable, null, values)
         } catch (e: Exception) {
 
         } finally {
             db.setTransactionSuccessful()
             db.endTransaction()
-            DBUtils.get(context).close()
+//            DBUtils.get(context).close()
         }
     }
 
@@ -43,28 +44,26 @@ class XLDownloadDao(var context: Context) {
             val sql = ("select * from " + DBConstans.XLDownliadDBTable
                     + " where Data = ?")
             val cursor = db.rawQuery(sql, arrayOf("1"))
-            if (cursor == null) {
-                DBUtils.get(context).close()
-                return list
-            }
-
-            while (cursor.moveToNext()) {
-                val vo = XLDownloadDBBean()
-                vo.TotalSize = cursor.getLong(cursor.getColumnIndex("TotalSize"))
-                vo.DownloadSize = cursor.getLong(cursor.getColumnIndex("DownloadSize"))
-                vo.Name = cursor.getString(cursor.getColumnIndex("Name"))
-                vo.DownloadPath = cursor.getString(cursor
-                        .getColumnIndex("DownloadPath"))
-                vo.SavePath = cursor.getString(cursor
-                        .getColumnIndex("SavePath"))
-                vo.TorrentPath = cursor.getString(cursor.getColumnIndex("TorrentPath"))
-                vo.IsTorrent = cursor.getInt(cursor
-                        .getColumnIndex("IsTorrent"))
-                vo.TastId = cursor.getLong(cursor
-                        .getColumnIndex("TastId"))
-                vo.DownloadStatus = cursor.getInt(cursor.getColumnIndex("DownloadStatus"))
-                vo.Data = "1"
-                list.add(vo)
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    val vo = XLDownloadDBBean()
+                    vo.TotalSize = cursor.getLong(cursor.getColumnIndex("TotalSize"))
+                    vo.DownloadSize = cursor.getLong(cursor.getColumnIndex("DownloadSize"))
+                    vo.Name = cursor.getString(cursor.getColumnIndex("Name"))
+                    vo.DownloadPath = cursor.getString(cursor
+                            .getColumnIndex("DownloadPath"))
+                    vo.SavePath = cursor.getString(cursor
+                            .getColumnIndex("SavePath"))
+                    vo.TorrentPath = cursor.getString(cursor.getColumnIndex("TorrentPath"))
+                    vo.IsTorrent = cursor.getInt(cursor
+                            .getColumnIndex("IsTorrent"))
+                    vo.TaskId = cursor.getLong(cursor
+                            .getColumnIndex("TaskId"))
+                    vo.DownloadStatus = cursor.getInt(cursor.getColumnIndex("DownloadStatus"))
+                    vo.Data = "1"
+                    vo.mCid = cursor.getString(cursor.getColumnIndex("mCid"))
+                    list.add(vo)
+                }
             }
             DBUtils.get(context).closeCursor(cursor)
         } catch (e: Exception) {
@@ -72,7 +71,7 @@ class XLDownloadDao(var context: Context) {
         } finally {
             db.setTransactionSuccessful()
             db.endTransaction()
-            DBUtils.get(context).close()
+//            DBUtils.get(context).close()
             return list
         }
     }
@@ -85,34 +84,32 @@ class XLDownloadDao(var context: Context) {
             val sql = ("select * from " + DBConstans.XLDownliadDBTable
                     + " where DownloadPath = ?")
             val cursor = db.rawQuery(sql, arrayOf(bean.DownloadPath))
-            if (cursor == null) {
-                DBUtils.get(context).close()
-                return vo
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    vo.TotalSize = cursor.getLong(cursor.getColumnIndex("TotalSize"))
+                    vo.DownloadSize = cursor.getLong(cursor.getColumnIndex("DownloadSize"))
+                    vo.Name = cursor.getString(cursor.getColumnIndex("Name"))
+                    vo.DownloadPath = cursor.getString(cursor
+                            .getColumnIndex("DownloadPath"))
+                    vo.SavePath = cursor.getString(cursor
+                            .getColumnIndex("SavePath"))
+                    vo.TorrentPath = cursor.getString(cursor.getColumnIndex("TorrentPath"))
+                    vo.IsTorrent = cursor.getInt(cursor
+                            .getColumnIndex("IsTorrent"))
+                    vo.TaskId = cursor.getLong(cursor
+                            .getColumnIndex("TaskId"))
+                    vo.DownloadStatus = cursor.getInt(cursor.getColumnIndex("DownloadStatus"))
+                    vo.Data = "1"
+                    vo.mCid = cursor.getString(cursor.getColumnIndex("mCid"))
+                }
+                DBUtils.get(context).closeCursor(cursor)
             }
-
-            while (cursor.moveToNext()) {
-                vo.TotalSize = cursor.getLong(cursor.getColumnIndex("TotalSize"))
-                vo.DownloadSize = cursor.getLong(cursor.getColumnIndex("DownloadSize"))
-                vo.Name = cursor.getString(cursor.getColumnIndex("Name"))
-                vo.DownloadPath = cursor.getString(cursor
-                        .getColumnIndex("DownloadPath"))
-                vo.SavePath = cursor.getString(cursor
-                        .getColumnIndex("SavePath"))
-                vo.TorrentPath = cursor.getString(cursor.getColumnIndex("TorrentPath"))
-                vo.IsTorrent = cursor.getInt(cursor
-                        .getColumnIndex("IsTorrent"))
-                vo.TastId = cursor.getLong(cursor
-                        .getColumnIndex("TastId"))
-                vo.DownloadStatus = cursor.getInt(cursor.getColumnIndex("DownloadStatus"))
-                vo.Data = "1"
-            }
-            DBUtils.get(context).closeCursor(cursor)
         } catch (e: Exception) {
 
         } finally {
             db.setTransactionSuccessful()
             db.endTransaction()
-            DBUtils.get(context).close()
+//            DBUtils.get(context).close()
             return vo
         }
     }
@@ -130,15 +127,16 @@ class XLDownloadDao(var context: Context) {
             values.put("TorrentPath", bean.TorrentPath)
             values.put("IsTorrent", bean.IsTorrent)
             values.put("Data", "1")
-            values.put("TastId", bean.TastId)
+            values.put("TaskId", bean.TaskId)
             values.put("DownloadStatus", bean.DownloadStatus)
+            values.put("mCid", bean.mCid)
             db.update(DBConstans.XLDownliadDBTable, values, "Name = ?", arrayOf(bean.Name))
         } catch (e: Exception) {
 
         } finally {
             db.setTransactionSuccessful()
             db.endTransaction()
-            DBUtils.get(context).close()
+//            DBUtils.get(context).close()
         }
     }
 
@@ -152,7 +150,7 @@ class XLDownloadDao(var context: Context) {
         } finally {
             db.setTransactionSuccessful()
             db.endTransaction()
-            DBUtils.get(context).close()
+//            DBUtils.get(context).close()
         }
     }
 
@@ -167,7 +165,7 @@ class XLDownloadDao(var context: Context) {
         } finally {
             db.setTransactionSuccessful()
             db.endTransaction()
-            DBUtils.get(context).close()
+//            DBUtils.get(context).close()
         }
     }
 }

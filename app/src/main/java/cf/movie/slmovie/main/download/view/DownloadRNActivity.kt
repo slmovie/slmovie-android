@@ -24,7 +24,8 @@ class DownloadRNActivity : BaseRNActivity() {
 
     override fun loadFinished() {
         val gson = Gson()
-        emit("DownloadBean", ReactNativeJson.convertStringToMap(gson.toJson(bean)))
+        if (bean != null)
+            emit("DownloadBean", ReactNativeJson.convertStringToMap(gson.toJson(bean)))
     }
 
     override fun setMyReactPackage(builder: ReactInstanceManagerBuilder) {
@@ -33,7 +34,11 @@ class DownloadRNActivity : BaseRNActivity() {
 
     override fun initData() {
         super.initData()
-        bean = intent.extras.get("download") as XLDownloadDBBean
+        try {
+            bean = intent.extras.get("download") as XLDownloadDBBean
+        } catch (e: Exception) {
+
+        }
     }
 
 }

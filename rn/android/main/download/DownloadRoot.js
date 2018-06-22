@@ -36,7 +36,7 @@ export default class DownloadRoot extends React.Component {
         check()
         this._findAllInfo()
         this.DownloadBeanEmit = DeviceEventEmitter.addListener('DownloadBean', event => {
-            console.log(event)
+            // console.log(event)
             if (this.state.data.length == 0) {
                 var arr = this.state.data.concat(event)
                 this.setState({data: arr})
@@ -46,20 +46,19 @@ export default class DownloadRoot extends React.Component {
                 Object.keys(this.state.data).map((key, index) => {
                     if (this.state.data[key].DownloadPath == event.DownloadPath) {
                         update = true
-                        newArr = newArr.concat(event)
+                        var bean = this.state.data[key]
+                        bean.addNew = true
+                        newArr = newArr.concat(bean)
                     } else {
                         newArr = newArr.concat(this.state.data[key]);
                     }
                 });
-                if (!update)
+                if (!update) {
+                    event.addNew = true
                     newArr = newArr.concat(event)
-                console.log(newArr)
+                }
+                // console.log(newArr)
                 this.setState({data: newArr})
-            }
-            if (event.IsTorrent == 0) {
-                XLDownload.ed2kDownload(JSON.stringify(event))
-            } else {
-
             }
         });
     }
@@ -81,19 +80,6 @@ export default class DownloadRoot extends React.Component {
 
     //获取所有下载信息
     _findAllInfo() {
-        // DownloadUI.test().then(result => {
-        //     this.setState(this.state.data = result)
-        // }).catch(error => {
-        // }).finally(() => {
-        //     ProgressDialogNative.dismiss()
-        //     LoadUtilNative.loadFinish()
-        // })
-        // DownloadUI.test1().then(NativeMap => {
-        //     this.setState(this.state.test = NativeMap)
-        //     console.log(NativeMap)
-        // }).catch(error => {
-        //
-        // })
         DownloadUI.findAllInfo().then(result => {
             this.setState(this.state.data = result)
         }).catch(error => {

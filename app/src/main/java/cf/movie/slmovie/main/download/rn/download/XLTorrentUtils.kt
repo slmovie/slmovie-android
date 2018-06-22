@@ -98,6 +98,12 @@ class XLTorrentUtils(var activity: Activity, var handler: Handler) {
         }
     }
 
+    fun TorrentDownload(bean: XLDownloadDBBean): Long {
+        var torrentInfo = XLTaskHelper.instance().getTorrentInfo(bean.TorrentPath)
+        var currentPlayMediaIndex = initTorrentIndex(torrentInfo)
+        return XLTaskHelper.instance().addTorrentTask(bean.TorrentPath, bean.SavePath, getTorrentDeselectedIndexs(currentPlayMediaIndex[0]))
+    }
+
     private fun initTorrentIndex(torrentInfo: TorrentInfo): ArrayList<Int> {
         var currentPlayMediaIndexs = ArrayList<Int>()
         if (torrentInfo != null && torrentInfo!!.mSubFileInfo != null) {

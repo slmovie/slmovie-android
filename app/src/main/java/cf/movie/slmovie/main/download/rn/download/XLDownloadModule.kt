@@ -36,12 +36,13 @@ import java.io.File
 class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
     companion object {
-        val ScanTorrent: Int = 0
-        val ED2K: Int = 1
+        val ScanTorrent = 0
+        val ED2K = 1
+        val Torrent = 2
         var perCallback: Callback? = null
     }
 
-    private var dao = XLDownloadDao(reactContext)
+    private var dao = XLDownloadDao(activity)
     private var XLTorrentUtils: XLTorrentUtils? = null
 
     override fun getName(): String {
@@ -80,10 +81,12 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
                 }
             } else if (msg.what == ED2K) {
                 var bean = msg.obj as XLDownloadDBBean
-                val taskInfo = XLTaskHelper.instance().getTaskInfo(bean.TastId)
+                val taskInfo = XLTaskHelper.instance().getTaskInfo(bean.TaskId)
                 bean.DownloadStatus = taskInfo.mTaskStatus
                 bean.DownloadSize = taskInfo.mDownloadSize
                 bean.Speed = taskInfo.mDownloadSpeed
+                if (!TextUtils.isEmpty(taskInfo.mCid))
+                    bean.mCid = taskInfo.mCid
                 when (taskInfo.mTaskStatus) {
                     0 -> {
 
@@ -104,9 +107,41 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
                             dao.update(bean)
                         }
                         //推送给RN
-                        var gson = Gson()
-                        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                                .emit("Querytask", ReactNativeJson.convertStringToMap(gson.toJson(bean)))
+//                        var gson = Gson()
+//                        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+//                                .emit("Querytask", ReactNativeJson.convertStringToMap(gson.toJson(bean)))
+                    }
+                }
+            } else if (msg.what == Torrent) {
+                var bean = msg.obj as XLDownloadDBBean
+                val taskInfo = XLTaskHelper.instance().getTaskInfo(bean.TaskId)
+                bean.DownloadStatus = taskInfo.mTaskStatus
+                bean.DownloadSize = taskInfo.mDownloadSize
+                bean.Speed = taskInfo.mDownloadSpeed
+                bean.mCid = taskInfo.mFileSize.toString()
+                when (taskInfo.mTaskStatus) {
+                    0 -> {
+
+                    }
+                    1 -> {
+                        var message = Message()
+                        message.what = Torrent
+                        message.obj = bean
+                        this.sendMessageDelayed(message, 1000)
+                    }
+                }
+                when (taskInfo.mTaskStatus) {
+                    1, 2, 3 -> {
+                        //保存到数据库
+                        if (TextUtils.isEmpty(dao.find(bean).Name)) {
+                            dao.insert(bean)
+                        } else {
+                            dao.update(bean)
+                        }
+                        //推送给RN
+//                        var gson = Gson()
+//                        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+//                                .emit("Querytask", ReactNativeJson.convertStringToMap(gson.toJson(bean)))
                     }
                 }
             }
@@ -114,10 +149,13 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
     }
 
     @ReactMethod
-    fun queryTask(taskId: Double, promise: Promise) {
-        val taskInfo = XLTaskHelper.instance().getTaskInfo(taskId.toLong())
+    fun queryTask(str: String, promise: Promise) {
         var gson = Gson()
-        promise.resolve(ReactNativeJson.convertStringToMap(gson.toJson(taskInfo)))
+        var bean = gson.fromJson(str, XLDownloadDBBean::class.java)
+        val taskInfo = XLTaskHelper.instance().getTaskInfo(bean.TaskId)
+        var json = gson.toJson(taskInfo)
+        var map = ReactNativeJson.convertStringToMap(json)
+        promise.resolve(map)
     }
 
     //下载弹出框
@@ -157,7 +195,8 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
         var bean = gson.fromJson(str, XLDownloadDBBean::class.java)
         try {
             var taskId = XLTaskHelper.instance().addThunderTask(bean.DownloadPath, bean.SavePath, bean.Name)
-            bean.TastId = taskId
+            bean.TaskId = taskId
+            emitTaskId(bean)
             var message = Message()
             message.what = ED2K
             message.obj = bean
@@ -177,6 +216,20 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
         Toast.makeText(reactContext, "无可下载应用，下载地址已复制到剪切板！", Toast.LENGTH_LONG).show()
     }
 
+    @ReactMethod
+    fun getTaskInfo(str: String, promise: Promise) {
+        var gson = Gson()
+        var bean = gson.fromJson(str, XLDownloadDBBean::class.java)
+        val taskInfo = XLTaskHelper.instance().getTaskInfo(bean.TaskId)
+        bean.DownloadStatus = taskInfo.mTaskStatus
+        bean.DownloadSize = taskInfo.mDownloadSize
+        bean.Speed = taskInfo.mDownloadSpeed
+        if (!TextUtils.isEmpty(taskInfo.mCid))
+            bean.mCid = taskInfo.mCid
+        var map = ReactNativeJson.convertStringToMap(gson.toJson(bean))
+        promise.resolve(map)
+    }
+
     //下载种子文件
     @ReactMethod
     fun scanTorrent(fileStr: String) {
@@ -187,7 +240,22 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
     //分析种子
     @ReactMethod
     fun analyzeTorrent(path: String, magent: String) {
+        XLTorrentUtils = XLTorrentUtils(activity, handler)
         XLTorrentUtils!!.analyzeTorrent(path, magent)
+    }
+
+    @ReactMethod
+    fun torrentDownload(fileStr: String) {
+        var gson = Gson()
+        var bean = gson.fromJson(fileStr, XLDownloadDBBean::class.java)
+        XLTorrentUtils = XLTorrentUtils(activity, handler)
+        var taskId = XLTorrentUtils!!.TorrentDownload(bean)
+        bean.TaskId = taskId
+        emitTaskId(bean)
+        var message = Message()
+        message.what = Torrent
+        message.obj = bean
+        handler.sendMessage(message)
     }
 
     @ReactMethod
@@ -209,6 +277,13 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
         } else {
             ActivityCompat.requestPermissions(activity, perms, MainActivity.XLDownload)
         }
+    }
+
+    fun emitTaskId(bean: XLDownloadDBBean) {
+        val gson = Gson()
+        val map = ReactNativeJson.convertStringToMap(gson.toJson(bean))
+        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("EmitTaskId", map)
     }
 }
 
