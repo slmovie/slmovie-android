@@ -44,6 +44,7 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
 
     private var dao = XLDownloadDao(activity)
     private var XLTorrentUtils: XLTorrentUtils? = null
+    private var scanTorrentCallback: Callback? = null
 
     override fun getName(): String {
         XLTaskHelper.init(activity.applicationContext)
@@ -70,9 +71,13 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
                         this.sendMessageDelayed(message, 1000)
                     }
                     2 -> {
+                        if (scanTorrentCallback != null)
+                            scanTorrentCallback!!.invoke()
                         analyzeTorrent(json.optString("savePath"), json.optString("magent"))
                     }
                     3 -> {
+                        if (scanTorrentCallback != null)
+                            scanTorrentCallback!!.invoke()
                         Toast.makeText(activity, "下载失败", Toast.LENGTH_LONG).show()
                         if (!OutsideDownloadUtils.start(activity, json.optString("magent")))
                             OutsideDownloadUtils.copy(activity, json.optString("magent"))
@@ -166,7 +171,7 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
         var bean = XLDownloadDBBean()
         bean.Name = getEd2kName(fileBean.download!!)
         bean.TotalSize = getEd2kSize(fileBean.download!!)
-        bean.SavePath = Constant.DownloadPath + fileBean.name
+        bean.SavePath = Constant.DownloadPath
         bean.IsTorrent = 0
         bean.DownloadPath = fileBean!!.download!!
         bean.DownloadStatus = 1
@@ -232,7 +237,8 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
 
     //下载种子文件
     @ReactMethod
-    fun scanTorrent(fileStr: String) {
+    fun scanTorrent(fileStr: String, scanTorrentCallback: Callback) {
+        this.scanTorrentCallback = scanTorrentCallback
         XLTorrentUtils = XLTorrentUtils(activity, handler)
         XLTorrentUtils!!.scanTorrent(fileStr)
     }

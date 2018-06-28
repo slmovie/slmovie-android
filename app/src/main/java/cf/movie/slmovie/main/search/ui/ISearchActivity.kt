@@ -1,6 +1,5 @@
 package cf.movie.slmovie.main.search.ui
 
-import cf.movie.slmovie.main.search.bean.SearchAdapter
 import cf.movie.slmovie.main.search.event.SearchEvent
 
 /**
@@ -9,7 +8,7 @@ import cf.movie.slmovie.main.search.event.SearchEvent
 
 interface ISearchActivity {
 
-    fun setAdapter(adapter: SearchAdapter)
+    fun setMovies(event: SearchEvent)
 
     fun reqError(msg: String)
 

@@ -6,8 +6,6 @@
 import React from 'react';
 import {
     StyleSheet,
-    Text,
-    View,
     NativeModules,
     FlatList,
     Alert,
@@ -20,7 +18,8 @@ import FlatItem from "./DownloadUIItem.js"
 let DownloadUI = NativeModules.XLDownloadUINative;
 let ProgressDialogNative = NativeModules.ProgressDialogNative;
 let LoadUtilNative = NativeModules.LoadUtilNative;
-let XLDownload = NativeModules.XLDownloadNative;
+let DeleteDialog = NativeModules.DeleteDialogNative
+let FileNative = NativeModules.FileNative
 
 export default class DownloadRoot extends React.Component {
 
@@ -38,6 +37,7 @@ export default class DownloadRoot extends React.Component {
         this.DownloadBeanEmit = DeviceEventEmitter.addListener('DownloadBean', event => {
             // console.log(event)
             if (this.state.data.length == 0) {
+                event.onlyOne = true
                 var arr = this.state.data.concat(event)
                 this.setState({data: arr})
             } else {
@@ -73,7 +73,8 @@ export default class DownloadRoot extends React.Component {
                 data={this.state.data}
                 extraData={this.state}
                 keyExtractor={(item, index) => index}
-                renderItem={({item}) => <FlatItem data={item}/>}
+                renderItem={({item, index}) => <FlatItem data={item}
+                                                         longPress={() => this._delete(index)}/>}
             />
         )
     }
@@ -86,6 +87,22 @@ export default class DownloadRoot extends React.Component {
         }).finally(() => {
             ProgressDialogNative.dismiss()
             LoadUtilNative.loadFinish()
+        })
+    }
+
+    _delete(deleteIndex) {
+        DeleteDialog.show((chosen) => {
+            if (chosen) {
+                let bean = this.state.data[deleteIndex]
+                DownloadUI.delete(JSON.stringify(bean))
+                FileNative.deleteFile(bean.SavePath + bean.Name)
+            }
+            var newArr = []
+            Object.keys(this.state.data).map((key, index) => {
+                if (index != deleteIndex)
+                    newArr = newArr.concat(this.state.data[index])
+            });
+            this.setState({data: newArr})
         })
     }
 }

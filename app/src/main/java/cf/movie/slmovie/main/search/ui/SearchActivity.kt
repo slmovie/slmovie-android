@@ -14,6 +14,8 @@ import cf.movie.slmovie.R
 import cf.movie.slmovie.base.BaseActivity
 import cf.movie.slmovie.main.detail.ui.DetailRNActivity
 import cf.movie.slmovie.main.search.bean.SearchAdapter
+import cf.movie.slmovie.main.search.bean.SearchResult
+import cf.movie.slmovie.main.search.event.SearchEvent
 import cf.movie.slmovie.main.search.presenter.SearchPresenter
 import cf.movie.slmovie.utils.impl.RecyclerItemClickListener
 
@@ -25,6 +27,7 @@ class SearchActivity : BaseActivity(), ISearchActivity {
     private var adapter: SearchAdapter? = null
     private var searchView: SearchView? = null
     private var container: CoordinatorLayout? = null
+    private var movies: ArrayList<SearchResult.Movies>? = null
 
     override val contentLayout: Int
         get() = R.layout.activity_search_result
@@ -83,24 +86,28 @@ class SearchActivity : BaseActivity(), ISearchActivity {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun setAdapter(adapter: SearchAdapter) {
-        this.adapter = adapter
-        val linearLayoutManager = LinearLayoutManager(this)
-        linearLayoutManager.orientation = OrientationHelper.VERTICAL
-        recyclerView!!.layoutManager = linearLayoutManager
-        recyclerView!!.adapter = adapter
-        recyclerView!!.addOnItemTouchListener(RecyclerItemClickListener(this, object : RecyclerItemClickListener.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
-                val intent = Intent(this@SearchActivity, DetailRNActivity::class.java)
-                intent.putExtra("address", adapter.getMovies(position).id)
-                intent.putExtra("name", adapter.getMovies(position).name)
-                startActivity(intent)
-            }
+    override fun setMovies(event: SearchEvent) {
+        this.movies = event.movies
+        if (adapter == null) {
+            adapter = SearchAdapter(this, movies)
+            val linearLayoutManager = LinearLayoutManager(this)
+            linearLayoutManager.orientation = OrientationHelper.VERTICAL
+            recyclerView!!.layoutManager = linearLayoutManager
+            recyclerView!!.adapter = adapter
+            recyclerView!!.addOnItemTouchListener(RecyclerItemClickListener(this, object : RecyclerItemClickListener.OnItemClickListener {
+                override fun onItemClick(view: View, position: Int) {
+                    val intent = Intent(this@SearchActivity, DetailRNActivity::class.java)
+                    intent.putExtra("address", adapter!!.getMovies(position).id)
+                    intent.putExtra("name", adapter!!.getMovies(position).name)
+                    startActivity(intent)
+                }
 
-            override fun onLongItemClick(view: View?, position: Int) {
+                override fun onLongItemClick(view: View?, position: Int) {
 
-            }
-        }))
+                }
+            }))
+        } else
+            adapter!!.refresh(movies!!)
     }
 
     override fun reqError(msg: String) {

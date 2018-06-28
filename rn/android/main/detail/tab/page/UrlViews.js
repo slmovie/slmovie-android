@@ -11,7 +11,6 @@ import {
     NativeModules, PermissionsAndroid
 } from 'react-native';
 
-let ToastDialog = NativeModules.ToastDialogNative;
 let XLDownload = NativeModules.XLDownloadNative;
 let ProgressDialogNative = NativeModules.ProgressDialogNative;
 
@@ -70,7 +69,10 @@ export default class UrlViews extends React.Component {
                 if (url.download.indexOf("ed2k://") != -1) {
                     XLDownload.ed2kDownloadDialog(str)
                 } else if (url.download.indexOf("magnet:?") != -1) {
-                    XLDownload.scanTorrent(str)
+                    ProgressDialogNative.show("分析种子中......")
+                    XLDownload.scanTorrent(str, () => {
+                        ProgressDialogNative.dismiss()
+                    })
                 } else {
                     XLDownload.sysDownload(url.download)
                 }

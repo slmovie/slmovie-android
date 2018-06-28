@@ -17,6 +17,7 @@ class DialogReactPackage(private val activity: Activity) : ReactPackage {
         val modules = ArrayList<NativeModule>()
         modules.add(ToastDialogModule(reactContext, activity))
         modules.add(ProgressDialogModule(reactContext, activity))
+        modules.add(DeleteDialogMoudle(reactContext, activity))
         return modules
     }
 

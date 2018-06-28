@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Message
 import android.widget.Toast
 import cf.movie.slmovie.bean.FilesBean
-import cf.movie.slmovie.dialog.ProgressDialog.ProgressDialog
 import cf.movie.slmovie.dialog.XLDownloadDialog.XLDownloadDialog
 import cf.movie.slmovie.main.download.model.bean.XLDownloadDBBean
 import cf.movie.slmovie.main.download.rn.download.XLDownloadModule.Companion.ScanTorrent
@@ -24,12 +23,8 @@ import java.io.File
  */
 class XLTorrentUtils(var activity: Activity, var handler: Handler) {
 
-    private var progressDialog: ProgressDialog? = null
-
     //下载种子文件
     fun scanTorrent(fileStr: String) {
-        progressDialog = ProgressDialog(activity, "分析种子中")
-        progressDialog!!.show()
         var gson = Gson()
         var fileBean = gson.fromJson(fileStr, FilesBean::class.java)
         val savePath = Constant.DownloadPath + fileBean!!.name
@@ -56,8 +51,6 @@ class XLTorrentUtils(var activity: Activity, var handler: Handler) {
     fun analyzeTorrent(path: String, magent: String) {
         var torrentInfo = XLTaskHelper.instance().getTorrentInfo(path)
         var currentPlayMediaIndex = initTorrentIndex(torrentInfo)
-        if (progressDialog != null && progressDialog!!.isShowing)
-            progressDialog!!.dismiss()
         when (currentPlayMediaIndex.size) {
         //没有视频文件
             0 -> {

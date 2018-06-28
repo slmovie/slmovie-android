@@ -1,7 +1,6 @@
 package cf.movie.slmovie.main.search.model
 
 import android.app.Activity
-import cf.movie.slmovie.main.search.bean.SearchAdapter
 import cf.movie.slmovie.main.search.bean.SearchResult
 import cf.movie.slmovie.main.search.event.SearchEvent
 import cf.movie.slmovie.server.Constant
@@ -29,9 +28,8 @@ class SearchModel(private val context: Activity) {
             val gson = Gson()
             val bean = gson.fromJson(response.toString(), SearchResult::class.java)
             if (bean.status!!.code == "1") {
-                val adapter = SearchAdapter(context, bean.movies)
                 event.isStatus = true
-                event.adapter = adapter
+                event.movies=bean.movies
                 EventBus.getDefault().post(event)
             } else {
                 event.isStatus = false

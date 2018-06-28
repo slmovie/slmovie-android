@@ -12,6 +12,7 @@ import cf.movie.slmovie.main.download.rn.download.XLDownloadModule
 import cf.movie.slmovie.main.home.ui.MainActivity
 import cf.movie.slmovie.utils.PermissionUtils
 import cf.movie.slmovie.utils.rnUtils.baseRN.model.Dialog.DialogReactPackage
+import cf.movie.slmovie.utils.rnUtils.baseRN.model.FileMoudle.FilePackage
 import cf.movie.slmovie.utils.rnUtils.baseRN.model.LoadModule.LoadModule
 import cf.movie.slmovie.utils.rnUtils.baseRN.model.LoadModule.LoadReactPackage
 import cf.movie.slmovie.utils.rnUtils.baseRN.model.checkVersion.CheckVersionReactPackage
@@ -79,6 +80,7 @@ abstract class BaseRNActivity : BaseActivity(), DefaultHardwareBackBtnHandler {
                     .addPackage(CheckVersionReactPackage(this))
                     .addPackage(DialogReactPackage(this@BaseRNActivity))
                     .addPackage(loadReactPackage)
+                    .addPackage(FilePackage())
             setMyReactPackage(builder)
         }
 
