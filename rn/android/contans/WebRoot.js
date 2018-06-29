@@ -3,7 +3,7 @@
  */
 import {Service} from "./Contans.js"
 
-export let WebRoot = getWebRoot()
+export let WebRoot = getWebRoot();
 
 function getWebRoot() {
     if (Service == "T") {

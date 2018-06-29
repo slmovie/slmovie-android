@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="alertDialogTheme">@style/AlertDialog</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -32,10 +33,11 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
-    <style name="Dialog">
+    <style name="Dialog" parent="@style/Base.Theme.AppCompat.Light.Dialog.MinWidth">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/translate</item>
     </style>
 </resources>

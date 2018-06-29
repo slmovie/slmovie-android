@@ -20,14 +20,14 @@ import cf.movie.slmovie.main.newMovies.ui.NewMoviesFragment
 import cf.movie.slmovie.main.newMovies.ui.NewTVsFragment
 import cf.movie.slmovie.main.search.ui.SearchActivity
 import cf.movie.slmovie.utils.LogUtils
+import cf.movie.slmovie.utils.PermissionUtils
 import kotlinx.android.synthetic.main.activity_main.*
-import pub.devrel.easypermissions.EasyPermissions
 
 
 /**
  * Created by 包俊 on 2017/7/19.
  */
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, EasyPermissions.PermissionCallbacks {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var fragmentManager: FragmentManager? = null
     private var hotMoviesFragment: BaseMoviesFragment? = null
@@ -40,6 +40,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     companion object {
         val WRITE_EXTERNAL_STORAGE: Int = 5001
+        val XLDownload: Int = 5002
     }
 
 
@@ -142,25 +143,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        PermissionUtils.requestResult(this, grantResults, permissions, {
+            presenter!!.checkUpdate()
+        }, {
+        })
     }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        when (requestCode) {
-            WRITE_EXTERNAL_STORAGE -> {
-                Toast.makeText(this, "用户授权成功！", Toast.LENGTH_SHORT).show()
-                presenter!!.checkUpdate()
-            }
-        }
-    }
-
-    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        when (requestCode) {
-            WRITE_EXTERNAL_STORAGE -> {
-                Toast.makeText(this, "用户授权失败！", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
 
 }

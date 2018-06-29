@@ -23,7 +23,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.detail.ui.DetailActivity"
+            android:name=".main.detail.ui.DetailRNActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".main.download.view.DownloadRNActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -33,6 +37,10 @@
         <activity
             android:name=".main.detailOS.view.DetailOSActivity"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".main.MainActivity2"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver android:name=".broadcast.DownloadBroadCast">

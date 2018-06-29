@@ -31,7 +31,7 @@ class DoubanView : BaseFragment(), DoubanPresenterImpl {
         val linearLayoutManager = LinearLayoutManager(activity!!)
         linearLayoutManager.orientation = OrientationHelper.VERTICAL
         swipe_target!!.layoutManager = linearLayoutManager
-        swipe_target?.addOnItemTouchListener(RecyclerItemClickListener(activity, object : RecyclerItemClickListener.OnItemClickListener {
+        swipe_target?.addOnItemTouchListener(RecyclerItemClickListener(activity!!, object : RecyclerItemClickListener.OnItemClickListener {
             override fun onLongItemClick(view: View?, position: Int) {
             }
 
@@ -44,7 +44,7 @@ class DoubanView : BaseFragment(), DoubanPresenterImpl {
             }
         }))
 
-        presenter = DoubanPresenter(activity, this)
+        presenter = DoubanPresenter(activity!!, this)
         presenter?.getTop250(true)
     }
 

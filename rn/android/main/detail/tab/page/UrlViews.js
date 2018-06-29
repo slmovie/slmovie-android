@@ -8,17 +8,16 @@ import {
     View,
     ScrollView,
     TouchableOpacity,
-    NativeModules,
-    Alert,
+    NativeModules, PermissionsAndroid
 } from 'react-native';
 
-let DownloadModule = NativeModules.DownloadNative
-let ToastDialog = NativeModules.ToastDialogNative
+let XLDownload = NativeModules.XLDownloadNative;
+let ProgressDialogNative = NativeModules.ProgressDialogNative;
 
 export default class UrlViews extends React.Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             choosen: -1,
         }
@@ -37,7 +36,7 @@ export default class UrlViews extends React.Component {
     }
 
     _renderUrls(urls) {
-        let lists = []
+        let lists = [];
         for (let i = 0; i < urls.length; i++) {
             lists.push(this._renderUrl(i, urls[i]))
         }
@@ -47,7 +46,7 @@ export default class UrlViews extends React.Component {
     _renderUrl(i, url) {
         return (
             <TouchableOpacity onPress={() => {
-                this._start(url.download)
+                this._start(url);
                 this.setState({choosen: i})
             }} key={i}>
                 <Text style={[styles.text, this._choosen(i)]}>
@@ -63,16 +62,23 @@ export default class UrlViews extends React.Component {
         }
     }
 
-    async _start(url) {
-        let {result} = await  DownloadModule.pushDownload(url)
-        if (!result) {
-            // Alert.alert("提示", "启动下载器失败，下载地址已复制到剪切板，请自行粘贴下载", [{text: '确认'}])
-            ToastDialog.show("提示", "启动下载器失败，下载地址已复制到剪切板，请自行粘贴下载", ["确定"], () => {
-                    ToastDialog.dismiss()
-                }, () => {
+    _start(url) {
+        XLDownload.requestPermission((result => {
+            if (result) {
+                let str = JSON.stringify(url)
+                if (url.download.indexOf("ed2k://") != -1) {
+                    XLDownload.ed2kDownloadDialog(str)
+                } else if (url.download.indexOf("magnet:?") != -1) {
+                    ProgressDialogNative.show("分析种子中......")
+                    XLDownload.scanTorrent(str, () => {
+                        ProgressDialogNative.dismiss()
+                    })
+                } else {
+                    XLDownload.sysDownload(url.download)
                 }
-            )
-        }
+            }
+        }))
+
     }
 
     //地址拼接
@@ -98,4 +104,4 @@ let styles = StyleSheet.create({
         marginLeft: 8,
         marginRight: 8,
     }
-})
+});

@@ -12,7 +12,7 @@ let data;
 export default class TabView extends React.Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         data = this.props.movies;
     }
 
