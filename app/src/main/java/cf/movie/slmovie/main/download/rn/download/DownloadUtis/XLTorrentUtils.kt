@@ -1,4 +1,4 @@
-package cf.movie.slmovie.main.download.rn.download
+package cf.movie.slmovie.main.download.rn.download.DownloadUtis
 
 import android.app.Activity
 import android.content.Intent
@@ -8,7 +8,9 @@ import android.widget.Toast
 import cf.movie.slmovie.bean.FilesBean
 import cf.movie.slmovie.dialog.XLDownloadDialog.XLDownloadDialog
 import cf.movie.slmovie.main.download.model.bean.XLDownloadDBBean
+import cf.movie.slmovie.main.download.rn.download.XLDownloadModule
 import cf.movie.slmovie.main.download.rn.download.XLDownloadModule.Companion.ScanTorrent
+import cf.movie.slmovie.main.download.rn.download.XLDownloadUtils
 import cf.movie.slmovie.main.download.view.DownloadRNActivity
 import cf.movie.slmovie.server.Constant
 import cf.movie.slmovie.utils.OutsideDownloadUtils
@@ -21,16 +23,21 @@ import java.io.File
 /**
  * Created by 包俊 on 2018/6/13.
  */
-class XLTorrentUtils(var activity: Activity, var handler: Handler) {
+class XLTorrentUtils(val activity: Activity, val handler: Handler, val listener: XLListener) {
+
+    companion object {
+        fun instance(activity: Activity, handler: Handler, listener: XLListener): XLTorrentUtils {
+            return XLTorrentUtils(activity, handler, listener)
+        }
+    }
 
     //下载种子文件
-    fun scanTorrent(fileStr: String) {
-        var gson = Gson()
-        var fileBean = gson.fromJson(fileStr, FilesBean::class.java)
+    fun scanTorrent(fileBean: FilesBean) {
         val savePath = Constant.DownloadPath + fileBean!!.name
         val file = File(savePath)
         if (file.exists()) {
             analyzeTorrent(savePath, fileBean!!.download!!)
+            listener!!.hasTorrent()
         } else {
             var taskId = XLTaskHelper.instance().addMagentTask(fileBean!!.download!!, Constant.DownloadPath, fileBean!!.name)
             var json = JSONObject()
@@ -91,10 +98,18 @@ class XLTorrentUtils(var activity: Activity, var handler: Handler) {
         }
     }
 
-    fun TorrentDownload(bean: XLDownloadDBBean): Long {
+    fun TorrentDownload(fileStr: String) {
+        var gson = Gson()
+        var bean = gson.fromJson(fileStr, XLDownloadDBBean::class.java)
         var torrentInfo = XLTaskHelper.instance().getTorrentInfo(bean.TorrentPath)
         var currentPlayMediaIndex = initTorrentIndex(torrentInfo)
-        return XLTaskHelper.instance().addTorrentTask(bean.TorrentPath, bean.SavePath, getTorrentDeselectedIndexs(currentPlayMediaIndex[0]))
+        var taskId = XLTaskHelper.instance().addTorrentTask(bean.TorrentPath, bean.SavePath, getTorrentDeselectedIndexs(currentPlayMediaIndex[0]))
+        bean.TaskId = taskId
+        listener!!.emitTaskId(bean)
+        var message = Message()
+        message.what = XLDownloadModule.Torrent
+        message.obj = bean
+        handler.sendMessage(message)
     }
 
     private fun initTorrentIndex(torrentInfo: TorrentInfo): ArrayList<Int> {

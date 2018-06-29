@@ -12,8 +12,8 @@ import cf.movie.slmovie.main.detailOS.model.event.DetailOsEvent
 import cf.movie.slmovie.main.detailOS.model.event.DoubanDetailOsEvent
 import cf.movie.slmovie.main.detailOS.presenter.DetailOSActivityPresenter
 import cf.movie.slmovie.main.douban.model.Top250.Top250Bean
-import org.greenrobot.eventbus.EventBus
 import kotlinx.android.synthetic.main.activity_detail_os.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Created by 包俊 on 2018/5/23.
@@ -77,4 +77,5 @@ class DetailOSActivity : BaseActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

@@ -2,7 +2,6 @@ package cf.movie.slmovie.main.download.rn.download
 
 import android.Manifest
 import android.app.Activity
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -11,11 +10,10 @@ import android.text.TextUtils
 import android.widget.Toast
 import cf.movie.slmovie.bean.FilesBean
 import cf.movie.slmovie.db.XLDownloadDao
-import cf.movie.slmovie.dialog.XLDownloadDialog.XLDownloadDialog
 import cf.movie.slmovie.main.download.model.bean.XLDownloadDBBean
-import cf.movie.slmovie.main.download.rn.download.XLDownloadUtils.Companion.getEd2kName
-import cf.movie.slmovie.main.download.rn.download.XLDownloadUtils.Companion.getEd2kSize
-import cf.movie.slmovie.main.download.view.DownloadRNActivity
+import cf.movie.slmovie.main.download.rn.download.DownloadUtis.XLED2KUtils
+import cf.movie.slmovie.main.download.rn.download.DownloadUtis.XLListener
+import cf.movie.slmovie.main.download.rn.download.DownloadUtis.XLTorrentUtils
 import cf.movie.slmovie.main.home.ui.MainActivity
 import cf.movie.slmovie.server.Constant
 import cf.movie.slmovie.utils.OutsideDownloadUtils
@@ -24,7 +22,6 @@ import cf.movie.slmovie.utils.ReactNativeJson
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.google.gson.Gson
-import com.xunlei.downloadlib.DownloadException
 import com.xunlei.downloadlib.XLTaskHelper
 import org.json.JSONObject
 import java.io.File
@@ -43,7 +40,6 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
     }
 
     private var dao = XLDownloadDao(activity)
-    private var XLTorrentUtils: XLTorrentUtils? = null
     private var scanTorrentCallback: Callback? = null
 
     override fun getName(): String {
@@ -168,57 +164,12 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
     fun ed2kDownloadDialog(fileStr: String) {
         var gson = Gson()
         var fileBean = gson.fromJson(fileStr, FilesBean::class.java)
-        var bean = XLDownloadDBBean()
-        bean.Name = getEd2kName(fileBean.download!!)
-        bean.TotalSize = getEd2kSize(fileBean.download!!)
-        bean.SavePath = Constant.DownloadPath
-        bean.IsTorrent = 0
-        bean.DownloadPath = fileBean!!.download!!
-        bean.DownloadStatus = 1
-        val list = ArrayList<XLDownloadDBBean>()
-        list.add(bean)
-        val dialog = XLDownloadDialog(activity, list)
-        dialog.show()
-        dialog.setOnClickDownloadListner(object : XLDownloadDialog.onClickDownloadListener {
-            override fun myDownload(dialog: XLDownloadDialog) {
-                dialog.dismiss()
-                var intent = Intent(activity, DownloadRNActivity::class.java)
-                intent.putExtra("download", bean)
-                activity.startActivity(intent)
-            }
-
-            override fun sysDownload(dialog: XLDownloadDialog) {
-                dialog.dismiss()
-                sysDownload(fileStr)
-            }
-        })
+        XLED2KUtils.instance(activity, handler, XLListener).ed2kDownloadDialog(fileBean)
     }
 
     @ReactMethod
     fun ed2kDownload(str: String) {
-        var gson = Gson()
-        var bean = gson.fromJson(str, XLDownloadDBBean::class.java)
-        try {
-            var taskId = XLTaskHelper.instance().addThunderTask(bean.DownloadPath, bean.SavePath, bean.Name)
-            bean.TaskId = taskId
-            emitTaskId(bean)
-            var message = Message()
-            message.what = ED2K
-            message.obj = bean
-            handler.sendMessage(message)
-        } catch (e: DownloadException) {
-            Toast.makeText(activity, "下载失败，请重试", Toast.LENGTH_LONG).show()
-            bean.DownloadStatus = 3
-        }
-    }
-
-    @ReactMethod
-    fun sysDownload(fileStr: String) {
-        var gson = Gson()
-        var fileBean = gson.fromJson(fileStr, FilesBean::class.java)
-        if (!OutsideDownloadUtils.start(reactContext, fileBean!!.download!!))
-            OutsideDownloadUtils.copy(reactContext, fileBean!!.download!!)
-        Toast.makeText(reactContext, "无可下载应用，下载地址已复制到剪切板！", Toast.LENGTH_LONG).show()
+        XLED2KUtils.instance(activity, handler, XLListener).ed2kDownload(str)
     }
 
     @ReactMethod
@@ -239,29 +190,20 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
     @ReactMethod
     fun scanTorrent(fileStr: String, scanTorrentCallback: Callback) {
         this.scanTorrentCallback = scanTorrentCallback
-        XLTorrentUtils = XLTorrentUtils(activity, handler)
-        XLTorrentUtils!!.scanTorrent(fileStr)
+        var gson = Gson()
+        var fileBean = gson.fromJson(fileStr, FilesBean::class.java)
+        XLTorrentUtils.instance(activity, handler, XLListener).scanTorrent(fileBean)
     }
 
     //分析种子
     @ReactMethod
     fun analyzeTorrent(path: String, magent: String) {
-        XLTorrentUtils = XLTorrentUtils(activity, handler)
-        XLTorrentUtils!!.analyzeTorrent(path, magent)
+        XLTorrentUtils.instance(activity, handler, XLListener).analyzeTorrent(path, magent)
     }
 
     @ReactMethod
     fun torrentDownload(fileStr: String) {
-        var gson = Gson()
-        var bean = gson.fromJson(fileStr, XLDownloadDBBean::class.java)
-        XLTorrentUtils = XLTorrentUtils(activity, handler)
-        var taskId = XLTorrentUtils!!.TorrentDownload(bean)
-        bean.TaskId = taskId
-        emitTaskId(bean)
-        var message = Message()
-        message.what = Torrent
-        message.obj = bean
-        handler.sendMessage(message)
+        XLTorrentUtils.instance(activity, handler, XLListener).TorrentDownload(fileStr)
     }
 
     @ReactMethod
@@ -285,11 +227,22 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
         }
     }
 
-    fun emitTaskId(bean: XLDownloadDBBean) {
+    fun EmitTaskId(bean: XLDownloadDBBean) {
         val gson = Gson()
         val map = ReactNativeJson.convertStringToMap(gson.toJson(bean))
         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                 .emit("EmitTaskId", map)
+    }
+
+    val XLListener: XLListener = object : XLListener {
+        override fun hasTorrent() {
+            if (scanTorrentCallback != null)
+                scanTorrentCallback!!.invoke()
+        }
+
+        override fun emitTaskId(bean: XLDownloadDBBean) {
+            EmitTaskId(bean)
+        }
     }
 }
 
