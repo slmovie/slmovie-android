@@ -6,4 +6,10 @@
         android:icon="@drawable/ic_search"
         android:title="搜索"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/download"
+        android:icon="@drawable/ic_download_start"
+        android:title="下载"
+        app:showAsAction="ifRoom" />
 </menu>

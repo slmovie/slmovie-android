@@ -15,7 +15,6 @@ class DownloadRNActivity : BaseRNActivity() {
     private var bean: XLDownloadDBBean? = null
 
     init {
-        isSwipe = false
         title = "下载管理"
     }
 
@@ -24,6 +23,7 @@ class DownloadRNActivity : BaseRNActivity() {
 
     override fun loadFinished() {
         val gson = Gson()
+        swipeRefresh(false)
         if (bean != null)
             emit("DownloadBean", ReactNativeJson.convertStringToMap(gson.toJson(bean)))
     }

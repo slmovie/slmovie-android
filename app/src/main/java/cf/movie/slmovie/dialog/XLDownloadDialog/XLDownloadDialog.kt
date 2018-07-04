@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.dialog_xldownloadui.*
 /**
  * Created by 包俊 on 2018/6/6.
  */
-class XLDownloadDialog(context: Context?, var list: ArrayList<XLDownloadDBBean>) : AlertDialog(context) {
+class XLDownloadDialog(context: Context?, var bean: XLDownloadDBBean) : AlertDialog(context) {
 
     private var listener: onClickDownloadListener? = null
 
@@ -23,11 +23,9 @@ class XLDownloadDialog(context: Context?, var list: ArrayList<XLDownloadDBBean>)
     }
 
     private fun initData() {
-        if (list.size != 0) {
-            tv_path.text = list[0].SavePath
-            tv_name.text = list[0].Name
-            tv_size.text = XLDownloadUtils.convertFileSize(list[0].TotalSize)
-        }
+        tv_path.text = bean.SavePath
+        tv_name.text = bean.Name
+        tv_size.text = XLDownloadUtils.convertFileSize(bean.TotalSize)
     }
 
     private fun initAction() {
@@ -41,8 +39,8 @@ class XLDownloadDialog(context: Context?, var list: ArrayList<XLDownloadDBBean>)
         }
     }
 
-    fun setData(list: ArrayList<XLDownloadDBBean>) {
-        this.list = list
+    fun setData(bean: XLDownloadDBBean) {
+        this.bean = bean
         initData()
     }
 

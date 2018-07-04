@@ -43,11 +43,13 @@ export default class DownloadUIItem extends React.Component {
                         <View style={styles.sizeView}>
                             <Text
                                 style={styles.textSize}>{this._convertFileSize(this.state.data.Speed) + "/S"}</Text>
-                            <View style={styles.playView}>
-                                <Image source={{uri: 'ic_download_play'}}
-                                       style={{width: 13, height: 13}}/>
-                                <Text style={styles.textSize}>边下边播</Text>
-                            </View>
+                            <TouchableWithoutFeedback onPress={() => this._play()}>
+                                <View style={styles.playView}>
+                                    <Image source={{uri: 'ic_download_play'}}
+                                           style={{width: 13, height: 13}}/>
+                                    <Text style={styles.textSize}>边下边播</Text>
+                                </View>
+                            </TouchableWithoutFeedback>
                         </View>
                         <View style={styles.sizeView}>
                             <Text style={styles.textSize}>
@@ -163,6 +165,19 @@ export default class DownloadUIItem extends React.Component {
         }
     }
 
+    //开始播放
+    _play() {
+        if (this.state.downloadStatus == 0 || this.state.downloadStatus == 1 || this.state.downloadStatus == 2) {
+            XLDownload.paly(this.state.data.SavePath, this.state.data.Name)
+        } else if (this.state.downloadStatus == 3) {
+            this.setState({downloadStatus: 3}, () => {
+                this._download()
+                XLDownload.paly(this.state.data.SavePath, this.state.data.Name)
+            })
+        }
+
+    }
+
     //下载开始暂停播放按钮
     _download() {
         if (this.state.downloadStatus == 0 || this.state.downloadStatus == 1) {
@@ -172,7 +187,7 @@ export default class DownloadUIItem extends React.Component {
             bean.Speed = 0
             this.setState({downloadStatus: 3, data: bean})
         } else if (this.state.downloadStatus == 2) {
-
+            XLDownload.palyLocal(this.state.data.SavePath, this.state.data.Name)
         } else if (this.state.downloadStatus == 3) {
             if (this.state.data.IsTorrent == 0) {
                 XLDownload.ed2kDownload(JSON.stringify(this.state.data))

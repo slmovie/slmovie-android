@@ -2,6 +2,8 @@ package cf.movie.slmovie.main.download.rn.download
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -224,6 +226,42 @@ class XLDownloadModule(var activity: Activity, val reactContext: ReactApplicatio
             XLDownloadModule.perCallback!!.invoke(true)
         } else {
             ActivityCompat.requestPermissions(activity, perms, MainActivity.XLDownload)
+        }
+    }
+
+    @ReactMethod
+    fun paly(savePath: String, title: String) {
+        var filePath = if (savePath.endsWith("/")) {
+            savePath + title
+        } else {
+            "$savePath/$title"
+        }
+        var url = XLTaskHelper.instance().getLoclUrl(filePath)
+        var uri = Uri.parse(url)
+        // 让系统选择播放器来播放流媒体视频
+        var intent = Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "video/*");
+        activity.startActivity(intent)
+//        var intent = Intent(activity, VideoActivity::class.java)
+//        intent.putExtra("url", url)
+//        activity.startActivity(intent)
+        activity.finish()
+    }
+
+    @ReactMethod
+    fun playLocal(savePath: String, title: String) {
+        var filePath = if (savePath.endsWith("/")) {
+            savePath + title
+        } else {
+            "$savePath/$title"
+        }
+        var file = File(filePath)
+        if (file.exists()) {
+            var uri = Uri.parse(filePath)
+            var intent = Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "video/*");
+            activity.startActivity(intent)
+            activity.finish()
         }
     }
 

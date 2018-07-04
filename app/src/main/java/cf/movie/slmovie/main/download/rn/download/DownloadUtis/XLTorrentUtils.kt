@@ -66,26 +66,23 @@ class XLTorrentUtils(val activity: Activity, val handler: Handler, val listener:
             }
         //有视频文件
             else -> {
-                var list = ArrayList<XLDownloadDBBean>()
-                currentPlayMediaIndex.forEach {
-                    var torrentFileInfo = torrentInfo.mSubFileInfo[it]
-                    var bean = XLDownloadDBBean()
-                    bean.Name = torrentFileInfo.mFileName
-                    bean.TotalSize = torrentFileInfo.mFileSize
-                    bean.SavePath = Constant.DownloadPath + bean.Name
-                    bean.IsTorrent = 1
-                    bean.DownloadPath = magent
-                    bean.TorrentPath = path
-                    bean.DownloadStatus = 1
-                    list.add(bean)
-                }
-                var dialog = XLDownloadDialog(activity, list)
+//                var list = ArrayList<XLDownloadDBBean>()
+                var torrentFileInfo = torrentInfo.mSubFileInfo[currentPlayMediaIndex[0]]
+                var bean = XLDownloadDBBean()
+                bean.Name = torrentFileInfo.mFileName
+                bean.TotalSize = torrentFileInfo.mFileSize
+                bean.SavePath = Constant.DownloadPath + bean.Name
+                bean.IsTorrent = 1
+                bean.DownloadPath = magent
+                bean.TorrentPath = path
+                bean.DownloadStatus = 1
+                var dialog = XLDownloadDialog(activity, bean)
                 dialog.show()
                 dialog.setOnClickDownloadListner(object : XLDownloadDialog.onClickDownloadListener {
                     override fun myDownload(dialog: XLDownloadDialog) {
                         dialog.dismiss()
                         var intent = Intent(activity, DownloadRNActivity::class.java)
-                        intent.putExtra("download", list.get(0))
+                        intent.putExtra("download", bean)
                         activity.startActivity(intent)
                     }
 

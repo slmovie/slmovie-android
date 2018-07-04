@@ -15,6 +15,7 @@ import cf.movie.slmovie.base.BaseActivity
 import cf.movie.slmovie.base.BaseMovies.constant.Which
 import cf.movie.slmovie.base.BaseMovies.ui.BaseMoviesFragment
 import cf.movie.slmovie.main.douban.view.DoubanView
+import cf.movie.slmovie.main.download.view.DownloadRNActivity
 import cf.movie.slmovie.main.home.presenter.MainActivityPresenter
 import cf.movie.slmovie.main.newMovies.ui.NewMoviesFragment
 import cf.movie.slmovie.main.newMovies.ui.NewTVsFragment
@@ -78,6 +79,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             when (item.itemId) {
                 R.id.search -> {
                     val intent = Intent(this@MainActivity, SearchActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.download -> {
+                    val intent = Intent(this, DownloadRNActivity::class.java)
                     startActivity(intent)
                 }
             }

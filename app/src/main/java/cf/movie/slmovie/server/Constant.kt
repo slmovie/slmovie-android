@@ -10,7 +10,7 @@ object Constant {
     val ENVIRONMENT_TYPE = "P"
     var Log = true
     var WEBROOT: String? = null
-    var RNVersion: Int = 2
+    var RNVersion: Int = 3
     var DownloadPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/slys/download/"
 
     init {

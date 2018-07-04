@@ -48,9 +48,7 @@ class XLED2KUtils(var activity: Activity) {
         bean.IsTorrent = 0
         bean.DownloadPath = fileBean!!.download!!
         bean.DownloadStatus = 1
-        val list = ArrayList<XLDownloadDBBean>()
-        list.add(bean)
-        val dialog = XLDownloadDialog(activity, list)
+        val dialog = XLDownloadDialog(activity, bean)
         dialog.show()
         dialog.setOnClickDownloadListner(object : XLDownloadDialog.onClickDownloadListener {
             override fun myDownload(dialog: XLDownloadDialog) {
