@@ -37,7 +37,7 @@ export default class DownloadUIItem extends React.Component {
                             <Text style={styles.textName}>{this.state.data.Name}</Text>
                         </View>
                         <ProgressBar styleAttr="Horizontal"
-                                     progress={this.state.progress}
+                                     progress={this.state.progress / 100}
                                      indeterminate={false}
                                      color={"#ffffff"}/>
                         <View style={styles.sizeView}>
@@ -55,7 +55,7 @@ export default class DownloadUIItem extends React.Component {
                             <Text style={styles.textSize}>
                                 {this._convertFileSize(this.state.data.DownloadSize) + "/" + this._convertFileSize(this.state.data.TotalSize)}</Text>
                             <Text style={styles.textProgress}>
-                                {this._calculateProgress(this.state.data.DownloadSize, this.state.data.TotalSize)}
+                                {this.state.progress + "%"}
                             </Text>
                         </View>
                     </View>
@@ -105,6 +105,14 @@ export default class DownloadUIItem extends React.Component {
                 this._download()
             })
         }
+
+        if (this.state.data.DownloadSize != 0) {
+            this._calculateProgress()
+        }
+
+        if (this.state.data.DownloadSize == this.state.data.TotalSize) {
+            this.setState({downloadStatus: 2})
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -148,7 +156,9 @@ export default class DownloadUIItem extends React.Component {
                 XLDownload.getTaskInfo(JSON.stringify(this.state.data)).then(NativeMap => {
                     // console.log("_getTaskInfo>>>>" + NativeMap.Name)
                     if (this.state.downloadStatus == 0 || this.state.downloadStatus == 1) {
-                        this.setState({data: NativeMap, downloadStatus: NativeMap.DownloadStatus})
+                        this.setState({data: NativeMap, downloadStatus: NativeMap.DownloadStatus}, () => {
+                            this._calculateProgress()
+                        })
                         if (NativeMap.DownloadStatus == 1 || NativeMap.DownloadStatus == 0) {
                             this._getTaskInfo()
                         } else {
@@ -187,7 +197,7 @@ export default class DownloadUIItem extends React.Component {
             bean.Speed = 0
             this.setState({downloadStatus: 3, data: bean})
         } else if (this.state.downloadStatus == 2) {
-            XLDownload.palyLocal(this.state.data.SavePath, this.state.data.Name)
+            XLDownload.playLocal(this.state.data.SavePath, this.state.data.Name)
         } else if (this.state.downloadStatus == 3) {
             if (this.state.data.IsTorrent == 0) {
                 XLDownload.ed2kDownload(JSON.stringify(this.state.data))
@@ -248,11 +258,11 @@ export default class DownloadUIItem extends React.Component {
     }
 
     //计算下载百分比
-    _calculateProgress(downloadSize, totalSize) {
-        let long = Number(downloadSize / totalSize).toFixed(2)
-        // this.setState({progress: long * 100})
-        let str = long + "%";
-        return str
+    _calculateProgress() {
+        let long = Number(this.state.data.DownloadSize * 100 / this.state.data.TotalSize).toFixed(2)
+        this.setState({progress: long})
+        // let str = long + "%";
+        // return long
     }
 
     _convertFileSize(value) {
